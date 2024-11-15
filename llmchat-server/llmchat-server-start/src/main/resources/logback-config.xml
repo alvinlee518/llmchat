@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration DEBUG="false">
+    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_FILE_MAX_HISTORY" value="30"/>
+    <property name="LOG_FILE_MAX_SIZE" value="50MB"/>
+    <!-- 控制台输出 -->
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%thread,%method,%line]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${PID:- } --- [%thread,%method,%line] %-40.40logger{39} : %m%n">
+
+    </property>
+    <!--输出到控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 系统日志输出 -->
+    <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>${LOG_PATH}/app.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${LOG_PATH}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>${LOG_FILE_MAX_HISTORY}</maxHistory>
+            <maxFileSize>${LOG_FILE_MAX_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--开发环境日志输出-->
+    <springProfile name="dev">
+        <logger name="ai.llmchat.server.repository" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE_LOG"/>
+        </logger>
+        <logger name="ai.llmchat.server.service" level="TRACE" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE_LOG"/>
+        </logger>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE_LOG"/>
+        </root>
+    </springProfile>
+    <!--生产环境日志输出-->
+    <springProfile name="prod">
+        <logger name="ai.llmchat.server.repository" level="DEBUG" additivity="false">
+            <appender-ref ref="FILE_LOG"/>
+        </logger>
+        <logger name="ai.llmchat.server.service" level="TRACE" additivity="false">
+            <appender-ref ref="FILE_LOG"/>
+        </logger>
+        <root level="INFO">
+            <appender-ref ref="FILE_LOG"/>
+        </root>
+    </springProfile>
+</configuration>

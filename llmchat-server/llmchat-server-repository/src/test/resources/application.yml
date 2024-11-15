@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    dynamic:
+      aop:
+        enabled: true
+      primary: master
+      strict: false
+      grace-destroy: true
+      datasource:
+        master:
+          url: jdbc:postgresql://127.0.0.1:5432/llmchat?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: postgres
+          password: llmchat123456
+          driver-class-name: org.postgresql.Driver
+      druid:
+        initial-size: 4
+        min-idle: 4
+        max-active: 8
+        max-wait: 30000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        max-evictable-idle-time-millis: 600000
+        validation-query: select 1
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        keep-alive: true
+        pool-prepared-statements: true
+        async-init: true
+        max-pool-prepared-statement-per-connection-size: 8

@@ -1,0 +1,85 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+      - ../init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      PGUSER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-llmchat123456}
+      POSTGRES_DB: ${DB_DATABASE:-llmchat}
+      PGDATA: ${DB_DATA:-/var/lib/postgresql/data/pgdata}
+    command: >
+      postgres -c 'max_connections=${POSTGRES_MAX_CONNECTIONS:-100}'
+               -c 'shared_buffers=${POSTGRES_SHARED_BUFFERS:-128MB}'
+               -c 'work_mem=${POSTGRES_WORK_MEM:-4MB}'
+               -c 'maintenance_work_mem=${POSTGRES_MAINTENANCE_WORK_MEM:-64MB}'
+               -c 'effective_cache_size=${POSTGRES_EFFECTIVE_CACHE_SIZE:-4096MB}'
+    healthcheck:
+      test: [ 'CMD', 'pg_isready' ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    ports:
+      - 5432:5432
+  weaviate:
+    image: semitechnologies/weaviate:1.26.8
+    restart: always
+    volumes:
+      - ./volumes/weaviate:/var/lib/weaviate
+    environment:
+      PERSISTENCE_DATA_PATH: ${WEAVIATE_PERSISTENCE_DATA_PATH:-/var/lib/weaviate}
+      QUERY_DEFAULTS_LIMIT: ${WEAVIATE_QUERY_DEFAULTS_LIMIT:-25}
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: ${WEAVIATE_AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED:-false}
+      DEFAULT_VECTORIZER_MODULE: ${WEAVIATE_DEFAULT_VECTORIZER_MODULE:-none}
+      CLUSTER_HOSTNAME: ${WEAVIATE_CLUSTER_HOSTNAME:-node1}
+      AUTHENTICATION_APIKEY_ENABLED: ${WEAVIATE_AUTHENTICATION_APIKEY_ENABLED:-true}
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: ${WEAVIATE_AUTHENTICATION_APIKEY_ALLOWED_KEYS:-RgAbHv1w8Zh62GUzIq0ojWMQdaxiut5l3LmJ}
+      AUTHENTICATION_APIKEY_USERS: ${WEAVIATE_AUTHENTICATION_APIKEY_USERS:-llmchat}
+      ASYNC_INDEXING: ${WEAVIATE_ASYNC_INDEXING:-true}
+    command:
+      - --host
+      - '0.0.0.0'
+      - --port
+      - '58080'
+      - --scheme
+      - 'http'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:58080/v1/.well-known/ready" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    ports:
+      - 58080:58080
+      - 50051:50051
+  minio:
+    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-llmchat123456}
+    volumes:
+      - ./volumes/minio:/minio_data
+    command: minio server /minio_data --console-address ":9001"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live' ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+  redis:
+    image: redis:6.2.16
+    restart: always
+    volumes:
+      - ./volumes/redis:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD:-llmchat123456}
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 15s
+      timeout: 10s
+      retries: 5

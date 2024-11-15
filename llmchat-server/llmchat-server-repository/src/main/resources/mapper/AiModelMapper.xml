@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.AiModelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.AiModel">
+        <id column="id" property="id"/>
+        <result column="model_name" property="modelName"/>
+        <result column="model_provider" property="modelProvider"/>
+        <result column="model_type" property="modelType"/>
+        <result column="base_url" property="baseUrl"/>
+        <result column="api_key" property="apiKey"/>
+        <result column="secret_key" property="secretKey"/>
+        <result column="status" property="status"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , model_name, model_provider, model_type, base_url, api_key, secret_key, status, create_at, create_by, update_at, update_by
+    </sql>
+    <select id="getModelByDatasetId" resultType="ai.llmchat.server.repository.dataobject.ModelOptionsDO">
+        select am.id,
+               am.model_name,
+               am.model_type,
+               am.model_provider,
+               am.base_url,
+               am.api_key,
+               am.secret_key
+        from ai_model as am
+                 inner join ai_dataset as ad on (ad.embed_id = am.id and ad.status = 1)
+        where ad.id = #{datasetId}
+          and am.status = 1
+    </select>
+    <select id="getModelByAppId" resultType="ai.llmchat.server.repository.dataobject.ModelOptionsDO">
+        select app.temperature,
+               app.max_memory,
+               app.max_tokens,
+               am.id,
+               am.model_name,
+               am.model_type,
+               am.model_provider,
+               am.base_url,
+               am.api_key,
+               am.secret_key
+        from ai_app as app
+                 inner join ai_model as am on (am.id = app.model_id and am.status = 1)
+        where app.id = #{appId}
+    </select>
+    <select id="getModelByChatId" resultType="ai.llmchat.server.repository.dataobject.ModelOptionsDO">
+        select am.id,
+               am.model_name,
+               am.model_type,
+               am.model_provider,
+               am.base_url,
+               am.api_key,
+               am.secret_key
+        from ai_chat as ac
+                 inner join ai_model as am on (am.id = ac.model_id and am.status = 1)
+        where ac.id = #{chatId}
+    </select>
+</mapper>

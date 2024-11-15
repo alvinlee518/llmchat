@@ -1,0 +1,63 @@
+spring:
+  datasource:
+    dynamic:
+      aop:
+        enabled: true
+      primary: master
+      strict: false
+      grace-destroy: true
+      datasource:
+        master:
+          url: jdbc:postgresql://127.0.0.1:5432/llmchat?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: postgres
+          password: llmchat123456
+          driver-class-name: org.postgresql.Driver
+      druid:
+        initial-size: 4
+        min-idle: 4
+        max-active: 8
+        max-wait: 30000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        max-evictable-idle-time-millis: 600000
+        validation-query: select 1
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        keep-alive: true
+        pool-prepared-statements: true
+        async-init: true
+        max-pool-prepared-statement-per-connection-size: 8
+  data:
+    redis:
+      lettuce:
+        pool:
+          enabled: true
+          min-idle: 2
+          max-wait: 5s
+          time-between-eviction-runs: 60s
+        shutdown-timeout: 5s
+      host: 127.0.0.1
+      password: llmchat123456
+      database: 0
+      timeout: 5s
+      connect-timeout: 3s
+      client-type: lettuce
+dromara:
+  x-file-storage:
+    default-platform: minio
+    minio:
+      - platform: minio
+        enable-storage: true
+        access-key: minio
+        secret-key: llmchat123456
+        end-point: http://127.0.0.1:9000
+        bucket-name: llmchat
+        domain: http://127.0.0.1:9000/llmchat/
+        base-path: datasets/
+langchain4j:
+  embedding:
+    api-key: RgAbHv1w8Zh62GUzIq0ojWMQdaxiut5l3LmJ
+    scheme: http
+    host: 127.0.0.1:58080
+    object-class: Ai_Embeddings

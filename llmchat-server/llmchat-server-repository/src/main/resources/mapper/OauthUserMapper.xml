@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.OauthUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.OauthUser">
+        <id column="id" property="id"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="name" property="name"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <result column="birthday" property="birthday"/>
+        <result column="last_login_ip" property="lastLoginIp"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="remark" property="remark"/>
+        <result column="status" property="status"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_at" property="updateAt"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , dept_id, name, username, password, phone, email, gender, birthday, last_login_ip, last_login_time, remark, status, create_by, create_at, update_by, update_at
+    </sql>
+    <select id="selectUserListByRole" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from oauth_user ou
+        <where>
+            ou.status=1
+            <if test="name!=null and name!=''">
+                and ou.name like concat('%', #{name}, '%')
+            </if>
+            <if test="phone!=null and phone!=''">
+                and ou.phone like concat('%', #{phone}, '%')
+            </if>
+            <choose>
+                <when test="userScope!=null and userScope==0">
+                    and not exists(select id from oauth_user_role as our where our.status = 1 and our.user_id = ou.id
+                    and our.role_id = #{roleId})
+                </when>
+                <when test="userScope!=null and userScope==1">
+                    and exists(select id from oauth_user_role as our where our.status = 1 and our.user_id = ou.id and
+                    our.role_id = #{roleId})
+                </when>
+            </choose>
+        </where>
+        order by ou.update_at desc
+    </select>
+
+</mapper>

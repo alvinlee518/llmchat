@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ai.llmchat</groupId>
+        <artifactId>llmchat-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>llmchat-common</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>llmchat-common-bom</module>
+        <module>llmchat-common-core</module>
+        <module>llmchat-common-mybatis</module>
+        <module>llmchat-common-langchain</module>
+        <module>llmchat-common-security</module>
+    </modules>
+</project>

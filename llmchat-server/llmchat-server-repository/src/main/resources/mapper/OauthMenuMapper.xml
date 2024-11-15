@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.OauthMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.OauthMenu">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="menu_type" property="menuType"/>
+        <result column="name" property="name"/>
+        <result column="path" property="path"/>
+        <result column="component" property="component"/>
+        <result column="perms" property="perms"/>
+        <result column="target" property="target"/>
+        <result column="hidden" property="hidden"/>
+        <result column="keep_alive" property="keepAlive"/>
+        <result column="sorting" property="sorting"/>
+        <result column="remark" property="remark"/>
+        <result column="status" property="status"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_at" property="updateAt"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , parent_id, menu_type, name, path, component, perms, target, hidden, keep_alive, sorting, remark, status, create_by, create_at, update_by, update_at
+    </sql>
+    <select id="selectAuthorizedMenuList" resultMap="BaseResultMap">
+        select distinct om.*
+        from oauth_user_role as our
+                 inner join oauth_role_menu as orm on (orm.status = 1 and orm.role_id = our.role_id)
+                 inner join oauth_menu as om on (om.id = orm.menu_id and om.status = 1 and om.menu_type != 2)
+        where our.user_id = #{userId}
+          and our.status = 1
+        order by om.sorting desc
+    </select>
+    <select id="selectPermissionList" resultType="java.lang.String">
+        select distinct om.perms
+        from oauth_user_role as our
+                 inner join oauth_role_menu as orm on (orm.status = 1 and orm.role_id = our.role_id)
+                 inner join oauth_menu as om on (om.id = orm.menu_id and om.status = 1)
+        where our.user_id = #{userId}
+          and our.status = 1
+    </select>
+</mapper>

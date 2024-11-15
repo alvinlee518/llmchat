@@ -1,0 +1,38 @@
+server:
+  shutdown: graceful
+  port: 8686
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 100MB
+      max-file-size: 100MB
+  messages:
+    encoding: UTF-8
+    basename: i18n/messages
+  application:
+    name: llmchat
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  main:
+    allow-bean-definition-overriding: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+pagehelper:
+  helper-dialect: postgresql
+  params: count=countSql
+  support-methods-arguments: true
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-not-delete-value: 1
+      logic-delete-value: 0
+      logic-delete-field: status
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/**/*.xml
+logging:
+  config: classpath:logback-config.xml

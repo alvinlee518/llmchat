@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.AiChatMessageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.AiChatMessage">
+        <id column="id" property="id"/>
+        <result column="chat_id" property="chatId"/>
+        <result column="user_id" property="userId"/>
+        <result column="instruction" property="instruction"/>
+        <result column="prompt" property="prompt"/>
+        <result column="prompt_tokens" property="promptTokens"/>
+        <result column="completion" property="completion"/>
+        <result column="completion_tokens" property="completionTokens"/>
+        <result column="failed" property="failed"/>
+        <result column="citations" property="citations"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="duration" property="duration"/>
+        <result column="rating" property="rating"/>
+        <result column="status" property="status"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , chat_id, user_id, instruction, prompt, prompt_tokens, completion, completion_tokens, failed, citations, duration, rating, status, create_at, create_by, update_at, update_by
+    </sql>
+</mapper>

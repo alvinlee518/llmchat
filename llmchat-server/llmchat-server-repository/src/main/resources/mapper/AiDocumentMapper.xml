@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.AiDocumentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.AiDocument">
+        <id column="id" property="id"/>
+        <result column="dataset_id" property="datasetId"/>
+        <result column="file_id" property="fileId"/>
+        <result column="name" property="name"/>
+        <result column="data_type" property="dataType"/>
+        <result column="segment_mode" property="segmentMode"/>
+        <result column="separators" property="separators" typeHandler="org.apache.ibatis.type.ArrayTypeHandler"/>
+        <result column="chunk_size" property="chunkSize"/>
+        <result column="chunk_overlap" property="chunkOverlap"/>
+        <result column="clean_rules" property="cleanRules" typeHandler="org.apache.ibatis.type.ArrayTypeHandler"/>
+        <result column="index_state" property="indexState"/>
+        <result column="failure" property="failure"/>
+        <result column="status" property="status"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , dataset_id, file_id, name, data_type, segment_mode, separators, chunk_size, chunk_overlap, clean_rules, index_state, failure, status, create_at, create_by, update_at, update_by
+    </sql>
+    <select id="queryPage" resultType="ai.llmchat.server.repository.dataobject.DocumentDO">
+        select doc.id,
+        doc.name,
+        doc.index_state,
+        doc.failure,
+        doc.update_at,
+        count(para.id) as paraCount
+        from ai_document as doc
+        left join ai_paragraph as para on (para.status = 1 and para.doc_id = doc.id)
+        where doc.status = 1
+        and doc.dataset_id=#{datasetId}
+        <if test="name!=null and name!=''">
+            and doc.name like concat('%', #{name}, '%')
+        </if>
+        <if test="indexState!=null and indexState>=0">
+            and doc.index_state=#{indexState}
+        </if>
+        group by doc.id
+        order by doc.update_at desc
+    </select>
+
+</mapper>

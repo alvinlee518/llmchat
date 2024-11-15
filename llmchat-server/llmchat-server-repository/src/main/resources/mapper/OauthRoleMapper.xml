@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.OauthRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.OauthRole">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="data_scope" property="dataScope" />
+        <result column="sorting" property="sorting" />
+        <result column="remark" property="remark" />
+        <result column="status" property="status" />
+        <result column="create_by" property="createBy" />
+        <result column="create_at" property="createAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_at" property="updateAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, code, data_scope, sorting, remark, status, create_by, create_at, update_by, update_at
+    </sql>
+
+</mapper>

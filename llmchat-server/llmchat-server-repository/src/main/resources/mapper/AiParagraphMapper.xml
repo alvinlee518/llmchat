@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.AiParagraphMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.AiParagraph">
+        <id column="id" property="id"/>
+        <result column="dataset_id" property="datasetId"/>
+        <result column="doc_id" property="docId"/>
+        <result column="index_id" property="indexId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="position" property="position"/>
+        <result column="word_count" property="wordCount"/>
+        <result column="hit_count" property="hitCount"/>
+        <result column="index_state" property="indexState"/>
+        <result column="failure" property="failure"/>
+        <result column="status" property="status"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , dataset_id, doc_id, index_id, title, content, position, word_count, hit_count, index_state, failure, status, create_at, create_by, update_at, update_by
+    </sql>
+
+    <select id="querySegmentByIds" resultType="ai.llmchat.server.repository.dataobject.ParagraphDO">
+        select ad.id as docId,
+        ad.name as docName,
+        ad.reply_cols,
+        fd.url as docUrl,
+        ap.id,
+        ap.position,
+        ap.title,
+        ap.content
+        from ai_paragraph as ap
+        inner join ai_document as ad on (ad.id = ap.doc_id)
+        inner join file_detail as fd on (fd.id = ad.file_id)
+        where ap.id in
+        <foreach item="item" collection="ids" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

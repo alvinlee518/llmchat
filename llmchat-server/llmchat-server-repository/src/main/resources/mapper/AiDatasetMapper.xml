@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.AiDatasetMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.AiDataset">
+        <id column="id" property="id"/>
+        <result column="embed_id" property="embedId"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="search_mode" property="searchMode"/>
+        <result column="top_k" property="topK"/>
+        <result column="score" property="score"/>
+        <result column="status" property="status"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , embed_id, name, description, search_mode, top_k, score, status, create_at, create_by, update_at, update_by
+    </sql>
+    <select id="queryPage" resultType="ai.llmchat.server.repository.dataobject.DatasetDO">
+        select ds.id,
+        ds.name,
+        ds.description,
+        ds.update_at,
+        count(doc.id) as docCount
+        from ai_dataset as ds
+        left join ai_document as doc on (doc.status = 1 and doc.dataset_id = ds.id)
+        <where>
+            ds.status=1
+            <if test="name!=null and name!=''">
+                and ds.name like concat('%', #{name}, '%')
+            </if>
+        </where>
+        group by ds.id
+        order by ds.update_at desc
+    </select>
+    <select id="listByAppId" resultMap="BaseResultMap">
+        select ds.*
+        from ai_app_dataset as ads
+                 inner join ai_dataset as ds on (ds.status = 1 and ds.id = ads.dataset_id)
+        where ads.status = 1
+          and ads.app_id = #{appId}
+    </select>
+
+</mapper>

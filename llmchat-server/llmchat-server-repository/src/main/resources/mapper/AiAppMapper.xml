@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.llmchat.server.repository.mapper.AiAppMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.llmchat.server.repository.entity.AiApp">
+        <id column="id" property="id"/>
+        <result column="model_id" property="modelId"/>
+        <result column="rerank_id" property="rerankId"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="source_enabled" property="sourceEnabled"/>
+        <result column="rewrite_enabled" property="rewriteEnabled"/>
+        <result column="suggest_enabled" property="suggestEnabled"/>
+        <result column="top_k" property="topK"/>
+        <result column="score" property="score"/>
+        <result column="temperature" property="temperature"/>
+        <result column="max_tokens" property="maxTokens"/>
+        <result column="max_memory" property="maxMemory"/>
+        <result column="prompt" property="prompt"/>
+        <result column="prologue" property="prologue"/>
+        <result column="status" property="status"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , model_id, rerank_id, name, description, source_enabled, rewrite_enabled, suggest_enabled, top_k, score, temperature, max_tokens, max_memory, prompt, prologue, status, create_at, create_by, update_at, update_by
+    </sql>
+</mapper>
