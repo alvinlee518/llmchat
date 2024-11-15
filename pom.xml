@@ -134,7 +134,6 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <parameters>${project.build.sourceEncoding}</parameters>
                 </configuration>
             </plugin>
         </plugins>
