@@ -6,12 +6,12 @@ LLMChat是Java生态下企业级AIGC项目解决方案，在RBAC权限体系的�
 
 **本项目完全由本人独立开发，前后端代码工作量庞大，可能存在一些问题，敬请谅解，持续迭代中...**
 
-> **该项目如对您有帮助，欢迎点赞**
-
 代码仓库地址：
 
 - 前端项目：[github](https://github.com/chubin518/llmchat-ui)  [gitee](https://gitee.com/chubin518/llmchat-ui)
 - 后端项目：[github](https://github.com/chubin518/llmchat)  [gitee](https://gitee.com/chubin518/llmchat)
+
+> 该项目如对您有帮助，欢迎点赞
 
 ## 商业化支持
 
