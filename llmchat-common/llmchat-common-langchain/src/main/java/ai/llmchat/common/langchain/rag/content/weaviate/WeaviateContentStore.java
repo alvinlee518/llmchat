@@ -25,10 +25,7 @@ import io.weaviate.client.v1.graphql.query.argument.*;
 import io.weaviate.client.v1.graphql.query.builder.GetBuilder;
 import io.weaviate.client.v1.graphql.query.fields.Field;
 import io.weaviate.client.v1.graphql.query.fields.Fields;
-import io.weaviate.client.v1.schema.model.DataType;
-import io.weaviate.client.v1.schema.model.Property;
-import io.weaviate.client.v1.schema.model.Tokenization;
-import io.weaviate.client.v1.schema.model.WeaviateClass;
+import io.weaviate.client.v1.schema.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -180,7 +177,6 @@ public class WeaviateContentStore implements ContentStore, InitializingBean {
             log.info("className: {} already exists", this.className);
             return;
         }
-
         Property content = Property.builder()
                 .indexFilterable(true)
                 .indexSearchable(true)
@@ -199,7 +195,10 @@ public class WeaviateContentStore implements ContentStore, InitializingBean {
                     .build();
             propertyList.add(meta);
         }
-        WeaviateClass embeddingClass = WeaviateClass.builder().className(this.className).properties(propertyList).build();
+        WeaviateClass embeddingClass = WeaviateClass.builder()
+                .className(this.className)
+                .properties(propertyList)
+                .build();
         Result<Boolean> result = this.client.schema().classCreator().withClass(embeddingClass).run();
         if (result.hasErrors()) {
             throw new RuntimeException("failed to create schema because: \n" + result.getError().getMessages().stream().map(WeaviateErrorMessage::getMessage).collect(Collectors.joining(System.lineSeparator())));
@@ -233,6 +232,7 @@ public class WeaviateContentStore implements ContentStore, InitializingBean {
         for (String key : metadataKeys) {
             fields.put(METADATA_FIELD_PREFIX + key, metadata.getOrDefault(key, -1).toString());
         }
+
         return WeaviateObject.builder()
                 .className(this.className)
                 .id(id)
@@ -278,9 +278,9 @@ public class WeaviateContentStore implements ContentStore, InitializingBean {
     @SuppressWarnings("unchecked")
     private EmbeddingMatch<TextSegment> toEmbeddingMatch(Map<String, ?> item) {
         Map<String, ?> additional = (Map<String, ?>) item.get(ADDITIONAL_FIELD_NAME);
-        final Metadata metadata = new Metadata();
+        Map<String, Object> metadata = new HashMap<>();
         for (String metadataKey : metadataKeys) {
-            metadata.add(metadataKey, item.getOrDefault(METADATA_FIELD_PREFIX + metadataKey, null));
+            metadata.put(metadataKey, item.getOrDefault(METADATA_FIELD_PREFIX + metadataKey, null));
         }
         String text = (String) item.get(CONTENT_FIELD_NAME);
         String score = (String) additional.get(ADDITIONAL_SCORE_FIELD_NAME);
@@ -288,7 +288,7 @@ public class WeaviateContentStore implements ContentStore, InitializingBean {
                 Optional.ofNullable((Double) additional.get(ADDITIONAL_CERTAINTY_FIELD_NAME)).orElse(Double.parseDouble(score)),
                 (String) additional.get(ADDITIONAL_ID_FIELD_NAME),
                 Embedding.from(((List<Double>) additional.get(ADDITIONAL_VECTOR_FIELD_NAME)).stream().map(Double::floatValue).toList()),
-                StringUtils.isBlank(text) ? null : TextSegment.from(text, metadata)
+                StringUtils.isBlank(text) ? null : TextSegment.from(text, Metadata.from(metadata))
         );
     }
 }

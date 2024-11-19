@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -84,8 +86,8 @@ public class AiParagraph implements Serializable {
     /**
      * 索引状态:0-待处理;1-处理中;2-已处理;3-处理失败
      */
-    @TableField("index_state")
-    private Integer indexState;
+    @TableField("state")
+    private Integer state;
 
     /**
      * 失败原因

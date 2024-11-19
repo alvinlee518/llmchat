@@ -1,4 +1,4 @@
-package ai.llmchat.server.repository.dataobject;
+package ai.llmchat.server.api.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class DocumentDO implements Serializable {
+public class DocumentItemVO implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      *
@@ -25,9 +25,14 @@ public class DocumentDO implements Serializable {
     private Integer paraCount;
 
     /**
-     * 索引状态:0-待处理;1-处理中;2-已处理;3-处理失败
+     * 索引数量
      */
-    private Integer indexState;
+    private Integer indexCount;
+
+    /**
+     * 状态:0-待处理;1-处理中;2-已结束;3-错误
+     */
+    private Integer state;
 
     /**
      * 失败原因

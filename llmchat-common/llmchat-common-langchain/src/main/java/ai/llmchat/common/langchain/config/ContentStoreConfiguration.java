@@ -1,5 +1,6 @@
 package ai.llmchat.common.langchain.config;
 
+import ai.llmchat.common.langchain.rag.content.ContentStoreIngestor;
 import ai.llmchat.common.langchain.rag.memory.RedisChatMemoryStore;
 import ai.llmchat.common.langchain.rag.content.ContentStore;
 import ai.llmchat.common.langchain.rag.content.weaviate.WeaviateContentStore;
@@ -73,5 +74,11 @@ public class ContentStoreConfiguration {
     @ConditionalOnMissingBean
     public ChatMemoryStore chatMemoryStoreWithMemory() {
         return new InMemoryChatMemoryStore();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ContentStoreIngestor contentStoreIngestor(ContentStore contentStore) {
+        return ContentStoreIngestor.builder().contentStore(contentStore).build();
     }
 }

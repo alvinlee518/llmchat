@@ -1,23 +1,27 @@
 package ai.llmchat.server.service.impl;
 
+import ai.llmchat.common.core.enums.BooleanEnum;
 import ai.llmchat.common.core.wrapper.data.PageData;
-import ai.llmchat.common.langchain.event.DisruptorProducer;
-import ai.llmchat.server.api.enums.IndexStateEnum;
+import ai.llmchat.common.redis.core.Message;
+import ai.llmchat.common.redis.core.MessageStreamPublisher;
+import ai.llmchat.server.api.enums.StateEnum;
 import ai.llmchat.server.api.param.DocumentPageParam;
 import ai.llmchat.server.api.param.DocumentParam;
 import ai.llmchat.server.api.param.FileParam;
-import ai.llmchat.server.api.vo.DocumentVO;
-import ai.llmchat.server.repository.dataobject.DocumentDO;
+import ai.llmchat.server.api.vo.DocumentItemVO;
+import ai.llmchat.server.repository.dataobject.DocumentItemDO;
 import ai.llmchat.server.repository.entity.AiDocument;
-import ai.llmchat.server.repository.entity.AiParagraph;
 import ai.llmchat.server.repository.mapper.AiDocumentMapper;
 import ai.llmchat.server.repository.mapper.AiParagraphMapper;
 import ai.llmchat.server.service.AiDocumentService;
+import ai.llmchat.server.service.consumer.MessageConstants;
 import ai.llmchat.server.service.converter.AiDocumentConverter;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,20 +37,16 @@ import java.util.List;
 @Service
 public class AiDocumentServiceImpl extends ServiceImpl<AiDocumentMapper, AiDocument> implements AiDocumentService {
     private final AiDocumentConverter aiDocumentConverter;
-    private final AiParagraphMapper aiParagraphMapper;
-    private final DisruptorProducer disruptorProducer;
+    private final MessageStreamPublisher messageStreamPublisher;
 
-    public AiDocumentServiceImpl(AiDocumentConverter aiDocumentConverter, AiParagraphMapper aiParagraphMapper, DisruptorProducer disruptorProducer) {
+    public AiDocumentServiceImpl(AiDocumentConverter aiDocumentConverter, MessageStreamPublisher messageStreamPublisher) {
         this.aiDocumentConverter = aiDocumentConverter;
-        this.aiParagraphMapper = aiParagraphMapper;
-        this.disruptorProducer = disruptorProducer;
+        this.messageStreamPublisher = messageStreamPublisher;
     }
 
     @Override
-    public PageData<DocumentVO> queryPage(DocumentPageParam param) {
-        PageInfo<DocumentDO> pageInfo = PageHelper
-                .startPage(param.getPage(), param.getSize())
-                .doSelectPageInfo(() -> baseMapper.queryPage(param.getDatasetId(), param.getName(), param.getIndexState()));
+    public PageData<DocumentItemVO> queryPage(DocumentPageParam param) {
+        PageInfo<DocumentItemDO> pageInfo = PageHelper.startPage(param.getPage(), param.getSize()).doSelectPageInfo(() -> baseMapper.queryPage(param.getDatasetId(), param.getName(), param.getState()));
         return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), aiDocumentConverter.do2vo(pageInfo.getList()));
     }
 
@@ -59,17 +59,31 @@ public class AiDocumentServiceImpl extends ServiceImpl<AiDocumentMapper, AiDocum
             return document;
         }).toList();
         super.saveBatch(list);
-        list.forEach(item -> {
-            disruptorProducer.sendDocumentEvent(item.getId());
-        });
+        List<Message> messageList = list.stream().map(item -> new Message(MessageConstants.TOPIC_DOCUMENT_SPLIT, String.valueOf(item.getId()))).toList();
+        messageStreamPublisher.publish(messageList);
     }
 
     @Override
-    public void reindex(Long docId) {
-        baseMapper.update(Wrappers.<AiDocument>lambdaUpdate()
-                .eq(AiDocument::getId, docId)
-                .set(AiDocument::getIndexState, IndexStateEnum.PENDING.getCode()));
-        aiParagraphMapper.delete(Wrappers.<AiParagraph>lambdaQuery().eq(AiParagraph::getDocId, docId));
-        disruptorProducer.sendDocumentEvent(docId);
+    public void saveOrUpdate(DocumentParam param) {
+        AiDocument document = new AiDocument();
+        document.setId(param.getId());
+        document.setSegmentMode(param.getSegmentMode());
+        document.setSeparators(param.getSeparators());
+        document.setChunkSize(param.getChunkSize());
+        document.setChunkOverlap(param.getChunkOverlap());
+        document.setCleanRules(param.getCleanRules());
+        document.setState(StateEnum.PENDING.getCode());
+        document.setFailure(StringUtils.EMPTY);
+        document.setEmbedCols(param.getEmbedCols());
+        document.setReplyCols(param.getReplyCols());
+        document.setStatus(BooleanEnum.YES.getCode());
+        baseMapper.updateById(document);
+        messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_DOCUMENT_SPLIT, document.getId()));
+    }
+
+    @Override
+    public void changeState(Long docId, StateEnum state, String failure) {
+        LambdaUpdateWrapper<AiDocument> updateWrapper = Wrappers.<AiDocument>lambdaUpdate().eq(AiDocument::getId, docId).set(AiDocument::getState, state.getCode()).set(AiDocument::getFailure, failure);
+        baseMapper.update(updateWrapper);
     }
 }

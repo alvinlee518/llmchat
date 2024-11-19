@@ -16,7 +16,7 @@ public class ParagraphPageParam extends PageParam {
      */
     private String keyword;
     /**
-     * 索引状态:0-待处理;1-处理中;2-已处理;3-处理失败
+     * 状态:0-待处理;1-处理中;2-已结束;3-错误
      */
-    private Integer indexState;
+    private Integer state;
 }

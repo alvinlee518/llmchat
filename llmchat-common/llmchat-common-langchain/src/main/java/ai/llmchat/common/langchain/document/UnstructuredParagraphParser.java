@@ -36,7 +36,12 @@ public class UnstructuredParagraphParser implements ParagraphParser {
             Document document = UrlDocumentLoader.load(url, new ApacheTikaDocumentParser());
             document = new DocumentCleanTransformer(cleanPatterns).transform(document);
             List<TextSegment> segments = DocumentSplitterFactory.create(separators, chunkSize, chunkOverlap).split(document);
-            return segments.stream().map(item -> new Paragraph(StringUtils.EMPTY, item.text(), item.metadata().getInteger("index"))).toList();
+            return segments.stream().map(item -> new Paragraph(
+                            StringUtils.EMPTY,
+                            item.text(),
+                            item.metadata().getInteger("index")
+                    )
+            ).toList();
         } catch (Exception e) {
             throw new RuntimeException("Failed to load document", e);
         }

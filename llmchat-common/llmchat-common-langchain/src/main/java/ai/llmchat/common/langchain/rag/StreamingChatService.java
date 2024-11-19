@@ -55,10 +55,10 @@ import java.util.function.Function;
 public class StreamingChatService {
     private final static ThreadPoolExecutor POOL_EXECUTOR = new ThreadPoolExecutor(
             Runtime.getRuntime().availableProcessors(),
-            Runtime.getRuntime().availableProcessors() * 2,
-            5,
+            Runtime.getRuntime().availableProcessors() * 2 + 10,
+            1,
             TimeUnit.MINUTES,
-            new LinkedBlockingDeque<>(128),
+            new LinkedBlockingDeque<>(256),
             new NamedThreadFactory("Langchain-", false),
             new ThreadPoolExecutor.CallerRunsPolicy()
     );

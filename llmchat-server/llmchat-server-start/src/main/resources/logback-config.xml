@@ -52,7 +52,7 @@
 
     <!--开发环境日志输出-->
     <springProfile name="dev">
-        <logger name="ai.llmchat.server.repository" level="DEBUG" additivity="false">
+        <logger name="dev.langchain4j" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE_LOG"/>
         </logger>

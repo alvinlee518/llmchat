@@ -30,15 +30,15 @@
         </dependency>
         <dependency>
             <groupId>ai.llmchat</groupId>
-            <artifactId>llmchat-server-api</artifactId>
+            <artifactId>llmchat-common-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>ai.llmchat</groupId>
             <artifactId>llmchat-common-langchain</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <groupId>ai.llmchat</groupId>
+            <artifactId>llmchat-server-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.dromara.x-file-storage</groupId>

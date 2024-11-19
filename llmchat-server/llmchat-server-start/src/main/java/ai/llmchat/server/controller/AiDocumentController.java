@@ -1,14 +1,19 @@
 package ai.llmchat.server.controller;
 
+import ai.llmchat.common.core.util.ExcelUtil;
 import ai.llmchat.common.core.wrapper.PageResult;
 import ai.llmchat.common.core.wrapper.Result;
 import ai.llmchat.common.core.wrapper.data.PageData;
 import ai.llmchat.server.api.param.DocumentPageParam;
 import ai.llmchat.server.api.param.DocumentParam;
 import ai.llmchat.server.api.param.FileParam;
-import ai.llmchat.server.api.vo.DocumentVO;
+import ai.llmchat.server.api.vo.DocumentItemVO;
+import ai.llmchat.server.api.vo.ParagraphExportVO;
 import ai.llmchat.server.repository.entity.AiDocument;
 import ai.llmchat.server.service.AiDocumentService;
+import ai.llmchat.server.service.AiParagraphService;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
@@ -29,16 +34,18 @@ import java.util.List;
 @RequestMapping("/document")
 public class AiDocumentController {
     private final AiDocumentService aiDocumentService;
+    private final AiParagraphService aiParagraphService;
     private final FileStorageService fileStorageService;
 
-    public AiDocumentController(AiDocumentService aiDocumentService, FileStorageService fileStorageService) {
+    public AiDocumentController(AiDocumentService aiDocumentService, AiParagraphService aiParagraphService, FileStorageService fileStorageService) {
         this.aiDocumentService = aiDocumentService;
+        this.aiParagraphService = aiParagraphService;
         this.fileStorageService = fileStorageService;
     }
 
     @GetMapping("/list")
-    public PageResult<DocumentVO> queryPage(DocumentPageParam param) {
-        PageData<DocumentVO> pageData = aiDocumentService.queryPage(param);
+    public PageResult<DocumentItemVO> queryPage(DocumentPageParam param) {
+        PageData<DocumentItemVO> pageData = aiDocumentService.queryPage(param);
         return PageResult.of(pageData);
     }
 
@@ -50,6 +57,18 @@ public class AiDocumentController {
             return new FileParam(aLong, fileInfo.getOriginalFilename());
         }).toList();
         aiDocumentService.saveOrUpdate(param, fileParamList);
+        return Result.success();
+    }
+
+    @PostMapping("/modify")
+    public Result<?> modify(@RequestBody DocumentParam param) {
+        aiDocumentService.saveOrUpdate(param);
+        return Result.success();
+    }
+
+    @PutMapping("/reindex/{id}")
+    public Result<?> reindex(@PathVariable("id") Long id) {
+        aiParagraphService.reindexByDocId(id);
         return Result.success();
     }
 
@@ -65,9 +84,15 @@ public class AiDocumentController {
         return Result.success();
     }
 
-    @PutMapping("/{id}")
-    public Result<?> reindex(@PathVariable("id") Long id) {
-        aiDocumentService.reindex(id);
-        return Result.success();
+    @SneakyThrows
+    @GetMapping("/export/{id}")
+    public void exportAll(HttpServletResponse response, @PathVariable("id") Long id) {
+        List<ParagraphExportVO> paragraphExportVOS = aiParagraphService.exportListByDocId(id);
+        ExcelUtil.export2Web(response,
+                String.valueOf(System.currentTimeMillis()),
+                "sheet1",
+                ParagraphExportVO.class,
+                paragraphExportVOS
+        );
     }
 }

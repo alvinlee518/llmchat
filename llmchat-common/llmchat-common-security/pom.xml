@@ -17,21 +17,17 @@
             <artifactId>hutool-crypto</artifactId>
         </dependency>
         <dependency>
-            <groupId>ai.llmchat</groupId>
-            <artifactId>llmchat-common-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>transmittable-thread-local</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ai.llmchat</groupId>
+            <artifactId>llmchat-common-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 </project>

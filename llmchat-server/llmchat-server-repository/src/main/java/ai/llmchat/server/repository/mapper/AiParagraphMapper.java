@@ -18,5 +18,5 @@ import java.util.List;
  */
 @Mapper
 public interface AiParagraphMapper extends BaseMapper<AiParagraph> {
-    List<ParagraphDO> querySegmentByIds(@Param("ids") List<Long> ids);
+    List<ParagraphDO> queryByIds(@Param("ids") List<Long> ids);
 }

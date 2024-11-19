@@ -27,16 +27,18 @@ LLMChat 是一个在Java生态下构建的企业级AIGC项目解决方案。它�
 
 ## 功能特点
 
-1. **模型管理**：支持本地私有大模型（如LocalAI/Ollama）、国内公共大模型（如通义千问/智谱AI/百度千帆）、国际公共大模型（如OpenAI/Azure OpenAI），涵盖大语言模型、向量模型、重排模型等多种模型类型。
+1. **模型管理**：支持本地私有大模型（如LocalAI/Ollama）、国内公共大模型（如通义千问/智谱AI/百度千帆）、国际公共大模型（如OpenAI/Azure
+   OpenAI），涵盖大语言模型、向量模型、重排模型等多种模型类型。
 2. **知识库管理**：支持创建、重新向量化、设置和删除知识库，分段模式支持智能和自定义切分。
 3. **应用管理**：构建基于LLM的大语言模型应用，支持可视化编排、调试和实时刷新，所见即所得。
 4. **提示词生成**：一键生成和优化提示词，确保输出简洁、清晰、具体。
 5. **RAG（检索增强生成）**：支持Embedding检索、全文检索、混合检索；每次对话后，自动生成3个引导问题，推进对话。
-6. **Function Call**：支持自定义工具调用本地函数和第三方数据，计划进一步完善。
+6. **Tools (Function Calling)**：支持自定义工具调用本地函数和第三方数据，计划进一步完善。
 7. **多渠道发布**：计划支持Web SDK嵌入至任意Web应用，并扩展到微信、飞书、钉钉等消息平台（开发中）。
 8. **Workflows**：计划开发可视化LLM流程设计器，实现高度自定义的机器人流程（开发中）。
 9. **AIGC客户端应用**：快速管理客户端数据（开发中）。
 10. **更多特性**...
+
 ## 技术栈
 
 ### 后端
@@ -45,6 +47,7 @@ LLMChat 是一个在Java生态下构建的企业级AIGC项目解决方案。它�
 - Spring Boot 3.3.4
 - [langchain4j (Java版LangChain)](https://github.com/langchain4j/langchain4j)
 - PostgreSQL
+- Redis 5.0+
 - [Weaviate](https://weaviate.io/developers/weaviate)
 - [MinIO](https://min.io/docs/minio/container/index.html)
 
@@ -63,8 +66,8 @@ LLMChat 是一个在Java生态下构建的企业级AIGC项目解决方案。它�
 ## 版本更新
 
 - 2024.11.15 LLMChat正式发布、公开仓库
+- 2024.11.19 基于Redis Stream实现消息队列，用户异步处理分段，Embedding索引功能
 - ...
-
 
 ## 预览截图
 

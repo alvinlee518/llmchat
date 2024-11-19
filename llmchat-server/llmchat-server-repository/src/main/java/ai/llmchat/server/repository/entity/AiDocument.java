@@ -93,8 +93,8 @@ public class AiDocument implements Serializable {
     /**
      * 索引状态:0-待处理;1-处理中;2-已处理;3-处理失败
      */
-    @TableField("index_state")
-    private Integer indexState;
+    @TableField("state")
+    private Integer state;
 
     /**
      * 失败原因

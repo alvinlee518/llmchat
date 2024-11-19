@@ -31,6 +31,7 @@
         <minio.version>8.5.13</minio.version>
         <hanlp.version>portable-1.8.4</hanlp.version>
         <weaviate.version>4.8.3</weaviate.version>
+        <easyexcel.version>4.0.3</easyexcel.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     </properties>
 
@@ -54,6 +55,11 @@
             <dependency>
                 <groupId>ai.llmchat</groupId>
                 <artifactId>llmchat-common-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.llmchat</groupId>
+                <artifactId>llmchat-common-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -158,6 +164,11 @@
                 <groupId>io.weaviate</groupId>
                 <artifactId>client</artifactId>
                 <version>${weaviate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

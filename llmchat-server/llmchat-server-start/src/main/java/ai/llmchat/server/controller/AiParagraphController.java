@@ -64,4 +64,10 @@ public class AiParagraphController {
         aiParagraphService.enabled(param);
         return Result.success();
     }
+
+    @PutMapping("/reindex/{id}")
+    public Result<?> reindex(@PathVariable("id") Long id) {
+        aiParagraphService.reindex(id);
+        return Result.success();
+    }
 }

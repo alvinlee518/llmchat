@@ -40,3 +40,4 @@ logs
 .idea
 .flattened-pom.xml
 volumes
+.env

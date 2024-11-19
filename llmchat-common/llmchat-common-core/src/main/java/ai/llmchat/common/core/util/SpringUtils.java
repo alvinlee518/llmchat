@@ -8,12 +8,20 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.util.Collection;
+import java.util.Map;
+
 @Slf4j
 public class SpringUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
 
     public static <T> T getBean(Class<T> requiredType) {
         return applicationContext.getBean(requiredType);
+    }
+
+    public static <T> Collection<T> getBeansOfType(Class<T> requiredType) {
+        Map<String, T> beansOfType = applicationContext.getBeansOfType(requiredType);
+        return beansOfType.values();
     }
 
     public static <T> T getBean(String beanName, Class<T> requiredType) {

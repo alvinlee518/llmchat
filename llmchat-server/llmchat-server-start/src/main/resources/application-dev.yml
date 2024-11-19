@@ -34,14 +34,14 @@ spring:
         pool:
           enabled: true
           min-idle: 2
-          max-wait: 5s
+          max-wait: 10s
           time-between-eviction-runs: 60s
-        shutdown-timeout: 5s
+        shutdown-timeout: 10s
       host: 127.0.0.1
       password: llmchat123456
       database: 0
-      timeout: 5s
-      connect-timeout: 3s
+      timeout: 15s
+      connect-timeout: 10s
       client-type: lettuce
 dromara:
   x-file-storage:
@@ -61,3 +61,5 @@ langchain4j:
     scheme: http
     host: 127.0.0.1:58080
     object-class: Ai_Embeddings
+security:
+  exclude-patterns: /document/export/*

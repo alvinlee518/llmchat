@@ -16,5 +16,6 @@
         <module>llmchat-common-mybatis</module>
         <module>llmchat-common-langchain</module>
         <module>llmchat-common-security</module>
+        <module>llmchat-common-redis</module>
     </modules>
 </project>

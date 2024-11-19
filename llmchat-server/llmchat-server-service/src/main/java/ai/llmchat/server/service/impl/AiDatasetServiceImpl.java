@@ -5,6 +5,7 @@ import ai.llmchat.common.langchain.enums.SearchModeEnum;
 import ai.llmchat.common.langchain.rag.content.ContentSearchOptions;
 import ai.llmchat.common.langchain.rag.content.ContentStore;
 import ai.llmchat.common.langchain.util.LangchainConstants;
+import ai.llmchat.common.redis.core.MessageStreamPublisher;
 import ai.llmchat.server.api.param.CommonPageParam;
 import ai.llmchat.server.api.param.DatasetParam;
 import ai.llmchat.server.api.param.HitTestingParam;
@@ -14,7 +15,9 @@ import ai.llmchat.server.repository.dataobject.DatasetDO;
 import ai.llmchat.server.repository.entity.AiDataset;
 import ai.llmchat.server.repository.mapper.AiDatasetMapper;
 import ai.llmchat.server.service.AiDatasetService;
+import ai.llmchat.server.service.AiDocumentService;
 import ai.llmchat.server.service.AiModelService;
+import ai.llmchat.server.service.AiParagraphService;
 import ai.llmchat.server.service.converter.AiDatasetConverter;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +32,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <p>
@@ -43,13 +47,15 @@ public class AiDatasetServiceImpl extends ServiceImpl<AiDatasetMapper, AiDataset
     private final AiDatasetConverter aiDatasetConverter;
     private final ContentStore contentStore;
     private final AiModelService aiModelService;
+    private final AiParagraphService aiParagraphService;
 
     public AiDatasetServiceImpl(AiDatasetConverter aiDatasetConverter,
                                 ContentStore contentStore,
-                                AiModelService aiModelService) {
+                                AiModelService aiModelService, AiParagraphService aiParagraphService) {
         this.aiDatasetConverter = aiDatasetConverter;
         this.contentStore = contentStore;
         this.aiModelService = aiModelService;
+        this.aiParagraphService = aiParagraphService;
     }
 
     @Override
@@ -62,7 +68,17 @@ public class AiDatasetServiceImpl extends ServiceImpl<AiDatasetMapper, AiDataset
     @Override
     public Long saveOrUpdate(DatasetParam param) {
         AiDataset dataset = aiDatasetConverter.param2dto(param);
-        saveOrUpdate(dataset);
+        if (Optional.ofNullable(param.getId()).orElse(0L) >= 1) {
+            AiDataset aiDataset = baseMapper.selectById(param.getId());
+            if (Optional.ofNullable(aiDataset).map(AiDataset::getId).orElse(0L) >= 1) {
+                baseMapper.updateById(dataset);
+                if (!Objects.equals(param.getEmbedId(), aiDataset.getEmbedId())) {
+                    aiParagraphService.reindexByDatasetId(dataset.getId());
+                }
+                return dataset.getId();
+            }
+        }
+        baseMapper.insert(dataset);
         return dataset.getId();
     }
 

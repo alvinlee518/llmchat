@@ -1,6 +1,6 @@
 package ai.llmchat.server.repository.mapper;
 
-import ai.llmchat.server.repository.dataobject.DocumentDO;
+import ai.llmchat.server.repository.dataobject.DocumentItemDO;
 import ai.llmchat.server.repository.entity.AiDocument;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,5 +18,5 @@ import java.util.List;
  */
 @Mapper
 public interface AiDocumentMapper extends BaseMapper<AiDocument> {
-    List<DocumentDO> queryPage(@Param("datasetId") Long datasetId, @Param("name") String name, @Param("indexState") Integer indexState);
+    List<DocumentItemDO> queryPage(@Param("datasetId") Long datasetId, @Param("name") String name, @Param("state") Integer state);
 }

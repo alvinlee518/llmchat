@@ -1,4 +1,4 @@
-package ai.llmchat.common.core.config;
+package ai.llmchat.common.redis.config;
 
 import com.alibaba.fastjson2.support.spring6.data.redis.GenericFastJsonRedisSerializer;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
