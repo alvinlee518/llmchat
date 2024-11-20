@@ -1,0 +1,3 @@
+[submodule "llmchat-ui"]
+	path = llmchat-ui
+	url = git@github.com:alvinlee518/llmchat-ui.git

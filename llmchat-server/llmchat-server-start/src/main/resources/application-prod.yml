@@ -1,3 +1,10 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+management:
+  server:
+    base-path: /
 spring:
   datasource:
     dynamic:
@@ -8,9 +15,9 @@ spring:
       grace-destroy: true
       datasource:
         master:
-          url: jdbc:postgresql://127.0.0.1:5432/llmchat?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
-          username: postgres
-          password: llmchat123456
+          url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5432/llmchat?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8}
+          username: ${SPRING_DATASOURCE_USERNAME:postgres}
+          password: ${SPRING_DATASOURCE_PASSWORD:llmchat123456}
           driver-class-name: org.postgresql.Driver
       druid:
         initial-size: 4
@@ -38,7 +45,7 @@ spring:
           time-between-eviction-runs: 60s
           max-active: 16
         shutdown-timeout: 10s
-      url: redis://:llmchat123456@127.0.0.1:6379
+      url: ${SPRING_REDIS_URL:redis://:llmchat123456@127.0.0.1:6379}
       database: 0
       timeout: 15s
       connect-timeout: 10s
@@ -49,15 +56,15 @@ dromara:
     minio:
       - platform: minio
         enable-storage: true
-        access-key: minio
-        secret-key: llmchat123456
-        end-point: http://127.0.0.1:9000
+        access-key: ${SPRING_MINIO_ACCESS_KEY:minio}
+        secret-key: ${SPRING_MINIO_SECRET_KEY:llmchat123456}
+        end-point: ${SPRING_MINIO_END_POINT:http://127.0.0.1:9000}
         bucket-name: llmchat
-        domain: http://127.0.0.1:9000/llmchat/
+        domain: ${SPRING_MINIO_DOMAIN_HOST:http://127.0.0.1:9000/llmchat/}
         base-path: datasets/
 langchain4j:
   embedding:
-    api-key: RgAbHv1w8Zh62GUzIq0ojWMQdaxiut5l3LmJ
-    scheme: http
-    host: 127.0.0.1:58080
+    api-key: ${SPRING_EMBEDDING_API_KEY:RgAbHv1w8Zh62GUzIq0ojWMQdaxiut5l3LmJ}
+    scheme: ${SPRING_EMBEDDING_SCHEME:http}
+    host: ${SPRING_EMBEDDING_HOST:127.0.0.1:58080}
     object-class: Ai_Embeddings

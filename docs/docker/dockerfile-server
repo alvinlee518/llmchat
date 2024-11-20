@@ -1,0 +1,18 @@
+FROM openjdk:17-alpine
+LABEL authors="lixw"
+ENV SPRING_PROFILES_ACTIVE=prod \
+    SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/llmchat?useUnicode/=true&characterEncoding/=utf8&zeroDateTimeBehavior/=convertToNull&useSSL/=false&serverTimezone/=GMT%2B8 \
+    SPRING_DATASOURCE_USERNAME=postgres \
+    SPRING_DATASOURCE_PASSWORD=llmchat123456 \
+    SPRING_REDIS_URL=redis://:llmchat123456@redis:6379 \
+    SPRING_MINIO_ACCESS_KEY=minio \
+    SPRING_MINIO_SECRET_KEY=llmchat123456 \
+    SPRING_MINIO_END_POINT=http://minio:9000 \
+    SPRING_MINIO_DOMAIN_HOST=http://127.0.0.1:9000/llmchat/ \
+    SPRING_EMBEDDING_API_KEY=RgAbHv1w8Zh62GUzIq0ojWMQdaxiut5l3LmJ \
+    SPRING_EMBEDDING_SCHEME=http \
+    SPRING_EMBEDDING_HOST=weaviate:58080
+EXPOSE 8080
+WORKDIR /app
+ADD ../llmchat-server/llmchat-server-start/target/*.jar app.jar
+ENTRYPOINT ["java","-Dloader.path=lib","-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}","-jar","app.jar"]

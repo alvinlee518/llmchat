@@ -24,7 +24,7 @@ public class RedisStreamProperties {
     /**
      * 消费者数量（每个消费组的消费者实例数）。
      */
-    private int consumerCount = 8;
+    private int consumerCount = 4;
 
     /**
      * 线程池的核心线程数。

@@ -1,6 +1,5 @@
 server:
   shutdown: graceful
-  port: 8686
 spring:
   servlet:
     multipart:

@@ -605,7 +605,7 @@ create table if not exists ai_document
     chunk_size    integer       default 256                           not null,
     chunk_overlap integer       default 64                            not null,
     clean_rules   integer[]     default '{}'::integer[]               not null,
-    index_state   integer       default 0                             not null,
+    state   integer       default 0                             not null,
     failure       text          default ''::text                      not null,
     embed_cols    integer       default 3                             not null,
     reply_cols    integer       default 3                             not null,
@@ -642,7 +642,7 @@ comment on column ai_document.chunk_overlap is '分段重叠长度';
 
 comment on column ai_document.clean_rules is '数据清洗规则';
 
-comment on column ai_document.index_state is '索引状态:0-待处理;1-处理中;2-已处理;3-处理失败';
+comment on column ai_document.state is '索引状态:0-待处理;1-处理中;2-已处理;3-处理失败';
 
 comment on column ai_document.failure is '失败原因';
 
@@ -768,7 +768,7 @@ create table if not exists ai_paragraph
     position    integer       default 0                     not null,
     word_count  integer       default 0                     not null,
     hit_count   integer       default 0                     not null,
-    index_state integer       default 0                     not null,
+    state integer       default 0                     not null,
     failure     text          default ''::text              not null,
     status      integer       default 0                     not null,
     create_at   timestamp(6)  default CURRENT_TIMESTAMP     not null,
@@ -797,7 +797,7 @@ comment on column ai_paragraph.word_count is '字符数';
 
 comment on column ai_paragraph.hit_count is '命中次数';
 
-comment on column ai_paragraph.index_state is '索引状态:0-待处理;1-处理中;2-已处理;3-处理失败';
+comment on column ai_paragraph.state is '索引状态:0-待处理;1-处理中;2-已处理;3-处理失败';
 
 comment on column ai_paragraph.failure is '失败原因';
 

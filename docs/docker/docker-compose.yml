@@ -71,7 +71,7 @@ services:
       timeout: 10s
       retries: 5
   redis:
-    image: redis:6.2.16
+    image: redis:6.2.16-alpine
     restart: always
     volumes:
       - ./volumes/redis:/data
@@ -83,3 +83,21 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+  llmchat-server:
+    image: llmchat/llmchat-server:latest
+    restart: always
+    volumes:
+      - ./volumes/server:/app/logs
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  llmchat-ui:
+    image: llmchat/llmchat-ui:latest
+    restart: always
+    ports:
+      - 18080:80

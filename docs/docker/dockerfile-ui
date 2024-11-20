@@ -1,0 +1,5 @@
+FROM nginx:1.26.2-alpine
+LABEL authors="lixw"
+COPY ../llmchat-ui/dist/ /usr/share/nginx/html/
+COPY ../docs/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
