@@ -25,7 +25,7 @@ LLMChat is an enterprise-level AIGC project solution built within the Java ecosy
 4. Secondary project development collaboration (requires commercial authorization).
 5. Other related service needs.
 
-For inquiries, please contact via email at **493963286@qq.com**.
+For inquiries, please contact via email at **alvinlee518@163.com**.
 
 ---
 
@@ -75,6 +75,7 @@ This project is licensed under the GNU GPL v3. Individuals can use it for free f
 ## Changelog
 
 - **2024.11.15**: Official release of LLMChat and public repositories.
+- **2024.11.19**: Implementing a message queue based on Redis Stream, with asynchronous user processing of segments and embedding index functionality.
 
 ---
 
@@ -99,4 +100,4 @@ Below are some screenshots of the project interface:
 
 ## Contact Information
 
-- **Email**: 493963286@qq.com
+- **Email**: alvinlee518@163.com
