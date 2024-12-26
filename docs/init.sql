@@ -927,8 +927,7 @@ comment on column ai_chat.update_by is '更新人';
 alter table ai_chat
     owner to postgres;
 
-
-
+-- 默认用户名密码:llmchat/llmchat123456
 INSERT INTO "public"."oauth_user" ( "id", "dept_id", "name", "username", "password", "phone", "email", "gender", "birthday", "last_login_ip", "last_login_time", "remark", "status" )
 VALUES
     ( 1857227850498183170, 0, '超级管理员', 'llmchat', '7e00734692dd9c5c8c1f0b0355dd8f4d073bda22f094517062737b4cb8807c09', '13444444444', 'admin@llmchat.ai', 0, '1970-01-01', '0:0:0:0:0:0:0:1', '2024-11-15 09:19:38.379059', '', 1 );

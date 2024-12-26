@@ -55,6 +55,11 @@ public class ModelProviderConfiguration {
     }
 
     @Bean
+    public XinferenceModelProvider xinferenceModelProvider() {
+        return new XinferenceModelProvider();
+    }
+
+    @Bean
     public ModelProviderFactory modelProviderFactory(List<ModelProvider> modelProviders) {
         return new DefaultModelProviderFactory(modelProviders);
     }
@@ -70,4 +75,5 @@ public class ModelProviderConfiguration {
     public AIAssistantService promptAssistantService(ChatMemoryStore chatMemoryStore, ModelProviderFactory modelProviderFactory) {
         return new AIAssistantService(chatMemoryStore, modelProviderFactory);
     }
+
 }

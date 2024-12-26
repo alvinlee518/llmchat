@@ -4,10 +4,8 @@ import ai.llmchat.common.langchain.enums.ModelProviderEnum;
 import ai.llmchat.common.langchain.enums.ModelTypeEnum;
 import ai.llmchat.common.langchain.model.ModelProvider;
 import ai.llmchat.common.langchain.model.options.*;
-import dev.langchain4j.community.model.zhipu.ZhipuAiChatModel;
-import dev.langchain4j.community.model.zhipu.ZhipuAiEmbeddingModel;
-import dev.langchain4j.community.model.zhipu.ZhipuAiImageModel;
-import dev.langchain4j.community.model.zhipu.ZhipuAiStreamingChatModel;
+import dev.langchain4j.community.model.xinference.*;
+import dev.langchain4j.community.model.xinference.client.image.ResponseFormat;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -18,16 +16,16 @@ import dev.langchain4j.model.scoring.ScoringModel;
 
 import java.util.List;
 
-public class ZhipuAiModelProvider implements ModelProvider {
+public class XinferenceModelProvider implements ModelProvider {
     @Override
     public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        return new ZhipuAiChatModel.ZhipuAiChatModelBuilder()
+        return XinferenceChatModel.builder()
                 .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
                 .apiKey(options.getApiKey())
-                .maxToken(options.getMaxTokens())
-                .callTimeout(options.getTimeout())
-                .maxRetries(options.getMaxRetries())
+                .modelName(options.getModelName())
+                .temperature(options.getTemperature())
+                .maxTokens(options.getMaxTokens())
+                .timeout(options.getTimeout())
                 .logRequests(options.getLogRequests())
                 .logResponses(options.getLogResponses())
                 .build();
@@ -35,12 +33,13 @@ public class ZhipuAiModelProvider implements ModelProvider {
 
     @Override
     public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        return new ZhipuAiStreamingChatModel.ZhipuAiStreamingChatModelBuilder()
+        return XinferenceStreamingChatModel.builder()
                 .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
                 .apiKey(options.getApiKey())
-                .maxToken(options.getMaxTokens())
-                .callTimeout(options.getTimeout())
+                .modelName(options.getModelName())
+                .temperature(options.getTemperature())
+                .maxTokens(options.getMaxTokens())
+                .timeout(options.getTimeout())
                 .logRequests(options.getLogRequests())
                 .logResponses(options.getLogResponses())
                 .build();
@@ -48,12 +47,12 @@ public class ZhipuAiModelProvider implements ModelProvider {
 
     @Override
     public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return new ZhipuAiEmbeddingModel.ZhipuAiEmbeddingModelBuilder()
+        return XinferenceEmbeddingModel.builder()
                 .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
                 .apiKey(options.getApiKey())
-                .callTimeout(options.getTimeout())
+                .modelName(options.getModelName())
                 .maxRetries(options.getMaxRetries())
+                .timeout(options.getTimeout())
                 .logRequests(options.getLogRequests())
                 .logResponses(options.getLogResponses())
                 .build();
@@ -61,17 +60,30 @@ public class ZhipuAiModelProvider implements ModelProvider {
 
     @Override
     public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
+        return XinferenceScoringModel.builder()
+                .baseUrl(options.getBaseUrl())
+                .apiKey(options.getApiKey())
+                .modelName(options.getModelName())
+                .returnDocuments(false)
+                .returnLen(true)
+                .maxRetries(options.getMaxRetries())
+                .timeout(options.getTimeout())
+                .logRequests(options.getLogRequests())
+                .logResponses(options.getLogResponses())
+                .build();
     }
 
     @Override
     public ImageModel imageModel(ImageModelOptions options) {
-        return ZhipuAiImageModel.builder()
+        return XinferenceImageModel.builder()
                 .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
                 .apiKey(options.getApiKey())
-                .callTimeout(options.getTimeout())
+                .modelName(options.getModelName())
+                .negativePrompt(options.getNegativePrompt())
+                .responseFormat(ResponseFormat.B64_JSON)
+                .size(options.getSize())
                 .maxRetries(options.getMaxRetries())
+                .timeout(options.getTimeout())
                 .logRequests(options.getLogRequests())
                 .logResponses(options.getLogResponses())
                 .build();
@@ -84,11 +96,11 @@ public class ZhipuAiModelProvider implements ModelProvider {
 
     @Override
     public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.ZHIPU_AI;
+        return ModelProviderEnum.XINFERENCE;
     }
 
     @Override
     public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING, ModelTypeEnum.IMAGE);
+        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING, ModelTypeEnum.RERANK, ModelTypeEnum.IMAGE);
     }
 }

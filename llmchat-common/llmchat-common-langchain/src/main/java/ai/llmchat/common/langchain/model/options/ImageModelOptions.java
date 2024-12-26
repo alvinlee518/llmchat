@@ -9,4 +9,5 @@ public class ImageModelOptions extends ModelOptions {
     private String size;
     private String quality;
     private String style;
+    private String negativePrompt;
 }

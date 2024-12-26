@@ -76,7 +76,7 @@ This project is licensed under the GNU GPL v3. Individuals can use it for free f
 
 - **2024.11.15**: Official release of LLMChat and public repositories.
 - **2024.11.19**: Implementing a message queue based on Redis Stream, with asynchronous user processing of segments and embedding index functionality.
-
+- **2024.12.26**: Upgraded to Langchain 4j, introduced Langchain 4j-Community, updated dependencies for Qianfan, ZhipuAI, DashScope, and ChatGLM, and integrated the local model Xinference.
 ---
 
 ## Preview Screenshots

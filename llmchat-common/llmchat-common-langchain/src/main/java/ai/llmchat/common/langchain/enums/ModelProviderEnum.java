@@ -17,6 +17,7 @@ public enum ModelProviderEnum implements BaseEnum<Integer> {
     QIAN_FAN(7, "千帆大模型", "qianfan.png"),
     QWEN(8, "通义千问", "qwen.png"),
     ZHIPU_AI(9, "智谱AI", "zhipuai.svg"),
+    XINFERENCE(10, "Xinference", "xinference.svg"),
     ;
     private final Integer code;
     private final String message;
