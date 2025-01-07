@@ -36,84 +36,91 @@ import java.util.Optional;
  */
 @Service
 public class OauthRoleServiceImpl extends ServiceImpl<OauthRoleMapper, OauthRole> implements OauthRoleService {
-    private final OauthRoleDeptService oauthRoleDeptService;
-    private final OauthRoleMenuService oauthRoleMenuService;
 
-    public OauthRoleServiceImpl(OauthRoleDeptService oauthRoleDeptService, OauthRoleMenuService oauthRoleMenuService) {
-        this.oauthRoleDeptService = oauthRoleDeptService;
-        this.oauthRoleMenuService = oauthRoleMenuService;
-    }
+	private final OauthRoleDeptService oauthRoleDeptService;
 
-    @Override
-    public PageData<OauthRole> queryPage(CommonPageParam param) {
-        LambdaQueryWrapper<OauthRole> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, OauthRole::getStatus, param.getStatus());
-        queryWrapper.like(StringUtils.isNotBlank(param.getName()), OauthRole::getName, param.getName());
-        queryWrapper.orderByDesc(OauthRole::getUpdateAt);
-        PageInfo<OauthRole> pageInfo = PageHelper.startPage(param.getPage(), param.getSize()).doSelectPageInfo(() -> this.list(queryWrapper));
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
-    }
+	private final OauthRoleMenuService oauthRoleMenuService;
 
-    @Override
-    public DataScopeParam dataScopeById(Long id) {
-        OauthRole data = super.getById(id);
-        List<Long> deptIds = oauthRoleDeptService.listObjs(Wrappers.<OauthRoleDept>lambdaQuery()
-                .eq(OauthRoleDept::getStatus, BooleanEnum.YES.getCode())
-                .eq(OauthRoleDept::getRoleId, id).select(OauthRoleDept::getDeptId));
-        DataScopeParam param = new DataScopeParam();
-        param.setId(data.getId());
-        param.setName(data.getName());
-        param.setCode(data.getCode());
-        param.setDataScope(data.getDataScope());
-        param.setDeptIds(deptIds);
-        return param;
-    }
+	public OauthRoleServiceImpl(OauthRoleDeptService oauthRoleDeptService, OauthRoleMenuService oauthRoleMenuService) {
+		this.oauthRoleDeptService = oauthRoleDeptService;
+		this.oauthRoleMenuService = oauthRoleMenuService;
+	}
 
-    @Override
-    public void modifyDataScope(DataScopeParam param) {
-        LambdaUpdateWrapper<OauthRole> updateWrapper = Wrappers.<OauthRole>lambdaUpdate()
-                .eq(OauthRole::getId, param.getId())
-                .set(OauthRole::getDataScope, param.getDataScope());
-        update(updateWrapper);
-        oauthRoleDeptService.batchSave(param.getId(), param.getDeptIds());
-    }
+	@Override
+	public PageData<OauthRole> queryPage(CommonPageParam param) {
+		LambdaQueryWrapper<OauthRole> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, OauthRole::getStatus,
+				param.getStatus());
+		queryWrapper.like(StringUtils.isNotBlank(param.getName()), OauthRole::getName, param.getName());
+		queryWrapper.orderByDesc(OauthRole::getUpdateAt);
+		PageInfo<OauthRole> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> this.list(queryWrapper));
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
+	}
 
-    @Override
-    public MenuScopeParam menuScopeById(Long id) {
-        OauthRole data = super.getById(id);
-        List<Long> menuIds = oauthRoleMenuService.listObjs(Wrappers.<OauthRoleMenu>lambdaQuery()
-                .eq(OauthRoleMenu::getStatus, BooleanEnum.YES.getCode())
-                .eq(OauthRoleMenu::getRoleId, id).select(OauthRoleMenu::getMenuId));
-        MenuScopeParam param = new MenuScopeParam();
-        param.setId(data.getId());
-        param.setName(data.getName());
-        param.setCode(data.getCode());
-        param.setMenuIds(menuIds);
-        return param;
-    }
+	@Override
+	public DataScopeParam dataScopeById(Long id) {
+		OauthRole data = super.getById(id);
+		List<Long> deptIds = oauthRoleDeptService.listObjs(Wrappers.<OauthRoleDept>lambdaQuery()
+			.eq(OauthRoleDept::getStatus, BooleanEnum.YES.getCode())
+			.eq(OauthRoleDept::getRoleId, id)
+			.select(OauthRoleDept::getDeptId));
+		DataScopeParam param = new DataScopeParam();
+		param.setId(data.getId());
+		param.setName(data.getName());
+		param.setCode(data.getCode());
+		param.setDataScope(data.getDataScope());
+		param.setDeptIds(deptIds);
+		return param;
+	}
 
-    @Override
-    public void modifyMenuScope(MenuScopeParam param) {
-        oauthRoleMenuService.batchSave(param.getId(), param.getMenuIds());
-    }
+	@Override
+	public void modifyDataScope(DataScopeParam param) {
+		LambdaUpdateWrapper<OauthRole> updateWrapper = Wrappers.<OauthRole>lambdaUpdate()
+			.eq(OauthRole::getId, param.getId())
+			.set(OauthRole::getDataScope, param.getDataScope());
+		update(updateWrapper);
+		oauthRoleDeptService.batchSave(param.getId(), param.getDeptIds());
+	}
 
-    @Override
-    public List<SelectNode> selectOptions() {
-        LambdaQueryWrapper<OauthRole> queryWrapper = Wrappers.<OauthRole>lambdaQuery()
-                .eq(OauthRole::getStatus, BooleanEnum.YES.getCode())
-                .select(OauthRole::getId, OauthRole::getName)
-                .orderByDesc(OauthRole::getSorting);
-        return list(queryWrapper).stream().map(item -> new SelectNode(item.getName(), item.getId())).toList();
-    }
+	@Override
+	public MenuScopeParam menuScopeById(Long id) {
+		OauthRole data = super.getById(id);
+		List<Long> menuIds = oauthRoleMenuService.listObjs(Wrappers.<OauthRoleMenu>lambdaQuery()
+			.eq(OauthRoleMenu::getStatus, BooleanEnum.YES.getCode())
+			.eq(OauthRoleMenu::getRoleId, id)
+			.select(OauthRoleMenu::getMenuId));
+		MenuScopeParam param = new MenuScopeParam();
+		param.setId(data.getId());
+		param.setName(data.getName());
+		param.setCode(data.getCode());
+		param.setMenuIds(menuIds);
+		return param;
+	}
 
-    @Override
-    public boolean saveOrUpdate(OauthRole param) {
-        LambdaQueryWrapper<OauthRole> queryWrapper = Wrappers.<OauthRole>lambdaQuery()
-                .eq(OauthRole::getCode, param.getCode())
-                .ne(OauthRole::getId, Optional.ofNullable(param.getId()).orElse(0L));
-        if (exists(queryWrapper)) {
-            throw new DataExistsException("角色编码已存在,请修改后重试!");
-        }
-        return super.saveOrUpdate(param);
-    }
+	@Override
+	public void modifyMenuScope(MenuScopeParam param) {
+		oauthRoleMenuService.batchSave(param.getId(), param.getMenuIds());
+	}
+
+	@Override
+	public List<SelectNode> selectOptions() {
+		LambdaQueryWrapper<OauthRole> queryWrapper = Wrappers.<OauthRole>lambdaQuery()
+			.eq(OauthRole::getStatus, BooleanEnum.YES.getCode())
+			.select(OauthRole::getId, OauthRole::getName)
+			.orderByDesc(OauthRole::getSorting);
+		return list(queryWrapper).stream().map(item -> new SelectNode(item.getName(), item.getId())).toList();
+	}
+
+	@Override
+	public boolean saveOrUpdate(OauthRole param) {
+		LambdaQueryWrapper<OauthRole> queryWrapper = Wrappers.<OauthRole>lambdaQuery()
+			.eq(OauthRole::getCode, param.getCode())
+			.ne(OauthRole::getId, Optional.ofNullable(param.getId()).orElse(0L));
+		if (exists(queryWrapper)) {
+			throw new DataExistsException("角色编码已存在,请修改后重试!");
+		}
+		return super.saveOrUpdate(param);
+	}
+
 }

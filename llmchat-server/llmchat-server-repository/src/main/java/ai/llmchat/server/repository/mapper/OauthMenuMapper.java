@@ -17,7 +17,9 @@ import java.util.List;
  */
 @Mapper
 public interface OauthMenuMapper extends BaseMapper<OauthMenu> {
-    List<OauthMenu> selectAuthorizedMenuList(@Param("userId") Long userId);
 
-    List<String> selectPermissionList(@Param("userId") Long userId);
+	List<OauthMenu> selectAuthorizedMenuList(@Param("userId") Long userId);
+
+	List<String> selectPermissionList(@Param("userId") Long userId);
+
 }

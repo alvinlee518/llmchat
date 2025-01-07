@@ -9,6 +9,9 @@ import java.util.List;
 @Getter
 @Builder
 public class IngestionResult {
-    private final TokenUsage tokenUsage;
-    private final List<String> embedIdList;
+
+	private final TokenUsage tokenUsage;
+
+	private final List<String> embedIdList;
+
 }

@@ -27,53 +27,55 @@ import java.util.List;
  * @since 2024-10-23
  */
 @Service
-public class OauthUserRoleServiceImpl extends ServiceImpl<OauthUserRoleMapper, OauthUserRole> implements OauthUserRoleService {
-    private final OauthUserMapper oauthUserMapper;
+public class OauthUserRoleServiceImpl extends ServiceImpl<OauthUserRoleMapper, OauthUserRole>
+		implements OauthUserRoleService {
 
-    public OauthUserRoleServiceImpl(OauthUserMapper oauthUserMapper) {
-        this.oauthUserMapper = oauthUserMapper;
-    }
+	private final OauthUserMapper oauthUserMapper;
 
-    @Override
-    public void batchSave(Long userId, List<Long> ids) {
-        remove(Wrappers.<OauthUserRole>lambdaQuery().eq(OauthUserRole::getUserId, userId));
-        if (CollectionUtils.isEmpty(ids)) {
-            return;
-        }
-        List<OauthUserRole> list = ids.stream()
-                .map(item -> {
-                    OauthUserRole result = new OauthUserRole();
-                    result.setRoleId(item);
-                    result.setUserId(userId);
-                    return result;
-                }).toList();
-        saveBatch(list);
-    }
+	public OauthUserRoleServiceImpl(OauthUserMapper oauthUserMapper) {
+		this.oauthUserMapper = oauthUserMapper;
+	}
 
-    @Override
-    public PageData<OauthUser> userRoleList(UserRolePageParam param) {
-        PageInfo<OauthUser> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
-                .doSelectPageInfo(() -> oauthUserMapper.selectUserListByRole(param.getRoleId(), param.getName(), param.getPhone(), param.getUserScope()));
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
-    }
+	@Override
+	public void batchSave(Long userId, List<Long> ids) {
+		remove(Wrappers.<OauthUserRole>lambdaQuery().eq(OauthUserRole::getUserId, userId));
+		if (CollectionUtils.isEmpty(ids)) {
+			return;
+		}
+		List<OauthUserRole> list = ids.stream().map(item -> {
+			OauthUserRole result = new OauthUserRole();
+			result.setRoleId(item);
+			result.setUserId(userId);
+			return result;
+		}).toList();
+		saveBatch(list);
+	}
 
-    @Override
-    public void allocated(UserRoleParam param) {
-        List<OauthUserRole> list = param.getUserIds().stream()
-                .map(item -> {
-                    OauthUserRole result = new OauthUserRole();
-                    result.setRoleId(param.getRoleId());
-                    result.setUserId(item);
-                    return result;
-                }).toList();
-        saveBatch(list);
-    }
+	@Override
+	public PageData<OauthUser> userRoleList(UserRolePageParam param) {
+		PageInfo<OauthUser> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> oauthUserMapper.selectUserListByRole(param.getRoleId(), param.getName(),
+					param.getPhone(), param.getUserScope()));
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
+	}
 
-    @Override
-    public void unallocated(UserRoleParam param) {
-        LambdaQueryWrapper<OauthUserRole> queryWrapper = Wrappers.<OauthUserRole>lambdaQuery()
-                .eq(OauthUserRole::getRoleId, param.getRoleId())
-                .in(OauthUserRole::getUserId, param.getUserIds());
-        remove(queryWrapper);
-    }
+	@Override
+	public void allocated(UserRoleParam param) {
+		List<OauthUserRole> list = param.getUserIds().stream().map(item -> {
+			OauthUserRole result = new OauthUserRole();
+			result.setRoleId(param.getRoleId());
+			result.setUserId(item);
+			return result;
+		}).toList();
+		saveBatch(list);
+	}
+
+	@Override
+	public void unallocated(UserRoleParam param) {
+		LambdaQueryWrapper<OauthUserRole> queryWrapper = Wrappers.<OauthUserRole>lambdaQuery()
+			.eq(OauthUserRole::getRoleId, param.getRoleId())
+			.in(OauthUserRole::getUserId, param.getUserIds());
+		remove(queryWrapper);
+	}
+
 }

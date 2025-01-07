@@ -14,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-10-22
  */
 public interface DictDataService extends IService<DictData> {
-    PageData<DictData> queryPage(CommonPageParam param);
+
+	PageData<DictData> queryPage(CommonPageParam param);
+
 }

@@ -9,9 +9,13 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ParagraphExportVO implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @ExcelProperty("分段标题")
-    private String title;
-    @ExcelProperty("分段内容")
-    private String content;
+
+	private static final long serialVersionUID = 1L;
+
+	@ExcelProperty("分段标题")
+	private String title;
+
+	@ExcelProperty("分段内容")
+	private String content;
+
 }

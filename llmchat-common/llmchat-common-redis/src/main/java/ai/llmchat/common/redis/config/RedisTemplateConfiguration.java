@@ -17,35 +17,35 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @ConditionalOnClass(RedisTemplate.class)
 @AutoConfigureBefore(RedisAutoConfiguration.class)
 public class RedisTemplateConfiguration {
-    @Bean
-    @ConditionalOnMissingBean(
-            name = {"redisTemplate"}
-    )
-    @ConditionalOnSingleCandidate(RedisConnectionFactory.class)
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        initialize(redisTemplate, redisConnectionFactory);
-        return redisTemplate;
-    }
 
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnSingleCandidate(RedisConnectionFactory.class)
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate redisTemplate = new StringRedisTemplate();
-        initialize(redisTemplate, redisConnectionFactory);
-        return redisTemplate;
-    }
+	@Bean
+	@ConditionalOnMissingBean(name = { "redisTemplate" })
+	@ConditionalOnSingleCandidate(RedisConnectionFactory.class)
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+		initialize(redisTemplate, redisConnectionFactory);
+		return redisTemplate;
+	}
 
-    public void initialize(RedisTemplate<?, ?> redisTemplate, RedisConnectionFactory redisConnectionFactory) {
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        // 使用StringRedisSerializer 序列化和反序列化redis的key值
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        // 使用 fastjson 序列化和反序列化redis的value值
-        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	@ConditionalOnSingleCandidate(RedisConnectionFactory.class)
+	public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		StringRedisTemplate redisTemplate = new StringRedisTemplate();
+		initialize(redisTemplate, redisConnectionFactory);
+		return redisTemplate;
+	}
+
+	public void initialize(RedisTemplate<?, ?> redisTemplate, RedisConnectionFactory redisConnectionFactory) {
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		// 使用StringRedisSerializer 序列化和反序列化redis的key值
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		// 使用 fastjson 序列化和反序列化redis的value值
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.afterPropertiesSet();
+	}
+
 }

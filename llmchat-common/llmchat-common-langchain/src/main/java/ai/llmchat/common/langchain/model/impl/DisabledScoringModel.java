@@ -8,8 +8,10 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class DisabledScoringModel implements ScoringModel {
-    @Override
-    public Response<List<Double>> scoreAll(List<TextSegment> segments, String query) {
-        throw new ModelDisabledException("RerankModel is disabled");
-    }
+
+	@Override
+	public Response<List<Double>> scoreAll(List<TextSegment> segments, String query) {
+		throw new ModelDisabledException("RerankModel is disabled");
+	}
+
 }

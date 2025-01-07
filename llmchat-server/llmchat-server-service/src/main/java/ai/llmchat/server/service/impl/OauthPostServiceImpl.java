@@ -30,35 +30,35 @@ import java.util.Optional;
 @Service
 public class OauthPostServiceImpl extends ServiceImpl<OauthPostMapper, OauthPost> implements OauthPostService {
 
-    @Override
-    public PageData<OauthPost> queryPage(CommonPageParam param) {
-        LambdaQueryWrapper<OauthPost> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, OauthPost::getStatus, param.getStatus())
-                .like(StringUtils.isNotBlank(param.getName()), OauthPost::getName, param.getName())
-                .orderByDesc(OauthPost::getUpdateAt);
-        PageInfo<OauthPost> pageInfo = PageHelper
-                .startPage(param.getPage(), param.getSize())
-                .doSelectPageInfo(() -> this.list(queryWrapper));
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
-    }
+	@Override
+	public PageData<OauthPost> queryPage(CommonPageParam param) {
+		LambdaQueryWrapper<OauthPost> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, OauthPost::getStatus, param.getStatus())
+			.like(StringUtils.isNotBlank(param.getName()), OauthPost::getName, param.getName())
+			.orderByDesc(OauthPost::getUpdateAt);
+		PageInfo<OauthPost> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> this.list(queryWrapper));
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
+	}
 
-    @Override
-    public List<SelectNode> selectOptions() {
-        LambdaQueryWrapper<OauthPost> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(OauthPost::getStatus, BooleanEnum.YES.getCode())
-                .select(OauthPost::getName, OauthPost::getId)
-                .orderByDesc(OauthPost::getSorting);
-        return this.list(queryWrapper).stream().map(item -> new SelectNode(item.getName(), item.getId())).toList();
-    }
+	@Override
+	public List<SelectNode> selectOptions() {
+		LambdaQueryWrapper<OauthPost> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(OauthPost::getStatus, BooleanEnum.YES.getCode())
+			.select(OauthPost::getName, OauthPost::getId)
+			.orderByDesc(OauthPost::getSorting);
+		return this.list(queryWrapper).stream().map(item -> new SelectNode(item.getName(), item.getId())).toList();
+	}
 
-    @Override
-    public boolean saveOrUpdate(OauthPost param) {
-        LambdaQueryWrapper<OauthPost> queryWrapper = Wrappers.<OauthPost>lambdaQuery()
-                .eq(OauthPost::getCode, param.getCode())
-                .ne(OauthPost::getId, Optional.ofNullable(param.getId()).orElse(0L));
-        if (exists(queryWrapper)) {
-            throw new DataExistsException("岗位编码已存在,请修改后重试!");
-        }
-        return super.saveOrUpdate(param);
-    }
+	@Override
+	public boolean saveOrUpdate(OauthPost param) {
+		LambdaQueryWrapper<OauthPost> queryWrapper = Wrappers.<OauthPost>lambdaQuery()
+			.eq(OauthPost::getCode, param.getCode())
+			.ne(OauthPost::getId, Optional.ofNullable(param.getId()).orElse(0L));
+		if (exists(queryWrapper)) {
+			throw new DataExistsException("岗位编码已存在,请修改后重试!");
+		}
+		return super.saveOrUpdate(param);
+	}
+
 }

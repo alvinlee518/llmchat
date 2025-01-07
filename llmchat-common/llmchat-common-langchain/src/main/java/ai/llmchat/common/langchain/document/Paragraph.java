@@ -10,7 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Paragraph {
-    private String prompt;
-    private String completion;
-    private Integer position;
+
+	private String prompt;
+
+	private String completion;
+
+	private Integer position;
+
 }

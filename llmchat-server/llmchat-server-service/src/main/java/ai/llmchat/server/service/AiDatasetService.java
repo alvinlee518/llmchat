@@ -21,11 +21,13 @@ import java.util.List;
  * @since 2024-10-28
  */
 public interface AiDatasetService extends IService<AiDataset> {
-    PageData<DatasetVO> queryPage(CommonPageParam param);
 
-    Long saveOrUpdate(DatasetParam param);
+	PageData<DatasetVO> queryPage(CommonPageParam param);
 
-    List<HitTestingVO> hitTesting(HitTestingParam param);
+	Long saveOrUpdate(DatasetParam param);
 
-    List<AiDataset> listByAppId(Long appId);
+	List<HitTestingVO> hitTesting(HitTestingParam param);
+
+	List<AiDataset> listByAppId(Long appId);
+
 }

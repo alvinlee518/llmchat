@@ -23,45 +23,47 @@ import java.util.List;
 @RestController
 @RequestMapping("/dept")
 public class OauthDeptController {
-    private final OauthDeptService oauthDeptService;
 
-    public OauthDeptController(OauthDeptService oauthDeptService) {
-        this.oauthDeptService = oauthDeptService;
-    }
+	private final OauthDeptService oauthDeptService;
 
-    @GetMapping("/tree/{pid}")
-    public Result<List<TreeNode>> treeData(@PathVariable("pid") Long pid) {
-        List<TreeNode> list = oauthDeptService.treeData(pid);
-        return Result.data(list);
-    }
+	public OauthDeptController(OauthDeptService oauthDeptService) {
+		this.oauthDeptService = oauthDeptService;
+	}
 
-    @GetMapping("/list")
-    public PageResult<OauthDept> queryPage(CommonPageParam param) {
-        PageData<OauthDept> pageData = oauthDeptService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	@GetMapping("/tree/{pid}")
+	public Result<List<TreeNode>> treeData(@PathVariable("pid") Long pid) {
+		List<TreeNode> list = oauthDeptService.treeData(pid);
+		return Result.data(list);
+	}
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated OauthDept param) {
-        oauthDeptService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@GetMapping("/list")
+	public PageResult<OauthDept> queryPage(CommonPageParam param) {
+		PageData<OauthDept> pageData = oauthDeptService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated OauthDept param) {
-        oauthDeptService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated OauthDept param) {
+		oauthDeptService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @GetMapping("/{id}")
-    public Result<OauthDept> detail(@PathVariable("id") Long id) {
-        OauthDept dto = oauthDeptService.getById(id);
-        return Result.data(dto);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated OauthDept param) {
+		oauthDeptService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        oauthDeptService.removeByIds(ids);
-        return Result.success();
-    }
+	@GetMapping("/{id}")
+	public Result<OauthDept> detail(@PathVariable("id") Long id) {
+		OauthDept dto = oauthDeptService.getById(id);
+		return Result.data(dto);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		oauthDeptService.removeByIds(ids);
+		return Result.success();
+	}
+
 }

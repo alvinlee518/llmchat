@@ -25,89 +25,92 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 public class OauthRoleController {
-    private final OauthRoleService oauthRoleService;
-    private final OauthUserRoleService oauthUserRoleService;
 
-    public OauthRoleController(OauthRoleService oauthRoleService, OauthUserRoleService oauthUserRoleService) {
-        this.oauthRoleService = oauthRoleService;
-        this.oauthUserRoleService = oauthUserRoleService;
-    }
+	private final OauthRoleService oauthRoleService;
 
-    @GetMapping("/list")
-    public PageResult<OauthRole> queryPage(CommonPageParam param) {
-        PageData<OauthRole> pageData = oauthRoleService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	private final OauthUserRoleService oauthUserRoleService;
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated OauthRole param) {
-        oauthRoleService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	public OauthRoleController(OauthRoleService oauthRoleService, OauthUserRoleService oauthUserRoleService) {
+		this.oauthRoleService = oauthRoleService;
+		this.oauthUserRoleService = oauthUserRoleService;
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated OauthRole param) {
-        oauthRoleService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@GetMapping("/list")
+	public PageResult<OauthRole> queryPage(CommonPageParam param) {
+		PageData<OauthRole> pageData = oauthRoleService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @GetMapping("/{id}")
-    public Result<OauthRole> detail(@PathVariable("id") Long id) {
-        OauthRole dto = oauthRoleService.getById(id);
-        return Result.data(dto);
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated OauthRole param) {
+		oauthRoleService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        oauthRoleService.removeByIds(ids);
-        return Result.success();
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated OauthRole param) {
+		oauthRoleService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @GetMapping("/data_scope/{id}")
-    public Result<DataScopeParam> dataScope(@PathVariable("id") Long id) {
-        DataScopeParam param = oauthRoleService.dataScopeById(id);
-        return Result.data(param);
-    }
+	@GetMapping("/{id}")
+	public Result<OauthRole> detail(@PathVariable("id") Long id) {
+		OauthRole dto = oauthRoleService.getById(id);
+		return Result.data(dto);
+	}
 
-    @PostMapping("/data_scope")
-    public Result<?> dataScope(@RequestBody DataScopeParam param) {
-        oauthRoleService.modifyDataScope(param);
-        return Result.success();
-    }
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		oauthRoleService.removeByIds(ids);
+		return Result.success();
+	}
 
-    @GetMapping("/menu_scope/{id}")
-    public Result<MenuScopeParam> menuScope(@PathVariable("id") Long id) {
-        MenuScopeParam param = oauthRoleService.menuScopeById(id);
-        return Result.data(param);
-    }
+	@GetMapping("/data_scope/{id}")
+	public Result<DataScopeParam> dataScope(@PathVariable("id") Long id) {
+		DataScopeParam param = oauthRoleService.dataScopeById(id);
+		return Result.data(param);
+	}
 
-    @PostMapping("/menu_scope")
-    public Result<?> menuScope(@RequestBody MenuScopeParam param) {
-        oauthRoleService.modifyMenuScope(param);
-        return Result.success();
-    }
+	@PostMapping("/data_scope")
+	public Result<?> dataScope(@RequestBody DataScopeParam param) {
+		oauthRoleService.modifyDataScope(param);
+		return Result.success();
+	}
 
-    @GetMapping("/user_scope")
-    public PageResult<OauthUser> userRoleList(UserRolePageParam param) {
-        PageData<OauthUser> pageData = oauthUserRoleService.userRoleList(param);
-        return PageResult.of(pageData);
-    }
+	@GetMapping("/menu_scope/{id}")
+	public Result<MenuScopeParam> menuScope(@PathVariable("id") Long id) {
+		MenuScopeParam param = oauthRoleService.menuScopeById(id);
+		return Result.data(param);
+	}
 
-    @PostMapping("/allocated")
-    public Result<?> allocated(@RequestBody UserRoleParam param) {
-        oauthUserRoleService.allocated(param);
-        return Result.success();
-    }
+	@PostMapping("/menu_scope")
+	public Result<?> menuScope(@RequestBody MenuScopeParam param) {
+		oauthRoleService.modifyMenuScope(param);
+		return Result.success();
+	}
 
-    @PostMapping("/unallocated")
-    public Result<?> unallocated(@RequestBody UserRoleParam param) {
-        oauthUserRoleService.unallocated(param);
-        return Result.success();
-    }
+	@GetMapping("/user_scope")
+	public PageResult<OauthUser> userRoleList(UserRolePageParam param) {
+		PageData<OauthUser> pageData = oauthUserRoleService.userRoleList(param);
+		return PageResult.of(pageData);
+	}
 
-    @GetMapping("/select_options")
-    public Result<List<SelectNode>> selectOptions() {
-        List<SelectNode> selectNodes = oauthRoleService.selectOptions();
-        return Result.data(selectNodes);
-    }
+	@PostMapping("/allocated")
+	public Result<?> allocated(@RequestBody UserRoleParam param) {
+		oauthUserRoleService.allocated(param);
+		return Result.success();
+	}
+
+	@PostMapping("/unallocated")
+	public Result<?> unallocated(@RequestBody UserRoleParam param) {
+		oauthUserRoleService.unallocated(param);
+		return Result.success();
+	}
+
+	@GetMapping("/select_options")
+	public Result<List<SelectNode>> selectOptions() {
+		List<SelectNode> selectNodes = oauthRoleService.selectOptions();
+		return Result.data(selectNodes);
+	}
+
 }

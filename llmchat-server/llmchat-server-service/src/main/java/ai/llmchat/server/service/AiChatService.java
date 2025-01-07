@@ -19,19 +19,21 @@ import java.util.List;
  * @since 2024-11-07
  */
 public interface AiChatService extends IService<AiChat> {
-    Flux<Message> debugChat(ChatTestingParam param);
 
-    Flux<Message> streamingChat(ChatStramingParam param);
+	Flux<Message> debugChat(ChatTestingParam param);
 
-    List<MessageVO> chatMessageById(Long chatId);
+	Flux<Message> streamingChat(ChatStramingParam param);
 
-    AppChatVO chatListByAppId(Long appId);
+	List<MessageVO> chatMessageById(Long chatId);
 
-    PromptVO optimize(OptimizeParam param);
+	AppChatVO chatListByAppId(Long appId);
 
-    List<String> suggested(Long chatId);
+	PromptVO optimize(OptimizeParam param);
 
-    Long saveOrUpdate(ChatParam param);
+	List<String> suggested(Long chatId);
 
-    void rating(RatingParam param);
+	Long saveOrUpdate(ChatParam param);
+
+	void rating(RatingParam param);
+
 }

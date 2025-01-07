@@ -10,7 +10,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SelectNode implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private String label;
-    private Long value;
+
+	private static final long serialVersionUID = 1L;
+
+	private String label;
+
+	private Long value;
+
 }

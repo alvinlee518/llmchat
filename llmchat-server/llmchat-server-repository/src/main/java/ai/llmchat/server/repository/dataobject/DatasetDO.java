@@ -9,29 +9,32 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class DatasetDO implements Serializable {
-    private static final long serialVersionUID = 1L;
-    /**
-     *
-     */
-    private Long id;
 
-    /**
-     * 数据集名称
-     */
-    private String name;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 数据集描述
-     */
-    private String description;
+	/**
+	 *
+	 */
+	private Long id;
 
-    /**
-     * 文档数量
-     */
-    private Integer docCount;
+	/**
+	 * 数据集名称
+	 */
+	private String name;
 
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateAt;
+	/**
+	 * 数据集描述
+	 */
+	private String description;
+
+	/**
+	 * 文档数量
+	 */
+	private Integer docCount;
+
+	/**
+	 * 更新时间
+	 */
+	private LocalDateTime updateAt;
+
 }

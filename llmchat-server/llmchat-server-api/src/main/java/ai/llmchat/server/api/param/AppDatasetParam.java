@@ -7,6 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AppDatasetParam extends PageParam {
-    private String keyword;
-    private Long appId;
+
+	private String keyword;
+
+	private Long appId;
+
 }

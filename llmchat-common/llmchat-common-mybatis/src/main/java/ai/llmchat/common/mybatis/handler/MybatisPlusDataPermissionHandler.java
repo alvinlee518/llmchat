@@ -9,12 +9,14 @@ import net.sf.jsqlparser.schema.Table;
 import java.util.Objects;
 
 public class MybatisPlusDataPermissionHandler implements MultiDataPermissionHandler {
-    @Override
-    public Expression getSqlSegment(Table table, Expression where, String statementId) {
-        DataScope dataScope = DataScopeUtils.getDataScope(statementId);
-        if (Objects.isNull(dataScope)) {
-            return null;
-        }
-        return null;
-    }
+
+	@Override
+	public Expression getSqlSegment(Table table, Expression where, String statementId) {
+		DataScope dataScope = DataScopeUtils.getDataScope(statementId);
+		if (Objects.isNull(dataScope)) {
+			return null;
+		}
+		return null;
+	}
+
 }

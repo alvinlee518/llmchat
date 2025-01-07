@@ -18,11 +18,13 @@ import java.util.List;
  * @since 2024-10-23
  */
 public interface OauthUserRoleService extends IService<OauthUserRole> {
-    void batchSave(Long userId, List<Long> ids);
 
-    PageData<OauthUser> userRoleList(UserRolePageParam param);
+	void batchSave(Long userId, List<Long> ids);
 
-    void allocated(UserRoleParam param);
+	PageData<OauthUser> userRoleList(UserRolePageParam param);
 
-    void unallocated(UserRoleParam param);
+	void allocated(UserRoleParam param);
+
+	void unallocated(UserRoleParam param);
+
 }

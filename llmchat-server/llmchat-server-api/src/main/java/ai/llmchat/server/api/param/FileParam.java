@@ -12,7 +12,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FileParam implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Long fileId;
-    private String fileName;
+
+	private static final long serialVersionUID = 1L;
+
+	private Long fileId;
+
+	private String fileName;
+
 }

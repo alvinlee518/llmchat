@@ -28,28 +28,30 @@ import java.util.Optional;
 @Service
 public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> implements DictDataService {
 
-    @Override
-    public PageData<DictData> queryPage(CommonPageParam param) {
-        LambdaQueryWrapper<DictData> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, DictData::getStatus, param.getStatus());
-        queryWrapper.like(StringUtils.isNotBlank(param.getName()), DictData::getName, param.getName());
-        queryWrapper.eq(Optional.ofNullable(param.getParentId()).orElse(-1L) >= 0, DictData::getTypeId, param.getParentId());
-        queryWrapper.orderByDesc(DictData::getUpdateAt);
-        PageInfo<DictData> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
-                .doSelectPageInfo(() -> this.list(queryWrapper));
-        List<DictData> list = pageInfo.getList();
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), list);
-    }
+	@Override
+	public PageData<DictData> queryPage(CommonPageParam param) {
+		LambdaQueryWrapper<DictData> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, DictData::getStatus, param.getStatus());
+		queryWrapper.like(StringUtils.isNotBlank(param.getName()), DictData::getName, param.getName());
+		queryWrapper.eq(Optional.ofNullable(param.getParentId()).orElse(-1L) >= 0, DictData::getTypeId,
+				param.getParentId());
+		queryWrapper.orderByDesc(DictData::getUpdateAt);
+		PageInfo<DictData> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> this.list(queryWrapper));
+		List<DictData> list = pageInfo.getList();
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), list);
+	}
 
-    @Override
-    public boolean saveOrUpdate(DictData param) {
-        LambdaQueryWrapper<DictData> queryWrapper = Wrappers.<DictData>lambdaQuery()
-                .eq(DictData::getTypeId, param.getTypeId())
-                .eq(DictData::getCode, param.getCode())
-                .ne(DictData::getId, Optional.ofNullable(param.getId()).orElse(0L));
-        if (exists(queryWrapper)) {
-            throw new DataExistsException("字典编码已存在,请修改后重试!");
-        }
-        return super.saveOrUpdate(param);
-    }
+	@Override
+	public boolean saveOrUpdate(DictData param) {
+		LambdaQueryWrapper<DictData> queryWrapper = Wrappers.<DictData>lambdaQuery()
+			.eq(DictData::getTypeId, param.getTypeId())
+			.eq(DictData::getCode, param.getCode())
+			.ne(DictData::getId, Optional.ofNullable(param.getId()).orElse(0L));
+		if (exists(queryWrapper)) {
+			throw new DataExistsException("字典编码已存在,请修改后重试!");
+		}
+		return super.saveOrUpdate(param);
+	}
+
 }

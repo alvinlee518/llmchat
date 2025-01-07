@@ -14,5 +14,7 @@ import java.util.List;
  * @since 2024-10-23
  */
 public interface OauthUserPostService extends IService<OauthUserPost> {
-    void batchSave(Long userId, List<Long> ids);
+
+	void batchSave(Long userId, List<Long> ids);
+
 }

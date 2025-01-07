@@ -23,51 +23,53 @@ import java.util.List;
 @RestController
 @RequestMapping("/paragraph")
 public class AiParagraphController {
-    private final AiParagraphService aiParagraphService;
 
-    public AiParagraphController(AiParagraphService aiParagraphService) {
-        this.aiParagraphService = aiParagraphService;
-    }
+	private final AiParagraphService aiParagraphService;
 
-    @GetMapping("/list")
-    public PageResult<AiParagraph> queryPage(ParagraphPageParam param) {
-        PageData<AiParagraph> pageData = aiParagraphService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	public AiParagraphController(AiParagraphService aiParagraphService) {
+		this.aiParagraphService = aiParagraphService;
+	}
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated AiParagraph param) {
-        aiParagraphService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@GetMapping("/list")
+	public PageResult<AiParagraph> queryPage(ParagraphPageParam param) {
+		PageData<AiParagraph> pageData = aiParagraphService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated AiParagraph param) {
-        aiParagraphService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated AiParagraph param) {
+		aiParagraphService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @GetMapping("/{id}")
-    public Result<AiParagraph> detail(@PathVariable("id") Long id) {
-        AiParagraph dto = aiParagraphService.getById(id);
-        return Result.data(dto);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated AiParagraph param) {
+		aiParagraphService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        aiParagraphService.removeByIds(ids);
-        return Result.success();
-    }
+	@GetMapping("/{id}")
+	public Result<AiParagraph> detail(@PathVariable("id") Long id) {
+		AiParagraph dto = aiParagraphService.getById(id);
+		return Result.data(dto);
+	}
 
-    @PutMapping("/enabled")
-    public Result<?> enabled(@RequestBody EnabledParam param) {
-        aiParagraphService.enabled(param);
-        return Result.success();
-    }
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		aiParagraphService.removeByIds(ids);
+		return Result.success();
+	}
 
-    @PutMapping("/reindex/{id}")
-    public Result<?> reindex(@PathVariable("id") Long id) {
-        aiParagraphService.reindex(id);
-        return Result.success();
-    }
+	@PutMapping("/enabled")
+	public Result<?> enabled(@RequestBody EnabledParam param) {
+		aiParagraphService.enabled(param);
+		return Result.success();
+	}
+
+	@PutMapping("/reindex/{id}")
+	public Result<?> reindex(@PathVariable("id") Long id) {
+		aiParagraphService.reindex(id);
+		return Result.success();
+	}
+
 }

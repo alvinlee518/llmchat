@@ -24,63 +24,70 @@ import java.util.*;
 @Slf4j
 @Service
 public class EmbeddingConsumer implements MessageStreamListener {
-    private final AiModelService aiModelService;
-    private final AiDocumentService aiDocumentService;
-    private final AiParagraphService aiParagraphService;
-    private final ContentStoreIngestor contentStoreIngestor;
 
-    public EmbeddingConsumer(AiModelService aiModelService, AiDocumentService aiDocumentService, AiParagraphService aiParagraphService, ContentStoreIngestor contentStoreIngestor) {
-        this.aiModelService = aiModelService;
-        this.aiDocumentService = aiDocumentService;
-        this.aiParagraphService = aiParagraphService;
-        this.contentStoreIngestor = contentStoreIngestor;
-    }
+	private final AiModelService aiModelService;
 
-    @Override
-    public Action doConsume(Message message) {
-        long paraId = Long.parseLong(message.getBody());
-        AiParagraph paragraph = aiParagraphService.getById(paraId);
-        if (Optional.ofNullable(paragraph).map(AiParagraph::getId).orElse(0L) <= 0) {
-            return Action.CommitMessage;
-        }
-        AiDocument document = aiDocumentService.getById(paragraph.getDocId());
-        if (Optional.ofNullable(document).map(AiDocument::getId).orElse(0L) <= 0) {
-            return Action.CommitMessage;
-        }
+	private final AiDocumentService aiDocumentService;
 
-        aiParagraphService.changeState(List.of(paragraph.getId()), StateEnum.IN_PROCESSING);
-        List<String> texts = new ArrayList<>();
-        if ((document.getEmbedCols() & 1) == 1) {
-            texts.add(paragraph.getTitle());
-        }
-        if ((document.getEmbedCols() & 2) == 2) {
-            texts.add(paragraph.getContent());
-        }
-        Map<String, Object> metadata = new HashMap<>() {
-            {
-                put(LangchainConstants.METADATA_FIELD_DATASET, paragraph.getDatasetId());
-                put(LangchainConstants.METADATA_FIELD_DOCUMENT, paragraph.getDocId());
-                put(LangchainConstants.METADATA_FIELD_PARAGRAPH, paragraph.getId());
-            }
-        };
-        TextSegment segment = TextSegment.from(StringUtils.join(texts, System.lineSeparator()), Metadata.from(metadata));
-        EmbeddingModel embeddingModel = aiModelService.embeddingModelByDatasetId(document.getDatasetId());
-        IngestionResult ingestionResult = contentStoreIngestor.ingest(embeddingModel, List.of(segment));
-        List<String> embedIdList = ingestionResult.getEmbedIdList();
-        paragraph.setIndexId(embedIdList.get(0));
-        paragraph.setState(StateEnum.COMPLETION.getCode());
-        paragraph.setFailure(StringUtils.EMPTY);
-        aiParagraphService.updateById(paragraph);
-        return Action.CommitMessage;
-    }
+	private final AiParagraphService aiParagraphService;
 
-    @Override
-    public String getGroup() {
-        return "GROUP_PARAGRAPH_EMBEDDING";
-    }
+	private final ContentStoreIngestor contentStoreIngestor;
 
-    @Override
-    public String getTopic() {
-        return MessageConstants.TOPIC_PARAGRAPH_EMBEDDING;
-    }
+	public EmbeddingConsumer(AiModelService aiModelService, AiDocumentService aiDocumentService,
+			AiParagraphService aiParagraphService, ContentStoreIngestor contentStoreIngestor) {
+		this.aiModelService = aiModelService;
+		this.aiDocumentService = aiDocumentService;
+		this.aiParagraphService = aiParagraphService;
+		this.contentStoreIngestor = contentStoreIngestor;
+	}
+
+	@Override
+	public Action doConsume(Message message) {
+		long paraId = Long.parseLong(message.getBody());
+		AiParagraph paragraph = aiParagraphService.getById(paraId);
+		if (Optional.ofNullable(paragraph).map(AiParagraph::getId).orElse(0L) <= 0) {
+			return Action.CommitMessage;
+		}
+		AiDocument document = aiDocumentService.getById(paragraph.getDocId());
+		if (Optional.ofNullable(document).map(AiDocument::getId).orElse(0L) <= 0) {
+			return Action.CommitMessage;
+		}
+
+		aiParagraphService.changeState(List.of(paragraph.getId()), StateEnum.IN_PROCESSING);
+		List<String> texts = new ArrayList<>();
+		if ((document.getEmbedCols() & 1) == 1) {
+			texts.add(paragraph.getTitle());
+		}
+		if ((document.getEmbedCols() & 2) == 2) {
+			texts.add(paragraph.getContent());
+		}
+		Map<String, Object> metadata = new HashMap<>() {
+			{
+				put(LangchainConstants.METADATA_FIELD_DATASET, paragraph.getDatasetId());
+				put(LangchainConstants.METADATA_FIELD_DOCUMENT, paragraph.getDocId());
+				put(LangchainConstants.METADATA_FIELD_PARAGRAPH, paragraph.getId());
+			}
+		};
+		TextSegment segment = TextSegment.from(StringUtils.join(texts, System.lineSeparator()),
+				Metadata.from(metadata));
+		EmbeddingModel embeddingModel = aiModelService.embeddingModelByDatasetId(document.getDatasetId());
+		IngestionResult ingestionResult = contentStoreIngestor.ingest(embeddingModel, List.of(segment));
+		List<String> embedIdList = ingestionResult.getEmbedIdList();
+		paragraph.setIndexId(embedIdList.get(0));
+		paragraph.setState(StateEnum.COMPLETION.getCode());
+		paragraph.setFailure(StringUtils.EMPTY);
+		aiParagraphService.updateById(paragraph);
+		return Action.CommitMessage;
+	}
+
+	@Override
+	public String getGroup() {
+		return "GROUP_PARAGRAPH_EMBEDDING";
+	}
+
+	@Override
+	public String getTopic() {
+		return MessageConstants.TOPIC_PARAGRAPH_EMBEDDING;
+	}
+
 }

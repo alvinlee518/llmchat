@@ -10,9 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface OauthUserConverter {
-    OauthUser param2dto(OauthUserParam param);
 
-    OauthUserVO dto2vo(OauthUser dto);
+	OauthUser param2dto(OauthUserParam param);
 
-    List<OauthUserVO> dto2vo(Collection<OauthUser> list);
+	OauthUserVO dto2vo(OauthUser dto);
+
+	List<OauthUserVO> dto2vo(Collection<OauthUser> list);
+
 }

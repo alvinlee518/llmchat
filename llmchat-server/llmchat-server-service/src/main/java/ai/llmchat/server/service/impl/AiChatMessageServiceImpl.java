@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
  * @since 2024-11-07
  */
 @Service
-public class AiChatMessageServiceImpl extends ServiceImpl<AiChatMessageMapper, AiChatMessage> implements AiChatMessageService {
+public class AiChatMessageServiceImpl extends ServiceImpl<AiChatMessageMapper, AiChatMessage>
+		implements AiChatMessageService {
 
 }

@@ -21,15 +21,17 @@ import java.util.List;
  * @since 2024-10-22
  */
 public interface OauthRoleService extends IService<OauthRole> {
-    PageData<OauthRole> queryPage(CommonPageParam param);
 
-    DataScopeParam dataScopeById(Long id);
+	PageData<OauthRole> queryPage(CommonPageParam param);
 
-    void modifyDataScope(DataScopeParam param);
+	DataScopeParam dataScopeById(Long id);
 
-    MenuScopeParam menuScopeById(Long id);
+	void modifyDataScope(DataScopeParam param);
 
-    void modifyMenuScope(MenuScopeParam param);
+	MenuScopeParam menuScopeById(Long id);
 
-    List<SelectNode> selectOptions();
+	void modifyMenuScope(MenuScopeParam param);
+
+	List<SelectNode> selectOptions();
+
 }

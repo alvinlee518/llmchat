@@ -8,9 +8,15 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ContentSearchOptions {
-    private final String keyword;
-    private final Embedding embedding;
-    private final Integer maxResults;
-    private final Double minScore;
-    private final Filter filter;
+
+	private final String keyword;
+
+	private final Embedding embedding;
+
+	private final Integer maxResults;
+
+	private final Double minScore;
+
+	private final Filter filter;
+
 }

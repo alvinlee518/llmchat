@@ -38,155 +38,168 @@ import java.util.Optional;
  */
 @Service
 public class AiParagraphServiceImpl extends ServiceImpl<AiParagraphMapper, AiParagraph> implements AiParagraphService {
-    private final MessageStreamPublisher messageStreamPublisher;
 
-    public AiParagraphServiceImpl(MessageStreamPublisher messageStreamPublisher) {
-        this.messageStreamPublisher = messageStreamPublisher;
-    }
+	private final MessageStreamPublisher messageStreamPublisher;
 
-    @Override
-    public PageData<AiParagraph> queryPage(ParagraphPageParam param) {
-        LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery();
-        queryWrapper.eq(AiParagraph::getStatus, 1);
-        queryWrapper.eq(Optional.ofNullable(param.getState()).orElse(-1) >= 0, AiParagraph::getState, param.getState());
-        queryWrapper.eq(Optional.ofNullable(param.getDocId()).orElse(0L) >= 1, AiParagraph::getDocId, param.getDocId());
-        queryWrapper.and(StringUtils.isNotBlank(param.getKeyword()), wrapper -> {
-            wrapper.like(AiParagraph::getTitle, param.getKeyword()).or().like(AiParagraph::getContent, param.getKeyword());
-        });
-        queryWrapper.orderByAsc(AiParagraph::getPosition);
-        PageInfo<AiParagraph> pageInfo = PageHelper.startPage(param.getPage(), param.getSize()).doSelectPageInfo(() -> list(queryWrapper));
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
-    }
+	public AiParagraphServiceImpl(MessageStreamPublisher messageStreamPublisher) {
+		this.messageStreamPublisher = messageStreamPublisher;
+	}
 
-    @Override
-    public boolean saveOrUpdate(AiParagraph entity) {
-        entity.setState(StateEnum.PENDING.getCode());
-        entity.setFailure(StringUtils.EMPTY);
-        boolean isOk = super.saveOrUpdate(entity);
-        if (isOk) {
-            messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, entity.getId()));
-        }
-        return isOk;
-    }
+	@Override
+	public PageData<AiParagraph> queryPage(ParagraphPageParam param) {
+		LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery();
+		queryWrapper.eq(AiParagraph::getStatus, 1);
+		queryWrapper.eq(Optional.ofNullable(param.getState()).orElse(-1) >= 0, AiParagraph::getState, param.getState());
+		queryWrapper.eq(Optional.ofNullable(param.getDocId()).orElse(0L) >= 1, AiParagraph::getDocId, param.getDocId());
+		queryWrapper.and(StringUtils.isNotBlank(param.getKeyword()), wrapper -> {
+			wrapper.like(AiParagraph::getTitle, param.getKeyword())
+				.or()
+				.like(AiParagraph::getContent, param.getKeyword());
+		});
+		queryWrapper.orderByAsc(AiParagraph::getPosition);
+		PageInfo<AiParagraph> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> list(queryWrapper));
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), pageInfo.getList());
+	}
 
-    @Override
-    public void enabled(EnabledParam param) {
-        AiParagraph paragraph = baseMapper.selectById(param.getId());
-        if (Optional.ofNullable(paragraph).map(AiParagraph::getId).orElse(0L) <= 0) {
-            throw new ServiceException("分段不存在");
-        }
-        paragraph.setStatus(param.getEnabled());
-        baseMapper.updateById(paragraph);
-        if (Objects.equals(BooleanEnum.YES.getCode(), param.getEnabled())) {
-            messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, paragraph.getId()));
-        }
-    }
+	@Override
+	public boolean saveOrUpdate(AiParagraph entity) {
+		entity.setState(StateEnum.PENDING.getCode());
+		entity.setFailure(StringUtils.EMPTY);
+		boolean isOk = super.saveOrUpdate(entity);
+		if (isOk) {
+			messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, entity.getId()));
+		}
+		return isOk;
+	}
 
-    @Override
-    public List<ParagraphDO> queryParagraphByIds(List<Long> ids) {
-        return baseMapper.queryByIds(ids);
-    }
+	@Override
+	public void enabled(EnabledParam param) {
+		AiParagraph paragraph = baseMapper.selectById(param.getId());
+		if (Optional.ofNullable(paragraph).map(AiParagraph::getId).orElse(0L) <= 0) {
+			throw new ServiceException("分段不存在");
+		}
+		paragraph.setStatus(param.getEnabled());
+		baseMapper.updateById(paragraph);
+		if (Objects.equals(BooleanEnum.YES.getCode(), param.getEnabled())) {
+			messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, paragraph.getId()));
+		}
+	}
 
-    @Override
-    public void incrementHitCount(List<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            return;
-        }
-        LambdaUpdateWrapper<AiParagraph> updateWrapper = Wrappers.<AiParagraph>lambdaUpdate().setIncrBy(AiParagraph::getHitCount, 1).in(AiParagraph::getId, ids);
-        baseMapper.update(updateWrapper);
-    }
+	@Override
+	public List<ParagraphDO> queryParagraphByIds(List<Long> ids) {
+		return baseMapper.queryByIds(ids);
+	}
 
-    @Override
-    public void removeByDocId(Long docId) {
-        LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery().eq(AiParagraph::getDocId, docId);
-        baseMapper.delete(queryWrapper);
-    }
+	@Override
+	public void incrementHitCount(List<Long> ids) {
+		if (CollectionUtils.isEmpty(ids)) {
+			return;
+		}
+		LambdaUpdateWrapper<AiParagraph> updateWrapper = Wrappers.<AiParagraph>lambdaUpdate()
+			.setIncrBy(AiParagraph::getHitCount, 1)
+			.in(AiParagraph::getId, ids);
+		baseMapper.update(updateWrapper);
+	}
 
-    @Override
-    public List<AiParagraph> listPendingByDocId(Long docId) {
-        LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery().eq(AiParagraph::getDocId, docId)
-                .eq(AiParagraph::getState, StateEnum.PENDING.getCode())
-                .eq(AiParagraph::getStatus, BooleanEnum.YES.getCode());
-        return baseMapper.selectList(queryWrapper);
-    }
+	@Override
+	public void removeByDocId(Long docId) {
+		LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery()
+			.eq(AiParagraph::getDocId, docId);
+		baseMapper.delete(queryWrapper);
+	}
 
-    @Override
-    public void changeState(List<Long> ids, StateEnum state) {
-        LambdaUpdateWrapper<AiParagraph> updateWrapper = Wrappers.<AiParagraph>lambdaUpdate()
-                .set(AiParagraph::getState, state.getCode())
-                .in(AiParagraph::getId, ids);
-        baseMapper.update(updateWrapper);
-    }
+	@Override
+	public List<AiParagraph> listPendingByDocId(Long docId) {
+		LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery()
+			.eq(AiParagraph::getDocId, docId)
+			.eq(AiParagraph::getState, StateEnum.PENDING.getCode())
+			.eq(AiParagraph::getStatus, BooleanEnum.YES.getCode());
+		return baseMapper.selectList(queryWrapper);
+	}
 
-    @Override
-    public void changeState(List<Long> ids, StateEnum state, String failure) {
-        LambdaUpdateWrapper<AiParagraph> updateWrapper = Wrappers.<AiParagraph>lambdaUpdate()
-                .set(AiParagraph::getState, state.getCode())
-                .set(AiParagraph::getFailure, failure)
-                .in(AiParagraph::getId, ids);
-        baseMapper.update(updateWrapper);
-    }
+	@Override
+	public void changeState(List<Long> ids, StateEnum state) {
+		LambdaUpdateWrapper<AiParagraph> updateWrapper = Wrappers.<AiParagraph>lambdaUpdate()
+			.set(AiParagraph::getState, state.getCode())
+			.in(AiParagraph::getId, ids);
+		baseMapper.update(updateWrapper);
+	}
 
-    @Override
-    public void reindexByDocId(Long docId) {
-        List<AiParagraph> list = baseMapper.selectList(Wrappers.<AiParagraph>lambdaQuery()
-                .eq(AiParagraph::getDocId, docId)
-                .eq(AiParagraph::getStatus, BooleanEnum.YES.getCode())
-                .select(AiParagraph::getId));
-        if (CollectionUtils.isNotEmpty(list)) {
-            List<Long> idList = list.stream().map(AiParagraph::getId).toList();
-            baseMapper.update(Wrappers.<AiParagraph>lambdaUpdate()
-                    .set(AiParagraph::getState, StateEnum.PENDING.getCode())
-                    .set(AiParagraph::getFailure, StringUtils.EMPTY)
-                    .eq(AiParagraph::getDocId, docId)
-                    .in(AiParagraph::getId, idList));
-            List<Message> messages = list.stream().map(item -> Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, item.getId())).toList();
-            messageStreamPublisher.publish(messages);
-        }
-    }
+	@Override
+	public void changeState(List<Long> ids, StateEnum state, String failure) {
+		LambdaUpdateWrapper<AiParagraph> updateWrapper = Wrappers.<AiParagraph>lambdaUpdate()
+			.set(AiParagraph::getState, state.getCode())
+			.set(AiParagraph::getFailure, failure)
+			.in(AiParagraph::getId, ids);
+		baseMapper.update(updateWrapper);
+	}
 
-    @Override
-    public void reindexByDatasetId(Long dsId) {
-        List<AiParagraph> list = baseMapper.selectList(Wrappers.<AiParagraph>lambdaQuery()
-                .eq(AiParagraph::getDatasetId, dsId)
-                .eq(AiParagraph::getStatus, BooleanEnum.YES.getCode())
-                .select(AiParagraph::getId));
-        if (CollectionUtils.isNotEmpty(list)) {
-            List<Long> idList = list.stream().map(AiParagraph::getId).toList();
-            baseMapper.update(Wrappers.<AiParagraph>lambdaUpdate()
-                    .set(AiParagraph::getState, StateEnum.PENDING.getCode())
-                    .set(AiParagraph::getFailure, StringUtils.EMPTY)
-                    .eq(AiParagraph::getDatasetId, dsId)
-                    .in(AiParagraph::getId, idList));
-            List<Message> messages = list.stream().map(item -> Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, item.getId())).toList();
-            messageStreamPublisher.publish(messages);
-        }
-    }
+	@Override
+	public void reindexByDocId(Long docId) {
+		List<AiParagraph> list = baseMapper.selectList(Wrappers.<AiParagraph>lambdaQuery()
+			.eq(AiParagraph::getDocId, docId)
+			.eq(AiParagraph::getStatus, BooleanEnum.YES.getCode())
+			.select(AiParagraph::getId));
+		if (CollectionUtils.isNotEmpty(list)) {
+			List<Long> idList = list.stream().map(AiParagraph::getId).toList();
+			baseMapper.update(Wrappers.<AiParagraph>lambdaUpdate()
+				.set(AiParagraph::getState, StateEnum.PENDING.getCode())
+				.set(AiParagraph::getFailure, StringUtils.EMPTY)
+				.eq(AiParagraph::getDocId, docId)
+				.in(AiParagraph::getId, idList));
+			List<Message> messages = list.stream()
+				.map(item -> Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, item.getId()))
+				.toList();
+			messageStreamPublisher.publish(messages);
+		}
+	}
 
-    @Override
-    public void reindex(Long paraId) {
-        AiParagraph paragraph = baseMapper.selectById(paraId);
-        if (Optional.ofNullable(paragraph).map(AiParagraph::getId).orElse(0L) <= 0) {
-            throw new ServiceException("分段不存在");
-        }
-        paragraph.setState(StateEnum.PENDING.getCode());
-        paragraph.setFailure(StringUtils.EMPTY);
-        baseMapper.updateById(paragraph);
-        messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, paragraph.getId()));
-    }
+	@Override
+	public void reindexByDatasetId(Long dsId) {
+		List<AiParagraph> list = baseMapper.selectList(Wrappers.<AiParagraph>lambdaQuery()
+			.eq(AiParagraph::getDatasetId, dsId)
+			.eq(AiParagraph::getStatus, BooleanEnum.YES.getCode())
+			.select(AiParagraph::getId));
+		if (CollectionUtils.isNotEmpty(list)) {
+			List<Long> idList = list.stream().map(AiParagraph::getId).toList();
+			baseMapper.update(Wrappers.<AiParagraph>lambdaUpdate()
+				.set(AiParagraph::getState, StateEnum.PENDING.getCode())
+				.set(AiParagraph::getFailure, StringUtils.EMPTY)
+				.eq(AiParagraph::getDatasetId, dsId)
+				.in(AiParagraph::getId, idList));
+			List<Message> messages = list.stream()
+				.map(item -> Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, item.getId()))
+				.toList();
+			messageStreamPublisher.publish(messages);
+		}
+	}
 
-    @Override
-    public List<ParagraphExportVO> exportListByDocId(Long docId) {
-        LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery()
-                .eq(AiParagraph::getDocId, docId)
-                .eq(AiParagraph::getStatus, BooleanEnum.YES.getCode())
-                .select(AiParagraph::getTitle, AiParagraph::getContent);
-        List<AiParagraph> list = baseMapper.selectList(queryWrapper);
-        return list.stream().map(item -> {
-            ParagraphExportVO exportVO = new ParagraphExportVO();
-            exportVO.setTitle(item.getTitle());
-            exportVO.setContent(item.getContent());
-            return exportVO;
-        }).toList();
-    }
+	@Override
+	public void reindex(Long paraId) {
+		AiParagraph paragraph = baseMapper.selectById(paraId);
+		if (Optional.ofNullable(paragraph).map(AiParagraph::getId).orElse(0L) <= 0) {
+			throw new ServiceException("分段不存在");
+		}
+		paragraph.setState(StateEnum.PENDING.getCode());
+		paragraph.setFailure(StringUtils.EMPTY);
+		baseMapper.updateById(paragraph);
+		messageStreamPublisher.publish(Message.of(MessageConstants.TOPIC_PARAGRAPH_EMBEDDING, paragraph.getId()));
+	}
+
+	@Override
+	public List<ParagraphExportVO> exportListByDocId(Long docId) {
+		LambdaQueryWrapper<AiParagraph> queryWrapper = Wrappers.<AiParagraph>lambdaQuery()
+			.eq(AiParagraph::getDocId, docId)
+			.eq(AiParagraph::getStatus, BooleanEnum.YES.getCode())
+			.select(AiParagraph::getTitle, AiParagraph::getContent);
+		List<AiParagraph> list = baseMapper.selectList(queryWrapper);
+		return list.stream().map(item -> {
+			ParagraphExportVO exportVO = new ParagraphExportVO();
+			exportVO.setTitle(item.getTitle());
+			exportVO.setContent(item.getContent());
+			return exportVO;
+		}).toList();
+	}
+
 }

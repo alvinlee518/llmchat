@@ -7,7 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ModelPageParam extends PageParam {
-    private Integer modelProvider;
-    private String modelName;
-    private Integer status;
+
+	private Integer modelProvider;
+
+	private String modelName;
+
+	private Integer status;
+
 }

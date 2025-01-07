@@ -10,26 +10,25 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 public @interface DataScope {
-    /**
-     * 数据权限关联表别名
-     *
-     * @return
-     */
-    String alias() default "";
 
-    /**
-     * 数据权限关联表字段
-     *
-     * @return
-     */
-    String column() default "";
+	/**
+	 * 数据权限关联表别名
+	 * @return
+	 */
+	String alias() default "";
 
-    /**
-     * 是否禁用数据权限过滤
-     *
-     * @return
-     */
-    boolean ignore() default false;
+	/**
+	 * 数据权限关联表字段
+	 * @return
+	 */
+	String column() default "";
+
+	/**
+	 * 是否禁用数据权限过滤
+	 * @return
+	 */
+	boolean ignore() default false;
+
 }

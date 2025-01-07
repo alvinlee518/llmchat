@@ -15,39 +15,41 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class OauthUserController {
-    private final OauthUserService oauthUserService;
 
-    public OauthUserController(OauthUserService oauthUserService) {
-        this.oauthUserService = oauthUserService;
-    }
+	private final OauthUserService oauthUserService;
 
-    @GetMapping("/list")
-    public PageResult<OauthUserVO> queryPage(OauthUserPageParam param) {
-        PageData<OauthUserVO> pageData = oauthUserService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	public OauthUserController(OauthUserService oauthUserService) {
+		this.oauthUserService = oauthUserService;
+	}
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated OauthUserParam param) {
-        Long id = oauthUserService.saveOrUpdate(param);
-        return Result.data(id);
-    }
+	@GetMapping("/list")
+	public PageResult<OauthUserVO> queryPage(OauthUserPageParam param) {
+		PageData<OauthUserVO> pageData = oauthUserService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated OauthUserParam param) {
-        Long id = oauthUserService.saveOrUpdate(param);
-        return Result.data(id);
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated OauthUserParam param) {
+		Long id = oauthUserService.saveOrUpdate(param);
+		return Result.data(id);
+	}
 
-    @GetMapping("/{id}")
-    public Result<OauthUserVO> detail(@PathVariable("id") Long id) {
-        OauthUserVO data = oauthUserService.selectById(id);
-        return Result.data(data);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated OauthUserParam param) {
+		Long id = oauthUserService.saveOrUpdate(param);
+		return Result.data(id);
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        oauthUserService.removeByIds(ids);
-        return Result.success();
-    }
+	@GetMapping("/{id}")
+	public Result<OauthUserVO> detail(@PathVariable("id") Long id) {
+		OauthUserVO data = oauthUserService.selectById(id);
+		return Result.data(data);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		oauthUserService.removeByIds(ids);
+		return Result.success();
+	}
+
 }

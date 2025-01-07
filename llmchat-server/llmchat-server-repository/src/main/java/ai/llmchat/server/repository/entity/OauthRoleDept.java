@@ -25,50 +25,51 @@ import lombok.experimental.Accessors;
 @TableName("oauth_role_dept")
 public class OauthRoleDept implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+	@TableId(value = "id", type = IdType.ASSIGN_ID)
+	private Long id;
 
-    /**
-     * 角色Id
-     */
-    @TableField("role_id")
-    private Long roleId;
+	/**
+	 * 角色Id
+	 */
+	@TableField("role_id")
+	private Long roleId;
 
-    /**
-     * 部门Id
-     */
-    @TableField("dept_id")
-    private Long deptId;
+	/**
+	 * 部门Id
+	 */
+	@TableField("dept_id")
+	private Long deptId;
 
-    /**
-     * 状态:0-无效;1-有效
-     */
-    @TableField(value = "status", fill = FieldFill.INSERT)
-    private Integer status;
+	/**
+	 * 状态:0-无效;1-有效
+	 */
+	@TableField(value = "status", fill = FieldFill.INSERT)
+	private Integer status;
 
-    /**
-     * 创建人
-     */
-    @TableField(value = "create_by", fill = FieldFill.INSERT)
-    private String createBy;
+	/**
+	 * 创建人
+	 */
+	@TableField(value = "create_by", fill = FieldFill.INSERT)
+	private String createBy;
 
-    /**
-     * 创建时间
-     */
-    @TableField(value = "create_at", fill = FieldFill.INSERT)
-    private LocalDateTime createAt;
+	/**
+	 * 创建时间
+	 */
+	@TableField(value = "create_at", fill = FieldFill.INSERT)
+	private LocalDateTime createAt;
 
-    /**
-     * 更新人
-     */
-    @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    private String updateBy;
+	/**
+	 * 更新人
+	 */
+	@TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
+	private String updateBy;
 
-    /**
-     * 更新时间
-     */
-    @TableField(value = "update_at", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateAt;
+	/**
+	 * 更新时间
+	 */
+	@TableField(value = "update_at", fill = FieldFill.INSERT_UPDATE)
+	private LocalDateTime updateAt;
+
 }

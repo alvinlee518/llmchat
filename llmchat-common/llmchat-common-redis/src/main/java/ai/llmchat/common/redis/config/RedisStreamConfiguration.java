@@ -20,25 +20,24 @@ import java.util.List;
 @EnableConfigurationProperties(RedisStreamProperties.class)
 public class RedisStreamConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public MessageStreamPublisher messageStreamPublisher(StringRedisTemplate stringRedisTemplate) {
-        return new MessageStreamPublisher(stringRedisTemplate);
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public MessageStreamPublisher messageStreamPublisher(StringRedisTemplate stringRedisTemplate) {
+		return new MessageStreamPublisher(stringRedisTemplate);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public MessageStreamConsumer messageStreamConsumer(RedisStreamProperties redisStreamProperties,
-                                                       StringRedisTemplate stringRedisTemplate,
-                                                       List<MessageStreamListener> messageStreamListeners) {
-        return new MessageStreamConsumer(redisStreamProperties, stringRedisTemplate, messageStreamListeners);
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public MessageStreamConsumer messageStreamConsumer(RedisStreamProperties redisStreamProperties,
+			StringRedisTemplate stringRedisTemplate, List<MessageStreamListener> messageStreamListeners) {
+		return new MessageStreamConsumer(redisStreamProperties, stringRedisTemplate, messageStreamListeners);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public PendingMessageScheduler pendingMessageScheduler(RedisStreamProperties redisStreamProperties,
-                                                           StringRedisTemplate stringRedisTemplate,
-                                                           List<MessageStreamListener> messageStreamListeners) {
-        return new PendingMessageScheduler(redisStreamProperties, stringRedisTemplate, messageStreamListeners);
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public PendingMessageScheduler pendingMessageScheduler(RedisStreamProperties redisStreamProperties,
+			StringRedisTemplate stringRedisTemplate, List<MessageStreamListener> messageStreamListeners) {
+		return new PendingMessageScheduler(redisStreamProperties, stringRedisTemplate, messageStreamListeners);
+	}
+
 }

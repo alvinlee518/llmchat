@@ -10,8 +10,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SecurityClaims implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Long id;
-    private String username;
-    private String nickName;
+
+	private static final long serialVersionUID = 1L;
+
+	private Long id;
+
+	private String username;
+
+	private String nickName;
+
 }

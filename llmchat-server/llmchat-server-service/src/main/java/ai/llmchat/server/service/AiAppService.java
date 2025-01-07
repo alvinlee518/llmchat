@@ -16,9 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-11-04
  */
 public interface AiAppService extends IService<AiApp> {
-    PageData<AppVO> queryPage(CommonPageParam param);
 
-    AppVO findById(Long appId);
+	PageData<AppVO> queryPage(CommonPageParam param);
 
-    Long saveOrUpdate(AppParam param);
+	AppVO findById(Long appId);
+
+	Long saveOrUpdate(AppParam param);
+
 }

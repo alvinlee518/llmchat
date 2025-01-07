@@ -7,11 +7,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContentOptions {
-    private Long id;
-    private String name;
-    private String description;
-    private EmbeddingModelOptions modelOptions;
-    private Integer searchMode;
-    private Integer topK;
-    private Double score;
+
+	private Long id;
+
+	private String name;
+
+	private String description;
+
+	private EmbeddingModelOptions modelOptions;
+
+	private Integer searchMode;
+
+	private Integer topK;
+
+	private Double score;
+
 }

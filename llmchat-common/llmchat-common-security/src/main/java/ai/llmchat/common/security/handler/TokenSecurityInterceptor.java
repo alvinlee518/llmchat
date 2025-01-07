@@ -16,51 +16,50 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 @Slf4j
 public class TokenSecurityInterceptor implements AsyncHandlerInterceptor {
-    private final TokenStoreService tokenStoreService;
-    private final SecurityClaimsService securityClaimsService;
 
-    public TokenSecurityInterceptor(TokenStoreService tokenStoreService, SecurityClaimsService securityClaimsService) {
-        this.tokenStoreService = tokenStoreService;
-        this.securityClaimsService = securityClaimsService;
-    }
+	private final TokenStoreService tokenStoreService;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response,
-                             Object handler
-    ) throws Exception {
+	private final SecurityClaimsService securityClaimsService;
 
-        if (!(handler instanceof HandlerMethod)) {
-            return true;
-        }
+	public TokenSecurityInterceptor(TokenStoreService tokenStoreService, SecurityClaimsService securityClaimsService) {
+		this.tokenStoreService = tokenStoreService;
+		this.securityClaimsService = securityClaimsService;
+	}
 
-        if (StringUtils.equalsIgnoreCase(request.getMethod(), HttpMethod.OPTIONS.name())) {
-            return true;
-        }
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 
-        try {
-            String token = RequestUtils.getToken(request);
-            if (StringUtils.isBlank(token)) {
-                throw new AuthenticationException("无效的Token，请登录后重试");
-            }
-            // 验证token
-            String username = tokenStoreService.readAndRefresh(token);
-            // 验证用户
-            SecurityClaims claims = securityClaimsService.findByUsername(username);
-            SecurityUtils.set(claims);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new AuthenticationException(e);
-        }
-        return true;
-    }
+		if (!(handler instanceof HandlerMethod)) {
+			return true;
+		}
 
-    @Override
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response,
-                                Object handler,
-                                Exception ex
-    ) throws Exception {
-        SecurityUtils.clear();
-    }
+		if (StringUtils.equalsIgnoreCase(request.getMethod(), HttpMethod.OPTIONS.name())) {
+			return true;
+		}
+
+		try {
+			String token = RequestUtils.getToken(request);
+			if (StringUtils.isBlank(token)) {
+				throw new AuthenticationException("无效的Token，请登录后重试");
+			}
+			// 验证token
+			String username = tokenStoreService.readAndRefresh(token);
+			// 验证用户
+			SecurityClaims claims = securityClaimsService.findByUsername(username);
+			SecurityUtils.set(claims);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new AuthenticationException(e);
+		}
+		return true;
+	}
+
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		SecurityUtils.clear();
+	}
+
 }

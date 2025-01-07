@@ -18,7 +18,8 @@ import java.util.List;
  */
 public interface OauthDeptService extends IService<OauthDept> {
 
-    PageData<OauthDept> queryPage(CommonPageParam param);
+	PageData<OauthDept> queryPage(CommonPageParam param);
 
-    List<TreeNode> treeData(Long parentId);
+	List<TreeNode> treeData(Long parentId);
+
 }

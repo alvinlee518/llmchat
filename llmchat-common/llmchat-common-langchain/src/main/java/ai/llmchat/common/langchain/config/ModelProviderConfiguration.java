@@ -14,66 +14,67 @@ import java.util.List;
 
 @Configuration
 public class ModelProviderConfiguration {
-    @Bean
-    public OllamaModelProvider ollamaModelProvider() {
-        return new OllamaModelProvider();
-    }
 
-    @Bean
-    public AzureOpenAiModelProvider azureOpenAiModelProvider() {
-        return new AzureOpenAiModelProvider();
-    }
+	@Bean
+	public OllamaModelProvider ollamaModelProvider() {
+		return new OllamaModelProvider();
+	}
 
-    @Bean
-    public HuggingFaceModelProvider huggingFaceModelProvider() {
-        return new HuggingFaceModelProvider();
-    }
+	@Bean
+	public AzureOpenAiModelProvider azureOpenAiModelProvider() {
+		return new AzureOpenAiModelProvider();
+	}
 
-    @Bean
-    public LocalAiModelProvider localAiModelProvider() {
-        return new LocalAiModelProvider();
-    }
+	@Bean
+	public HuggingFaceModelProvider huggingFaceModelProvider() {
+		return new HuggingFaceModelProvider();
+	}
 
-    @Bean
-    public OpenAiModelProvider openAiModelProvider() {
-        return new OpenAiModelProvider();
-    }
+	@Bean
+	public LocalAiModelProvider localAiModelProvider() {
+		return new LocalAiModelProvider();
+	}
 
-    @Bean
-    public QianfanModelProvider qianfanModelProvider() {
-        return new QianfanModelProvider();
-    }
+	@Bean
+	public OpenAiModelProvider openAiModelProvider() {
+		return new OpenAiModelProvider();
+	}
 
-    @Bean
-    public ZhipuAiModelProvider zhipuAiModelProvider() {
-        return new ZhipuAiModelProvider();
-    }
+	@Bean
+	public QianfanModelProvider qianfanModelProvider() {
+		return new QianfanModelProvider();
+	}
 
-    @Bean
-    public ChatGlmModelProvider chatGlmModelProvider() {
-        return new ChatGlmModelProvider();
-    }
+	@Bean
+	public ZhipuAiModelProvider zhipuAiModelProvider() {
+		return new ZhipuAiModelProvider();
+	}
 
-    @Bean
-    public XinferenceModelProvider xinferenceModelProvider() {
-        return new XinferenceModelProvider();
-    }
+	@Bean
+	public ChatGlmModelProvider chatGlmModelProvider() {
+		return new ChatGlmModelProvider();
+	}
 
-    @Bean
-    public ModelProviderFactory modelProviderFactory(List<ModelProvider> modelProviders) {
-        return new DefaultModelProviderFactory(modelProviders);
-    }
+	@Bean
+	public XinferenceModelProvider xinferenceModelProvider() {
+		return new XinferenceModelProvider();
+	}
 
-    @Bean
-    public StreamingChatService chatAssistantService(ContentStore contentStore,
-                                                     ChatMemoryStore chatMemoryStore,
-                                                     ModelProviderFactory modelProviderFactory) {
-        return new StreamingChatService(contentStore, chatMemoryStore, modelProviderFactory);
-    }
+	@Bean
+	public ModelProviderFactory modelProviderFactory(List<ModelProvider> modelProviders) {
+		return new DefaultModelProviderFactory(modelProviders);
+	}
 
-    @Bean
-    public AIAssistantService promptAssistantService(ChatMemoryStore chatMemoryStore, ModelProviderFactory modelProviderFactory) {
-        return new AIAssistantService(chatMemoryStore, modelProviderFactory);
-    }
+	@Bean
+	public StreamingChatService chatAssistantService(ContentStore contentStore, ChatMemoryStore chatMemoryStore,
+			ModelProviderFactory modelProviderFactory) {
+		return new StreamingChatService(contentStore, chatMemoryStore, modelProviderFactory);
+	}
+
+	@Bean
+	public AIAssistantService promptAssistantService(ChatMemoryStore chatMemoryStore,
+			ModelProviderFactory modelProviderFactory) {
+		return new AIAssistantService(chatMemoryStore, modelProviderFactory);
+	}
 
 }

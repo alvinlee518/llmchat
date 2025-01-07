@@ -20,27 +20,29 @@ import java.util.List;
  * @since 2024-10-28
  */
 public interface AiParagraphService extends IService<AiParagraph> {
-    PageData<AiParagraph> queryPage(ParagraphPageParam param);
 
-    void enabled(EnabledParam param);
+	PageData<AiParagraph> queryPage(ParagraphPageParam param);
 
-    List<ParagraphDO> queryParagraphByIds(List<Long> ids);
+	void enabled(EnabledParam param);
 
-    void incrementHitCount(List<Long> ids);
+	List<ParagraphDO> queryParagraphByIds(List<Long> ids);
 
-    void removeByDocId(Long docId);
+	void incrementHitCount(List<Long> ids);
 
-    List<AiParagraph> listPendingByDocId(Long docId);
+	void removeByDocId(Long docId);
 
-    void changeState(List<Long> ids, StateEnum state);
+	List<AiParagraph> listPendingByDocId(Long docId);
 
-    void changeState(List<Long> ids, StateEnum state, String failure);
+	void changeState(List<Long> ids, StateEnum state);
 
-    void reindexByDocId(Long docId);
+	void changeState(List<Long> ids, StateEnum state, String failure);
 
-    void reindexByDatasetId(Long dsId);
+	void reindexByDocId(Long docId);
 
-    void reindex(Long paraId);
+	void reindexByDatasetId(Long dsId);
 
-    List<ParagraphExportVO> exportListByDocId(Long docId);
+	void reindex(Long paraId);
+
+	List<ParagraphExportVO> exportListByDocId(Long docId);
+
 }

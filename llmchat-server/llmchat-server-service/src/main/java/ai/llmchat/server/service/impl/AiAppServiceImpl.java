@@ -34,55 +34,69 @@ import java.util.Optional;
  */
 @Service
 public class AiAppServiceImpl extends ServiceImpl<AiAppMapper, AiApp> implements AiAppService {
-    private final AiModelMapper aiModelMapper;
-    private final AiAppConverter aiAppConverter;
-    private final AiAppDatasetService aiAppDatasetService;
 
-    public AiAppServiceImpl(AiModelMapper aiModelMapper, AiAppConverter aiAppConverter, AiAppDatasetService aiAppDatasetService) {
-        this.aiModelMapper = aiModelMapper;
-        this.aiAppConverter = aiAppConverter;
-        this.aiAppDatasetService = aiAppDatasetService;
-    }
+	private final AiModelMapper aiModelMapper;
 
+	private final AiAppConverter aiAppConverter;
 
-    @Override
-    public PageData<AppVO> queryPage(CommonPageParam param) {
-        LambdaQueryWrapper<AiApp> queryWrapper = Wrappers.<AiApp>lambdaQuery().eq(StringUtils.isNotBlank(param.getName()), AiApp::getName, param.getName()).eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, AiApp::getStatus, param.getStatus()).orderByDesc(AiApp::getUpdateAt);
-        PageInfo<AiApp> pageInfo = PageHelper.startPage(param.getPage(), param.getSize()).doSelectPageInfo(() -> list(queryWrapper));
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), aiAppConverter.do2vo(pageInfo.getList()));
-    }
+	private final AiAppDatasetService aiAppDatasetService;
 
-    @Override
-    public AppVO findById(Long appId) {
-        AiApp app = this.getById(appId);
-        if (Optional.ofNullable(app).map(AiApp::getId).orElse(0L) <= 0) {
-            return null;
-        }
-        AppVO result = aiAppConverter.do2vo(app);
-        if (Optional.ofNullable(app.getModelId()).orElse(0L) >= 1) {
-            AiModel model = aiModelMapper.selectById(app.getModelId());
-            if (Optional.ofNullable(model).map(AiModel::getId).orElse(0L) >= 1) {
-                result.setModelId(app.getModelId());
-                result.setModelName(model.getModelName());
-            }
-        }
-        if (Optional.ofNullable(app.getRerankId()).orElse(0L) >= 1) {
-            AiModel model = aiModelMapper.selectById(app.getRerankId());
-            if (Optional.ofNullable(model).map(AiModel::getId).orElse(0L) >= 1) {
-                result.setRerankId(app.getModelId());
-                result.setRerankModelName(model.getModelName());
-            }
-        }
-        List<DatasetItemVO> datasetList = aiAppDatasetService.listByAppId(app.getId());
-        result.setDatasets(Optional.ofNullable(datasetList).orElse(new ArrayList<>()));
-        return result;
-    }
+	public AiAppServiceImpl(AiModelMapper aiModelMapper, AiAppConverter aiAppConverter,
+			AiAppDatasetService aiAppDatasetService) {
+		this.aiModelMapper = aiModelMapper;
+		this.aiAppConverter = aiAppConverter;
+		this.aiAppDatasetService = aiAppDatasetService;
+	}
 
-    @Override
-    public Long saveOrUpdate(AppParam param) {
-        AiApp app = aiAppConverter.param2do(param);
-        super.saveOrUpdate(app);
-        aiAppDatasetService.batchSave(app.getId(), Optional.ofNullable(param.getDatasets()).orElse(new ArrayList<>()).stream().map(DatasetItemVO::getId).toList());
-        return app.getId();
-    }
+	@Override
+	public PageData<AppVO> queryPage(CommonPageParam param) {
+		LambdaQueryWrapper<AiApp> queryWrapper = Wrappers.<AiApp>lambdaQuery()
+			.eq(StringUtils.isNotBlank(param.getName()), AiApp::getName, param.getName())
+			.eq(Optional.ofNullable(param.getStatus()).orElse(-1) >= 0, AiApp::getStatus, param.getStatus())
+			.orderByDesc(AiApp::getUpdateAt);
+		PageInfo<AiApp> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> list(queryWrapper));
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(),
+				aiAppConverter.do2vo(pageInfo.getList()));
+	}
+
+	@Override
+	public AppVO findById(Long appId) {
+		AiApp app = this.getById(appId);
+		if (Optional.ofNullable(app).map(AiApp::getId).orElse(0L) <= 0) {
+			return null;
+		}
+		AppVO result = aiAppConverter.do2vo(app);
+		if (Optional.ofNullable(app.getModelId()).orElse(0L) >= 1) {
+			AiModel model = aiModelMapper.selectById(app.getModelId());
+			if (Optional.ofNullable(model).map(AiModel::getId).orElse(0L) >= 1) {
+				result.setModelId(app.getModelId());
+				result.setModelName(model.getModelName());
+			}
+		}
+		if (Optional.ofNullable(app.getRerankId()).orElse(0L) >= 1) {
+			AiModel model = aiModelMapper.selectById(app.getRerankId());
+			if (Optional.ofNullable(model).map(AiModel::getId).orElse(0L) >= 1) {
+				result.setRerankId(app.getModelId());
+				result.setRerankModelName(model.getModelName());
+			}
+		}
+		List<DatasetItemVO> datasetList = aiAppDatasetService.listByAppId(app.getId());
+		result.setDatasets(Optional.ofNullable(datasetList).orElse(new ArrayList<>()));
+		return result;
+	}
+
+	@Override
+	public Long saveOrUpdate(AppParam param) {
+		AiApp app = aiAppConverter.param2do(param);
+		super.saveOrUpdate(app);
+		aiAppDatasetService.batchSave(app.getId(),
+				Optional.ofNullable(param.getDatasets())
+					.orElse(new ArrayList<>())
+					.stream()
+					.map(DatasetItemVO::getId)
+					.toList());
+		return app.getId();
+	}
+
 }

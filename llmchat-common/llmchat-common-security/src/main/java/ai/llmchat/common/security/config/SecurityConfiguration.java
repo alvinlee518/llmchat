@@ -20,37 +20,39 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableConfigurationProperties(SecurityConfigurationProperties.class)
 public class SecurityConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public RedisTemplate<String, SecurityClaims> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, SecurityClaims> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        // 使用StringRedisSerializer 序列化和反序列化redis的key值
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        // 使用 fastjson 序列化和反序列化redis的value值
-        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public RedisTemplate<String, SecurityClaims> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, SecurityClaims> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		// 使用StringRedisSerializer 序列化和反序列化redis的key值
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		// 使用 fastjson 序列化和反序列化redis的value值
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.afterPropertiesSet();
+		return redisTemplate;
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public TokenStoreService tokenStoreService(RedisTemplate<String, SecurityClaims> redisTemplate) {
-        return new TokenStoreServiceImpl(redisTemplate);
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public TokenStoreService tokenStoreService(RedisTemplate<String, SecurityClaims> redisTemplate) {
+		return new TokenStoreServiceImpl(redisTemplate);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SecurityEndpoint securityEndpoint(TokenStoreService tokenStoreService, SecurityClaimsService securityClaimsService) {
-        return new SecurityEndpoint(tokenStoreService, securityClaimsService);
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public SecurityEndpoint securityEndpoint(TokenStoreService tokenStoreService,
+			SecurityClaimsService securityClaimsService) {
+		return new SecurityEndpoint(tokenStoreService, securityClaimsService);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public PasswordEncryptService passwordEncryptService() {
-        return new PasswordEncryptServiceImpl();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public PasswordEncryptService passwordEncryptService() {
+		return new PasswordEncryptServiceImpl();
+	}
+
 }

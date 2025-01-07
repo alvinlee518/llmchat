@@ -9,9 +9,15 @@ import java.util.List;
 @Getter
 @Setter
 public class RetrievalOptions {
-    private Boolean rewriteEnabled;
-    private ScoringModelOptions modelOptions;
-    private Double score;
-    private Integer topK;
-    private List<ContentOptions> contents;
+
+	private Boolean rewriteEnabled;
+
+	private ScoringModelOptions modelOptions;
+
+	private Double score;
+
+	private Integer topK;
+
+	private List<ContentOptions> contents;
+
 }

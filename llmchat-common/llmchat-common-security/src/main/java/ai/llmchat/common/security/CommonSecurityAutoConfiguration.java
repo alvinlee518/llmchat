@@ -6,10 +6,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ImportAutoConfiguration({
-        SecurityConfiguration.class,
-        WebSecurityConfiguration.class
-})
+@ImportAutoConfiguration({ SecurityConfiguration.class, WebSecurityConfiguration.class })
 public class CommonSecurityAutoConfiguration {
 
 }

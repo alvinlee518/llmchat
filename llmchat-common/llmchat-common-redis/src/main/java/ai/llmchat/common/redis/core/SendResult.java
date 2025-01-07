@@ -13,9 +13,14 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendResult implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Nullable
-    private Long sequence;
-    private Long timestamp;
-    private String value;
+
+	private static final long serialVersionUID = 1L;
+
+	@Nullable
+	private Long sequence;
+
+	private Long timestamp;
+
+	private String value;
+
 }

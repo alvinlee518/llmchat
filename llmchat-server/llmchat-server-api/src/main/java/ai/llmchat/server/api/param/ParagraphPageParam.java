@@ -7,16 +7,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ParagraphPageParam extends PageParam {
-    /**
-     * 文档Id
-     */
-    private Long docId;
-    /**
-     * 分段名称
-     */
-    private String keyword;
-    /**
-     * 状态:0-待处理;1-处理中;2-已结束;3-错误
-     */
-    private Integer state;
+
+	/**
+	 * 文档Id
+	 */
+	private Long docId;
+
+	/**
+	 * 分段名称
+	 */
+	private String keyword;
+
+	/**
+	 * 状态:0-待处理;1-处理中;2-已结束;3-错误
+	 */
+	private Integer state;
+
 }

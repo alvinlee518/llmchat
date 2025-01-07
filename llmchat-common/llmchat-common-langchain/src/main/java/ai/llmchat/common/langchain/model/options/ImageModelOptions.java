@@ -6,8 +6,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ImageModelOptions extends ModelOptions {
-    private String size;
-    private String quality;
-    private String style;
-    private String negativePrompt;
+
+	private String size;
+
+	private String quality;
+
+	private String style;
+
+	private String negativePrompt;
+
 }

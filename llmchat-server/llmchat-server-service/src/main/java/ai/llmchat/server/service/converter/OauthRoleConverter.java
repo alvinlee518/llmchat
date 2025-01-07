@@ -6,5 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface OauthRoleConverter {
-    OauthRoleVO dto2vo(OauthRole dto);
+
+	OauthRoleVO dto2vo(OauthRole dto);
+
 }

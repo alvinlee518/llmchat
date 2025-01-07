@@ -7,8 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRolePageParam extends PageParam {
-    private String name;
-    private String phone;
-    private Integer userScope;
-    private Long roleId;
+
+	private String name;
+
+	private String phone;
+
+	private Integer userScope;
+
+	private Long roleId;
+
 }

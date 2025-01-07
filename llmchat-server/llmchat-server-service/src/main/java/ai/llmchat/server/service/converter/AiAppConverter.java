@@ -9,9 +9,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AiAppConverter {
-    AiApp param2do(AppParam param);
 
-    AppVO do2vo(AiApp app);
+	AiApp param2do(AppParam param);
 
-    List<AppVO> do2vo(List<AiApp> list);
+	AppVO do2vo(AiApp app);
+
+	List<AppVO> do2vo(List<AiApp> list);
+
 }

@@ -20,77 +20,76 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class QianfanModelProvider implements ModelProvider {
-    @Override
-    public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        String responseFormat = null;
-        if (options.getFormat() == ResponseFormatEnum.JSON_OBJECT) {
-            responseFormat = "json_object";
-        }
-        return new QianfanChatModel.QianfanChatModelBuilder()
-                .endpoint(options.getBaseUrl())
-                .modelName(options.getModelName())
-                .responseFormat(responseFormat)
-                .apiKey(options.getApiKey())
-                .secretKey(options.getSecretKey())
-                .temperature(options.getTemperature())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
 
-    @Override
-    public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        String responseFormat = null;
-        if (options.getFormat() == ResponseFormatEnum.JSON_OBJECT) {
-            responseFormat = "json_object";
-        }
-        return new QianfanStreamingChatModel.QianfanStreamingChatModelBuilder()
-                .endpoint(options.getBaseUrl())
-                .modelName(options.getModelName())
-                .responseFormat(responseFormat)
-                .apiKey(options.getApiKey())
-                .secretKey(options.getSecretKey())
-                .temperature(options.getTemperature())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
+		String responseFormat = null;
+		if (options.getFormat() == ResponseFormatEnum.JSON_OBJECT) {
+			responseFormat = "json_object";
+		}
+		return new QianfanChatModel.QianfanChatModelBuilder().endpoint(options.getBaseUrl())
+			.modelName(options.getModelName())
+			.responseFormat(responseFormat)
+			.apiKey(options.getApiKey())
+			.secretKey(options.getSecretKey())
+			.temperature(options.getTemperature())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return new QianfanEmbeddingModel.QianfanEmbeddingModelBuilder()
-                .endpoint(options.getBaseUrl())
-                .modelName(options.getModelName())
-                .apiKey(options.getApiKey())
-                .secretKey(options.getSecretKey())
-                .maxRetries(options.getMaxRetries())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
+		String responseFormat = null;
+		if (options.getFormat() == ResponseFormatEnum.JSON_OBJECT) {
+			responseFormat = "json_object";
+		}
+		return new QianfanStreamingChatModel.QianfanStreamingChatModelBuilder().endpoint(options.getBaseUrl())
+			.modelName(options.getModelName())
+			.responseFormat(responseFormat)
+			.apiKey(options.getApiKey())
+			.secretKey(options.getSecretKey())
+			.temperature(options.getTemperature())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
-    }
+	@Override
+	public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
+		return new QianfanEmbeddingModel.QianfanEmbeddingModelBuilder().endpoint(options.getBaseUrl())
+			.modelName(options.getModelName())
+			.apiKey(options.getApiKey())
+			.secretKey(options.getSecretKey())
+			.maxRetries(options.getMaxRetries())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ImageModel imageModel(ImageModelOptions options) {
-        return new DisabledImageModel();
-    }
+	@Override
+	public ScoringModel scoringModel(ScoringModelOptions options) {
+		return new DisabledScoringModel();
+	}
 
-    @Override
-    public ModerationModel moderationModel(ModerationModelOptions options) {
-        return new DisabledModerationModel();
-    }
+	@Override
+	public ImageModel imageModel(ImageModelOptions options) {
+		return new DisabledImageModel();
+	}
 
-    @Override
-    public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.QIAN_FAN;
-    }
+	@Override
+	public ModerationModel moderationModel(ModerationModelOptions options) {
+		return new DisabledModerationModel();
+	}
 
-    @Override
-    public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING);
-    }
+	@Override
+	public ModelProviderEnum modelProvider() {
+		return ModelProviderEnum.QIAN_FAN;
+	}
+
+	@Override
+	public List<ModelTypeEnum> supportedModelTypes() {
+		return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING);
+	}
+
 }

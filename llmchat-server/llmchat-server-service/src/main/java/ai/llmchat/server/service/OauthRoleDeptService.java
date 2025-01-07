@@ -14,5 +14,7 @@ import java.util.List;
  * @since 2024-10-23
  */
 public interface OauthRoleDeptService extends IService<OauthRoleDept> {
-    void batchSave(Long roleId, List<Long> ids);
+
+	void batchSave(Long roleId, List<Long> ids);
+
 }

@@ -19,54 +19,57 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class HuggingFaceModelProvider implements ModelProvider {
-    @Override
-    public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        return HuggingFaceChatModel.builder()
-                .modelId(options.getModelName())
-                .accessToken(options.getApiKey())
-                .temperature(options.getTemperature())
-                .timeout(options.getTimeout())
-                .maxNewTokens(options.getMaxTokens())
-                .waitForModel(true)
-                .build();
-    }
 
-    @Override
-    public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        return new DisabledStreamingChatLanguageModel();
-    }
+	@Override
+	public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
+		return HuggingFaceChatModel.builder()
+			.modelId(options.getModelName())
+			.accessToken(options.getApiKey())
+			.temperature(options.getTemperature())
+			.timeout(options.getTimeout())
+			.maxNewTokens(options.getMaxTokens())
+			.waitForModel(true)
+			.build();
+	}
 
-    @Override
-    public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return HuggingFaceEmbeddingModel.builder().modelId(options.getModelName())
-                .accessToken(options.getApiKey())
-                .timeout(options.getTimeout())
-                .waitForModel(true)
-                .build();
-    }
+	@Override
+	public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
+		return new DisabledStreamingChatLanguageModel();
+	}
 
-    @Override
-    public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
-    }
+	@Override
+	public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
+		return HuggingFaceEmbeddingModel.builder()
+			.modelId(options.getModelName())
+			.accessToken(options.getApiKey())
+			.timeout(options.getTimeout())
+			.waitForModel(true)
+			.build();
+	}
 
-    @Override
-    public ImageModel imageModel(ImageModelOptions options) {
-        return new DisabledImageModel();
-    }
+	@Override
+	public ScoringModel scoringModel(ScoringModelOptions options) {
+		return new DisabledScoringModel();
+	}
 
-    @Override
-    public ModerationModel moderationModel(ModerationModelOptions options) {
-        return new DisabledModerationModel();
-    }
+	@Override
+	public ImageModel imageModel(ImageModelOptions options) {
+		return new DisabledImageModel();
+	}
 
-    @Override
-    public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.HUGGING_FACE;
-    }
+	@Override
+	public ModerationModel moderationModel(ModerationModelOptions options) {
+		return new DisabledModerationModel();
+	}
 
-    @Override
-    public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING);
-    }
+	@Override
+	public ModelProviderEnum modelProvider() {
+		return ModelProviderEnum.HUGGING_FACE;
+	}
+
+	@Override
+	public List<ModelTypeEnum> supportedModelTypes() {
+		return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING);
+	}
+
 }

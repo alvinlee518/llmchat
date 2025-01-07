@@ -13,9 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @createDate 2024-10-21 14:15:53
  */
 public interface OauthUserService extends IService<OauthUser> {
-    PageData<OauthUserVO> queryPage(OauthUserPageParam param);
 
-    Long saveOrUpdate(OauthUserParam param);
+	PageData<OauthUserVO> queryPage(OauthUserPageParam param);
 
-    OauthUserVO selectById(Long id);
+	Long saveOrUpdate(OauthUserParam param);
+
+	OauthUserVO selectById(Long id);
+
 }

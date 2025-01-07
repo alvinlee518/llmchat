@@ -10,19 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({
-        DateFormatConfiguration.class,
-        JacksonFormatConfiguration.class,
-        TaskPoolConfiguration.class,
-})
+@Import({ DateFormatConfiguration.class, JacksonFormatConfiguration.class, TaskPoolConfiguration.class, })
 public class CommonCoreAutoConfiguration {
-    @Bean
-    public I18nUtils i18nUtils() {
-        return new I18nUtils();
-    }
 
-    @Bean
-    public SpringUtils springUtils() {
-        return new SpringUtils();
-    }
+	@Bean
+	public I18nUtils i18nUtils() {
+		return new I18nUtils();
+	}
+
+	@Bean
+	public SpringUtils springUtils() {
+		return new SpringUtils();
+	}
+
 }

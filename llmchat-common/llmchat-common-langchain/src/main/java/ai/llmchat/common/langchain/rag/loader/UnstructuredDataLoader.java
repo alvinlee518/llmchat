@@ -10,13 +10,17 @@ import dev.langchain4j.data.segment.TextSegment;
 import java.util.List;
 
 public class UnstructuredDataLoader {
-    public static List<TextSegment> load(String url, String[] separators, Integer size, Integer overlap, Integer[] cleanPatterns) {
-        try {
-            Document document = UrlDocumentLoader.load(url, new ApacheTikaDocumentParser());
-            document = new DocumentCleanTransformer(cleanPatterns).transform(document);
-            return DocumentSplitterFactory.create(separators, size, overlap).split(document);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load document", e);
-        }
-    }
+
+	public static List<TextSegment> load(String url, String[] separators, Integer size, Integer overlap,
+			Integer[] cleanPatterns) {
+		try {
+			Document document = UrlDocumentLoader.load(url, new ApacheTikaDocumentParser());
+			document = new DocumentCleanTransformer(cleanPatterns).transform(document);
+			return DocumentSplitterFactory.create(separators, size, overlap).split(document);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Failed to load document", e);
+		}
+	}
+
 }

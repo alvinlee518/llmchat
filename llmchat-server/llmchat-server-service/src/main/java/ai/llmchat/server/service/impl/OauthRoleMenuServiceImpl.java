@@ -19,21 +19,22 @@ import java.util.List;
  * @since 2024-10-23
  */
 @Service
-public class OauthRoleMenuServiceImpl extends ServiceImpl<OauthRoleMenuMapper, OauthRoleMenu> implements OauthRoleMenuService {
+public class OauthRoleMenuServiceImpl extends ServiceImpl<OauthRoleMenuMapper, OauthRoleMenu>
+		implements OauthRoleMenuService {
 
-    @Override
-    public void batchSave(Long roleId, List<Long> ids) {
-        remove(Wrappers.<OauthRoleMenu>lambdaQuery().eq(OauthRoleMenu::getRoleId, roleId));
-        if (CollectionUtils.isEmpty(ids)) {
-            return;
-        }
-        List<OauthRoleMenu> list = ids.stream()
-                .map(item -> {
-                    OauthRoleMenu result = new OauthRoleMenu();
-                    result.setMenuId(item);
-                    result.setRoleId(roleId);
-                    return result;
-                }).toList();
-        saveBatch(list);
-    }
+	@Override
+	public void batchSave(Long roleId, List<Long> ids) {
+		remove(Wrappers.<OauthRoleMenu>lambdaQuery().eq(OauthRoleMenu::getRoleId, roleId));
+		if (CollectionUtils.isEmpty(ids)) {
+			return;
+		}
+		List<OauthRoleMenu> list = ids.stream().map(item -> {
+			OauthRoleMenu result = new OauthRoleMenu();
+			result.setMenuId(item);
+			result.setRoleId(roleId);
+			return result;
+		}).toList();
+		saveBatch(list);
+	}
+
 }

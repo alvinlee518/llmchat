@@ -19,76 +19,75 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class ZhipuAiModelProvider implements ModelProvider {
-    @Override
-    public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        return new ZhipuAiChatModel.ZhipuAiChatModelBuilder()
-                .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
-                .apiKey(options.getApiKey())
-                .maxToken(options.getMaxTokens())
-                .callTimeout(options.getTimeout())
-                .maxRetries(options.getMaxRetries())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
 
-    @Override
-    public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        return new ZhipuAiStreamingChatModel.ZhipuAiStreamingChatModelBuilder()
-                .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
-                .apiKey(options.getApiKey())
-                .maxToken(options.getMaxTokens())
-                .callTimeout(options.getTimeout())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
+		return new ZhipuAiChatModel.ZhipuAiChatModelBuilder().baseUrl(options.getBaseUrl())
+			.model(options.getModelName())
+			.apiKey(options.getApiKey())
+			.maxToken(options.getMaxTokens())
+			.callTimeout(options.getTimeout())
+			.maxRetries(options.getMaxRetries())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return new ZhipuAiEmbeddingModel.ZhipuAiEmbeddingModelBuilder()
-                .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
-                .apiKey(options.getApiKey())
-                .callTimeout(options.getTimeout())
-                .maxRetries(options.getMaxRetries())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
+		return new ZhipuAiStreamingChatModel.ZhipuAiStreamingChatModelBuilder().baseUrl(options.getBaseUrl())
+			.model(options.getModelName())
+			.apiKey(options.getApiKey())
+			.maxToken(options.getMaxTokens())
+			.callTimeout(options.getTimeout())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
-    }
+	@Override
+	public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
+		return new ZhipuAiEmbeddingModel.ZhipuAiEmbeddingModelBuilder().baseUrl(options.getBaseUrl())
+			.model(options.getModelName())
+			.apiKey(options.getApiKey())
+			.callTimeout(options.getTimeout())
+			.maxRetries(options.getMaxRetries())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ImageModel imageModel(ImageModelOptions options) {
-        return ZhipuAiImageModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .model(options.getModelName())
-                .apiKey(options.getApiKey())
-                .callTimeout(options.getTimeout())
-                .maxRetries(options.getMaxRetries())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public ScoringModel scoringModel(ScoringModelOptions options) {
+		return new DisabledScoringModel();
+	}
 
-    @Override
-    public ModerationModel moderationModel(ModerationModelOptions options) {
-        return new DisabledModerationModel();
-    }
+	@Override
+	public ImageModel imageModel(ImageModelOptions options) {
+		return ZhipuAiImageModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.model(options.getModelName())
+			.apiKey(options.getApiKey())
+			.callTimeout(options.getTimeout())
+			.maxRetries(options.getMaxRetries())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.ZHIPU_AI;
-    }
+	@Override
+	public ModerationModel moderationModel(ModerationModelOptions options) {
+		return new DisabledModerationModel();
+	}
 
-    @Override
-    public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING, ModelTypeEnum.IMAGE);
-    }
+	@Override
+	public ModelProviderEnum modelProvider() {
+		return ModelProviderEnum.ZHIPU_AI;
+	}
+
+	@Override
+	public List<ModelTypeEnum> supportedModelTypes() {
+		return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING, ModelTypeEnum.IMAGE);
+	}
+
 }

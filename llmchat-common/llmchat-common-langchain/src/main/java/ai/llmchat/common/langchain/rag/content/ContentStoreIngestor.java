@@ -15,16 +15,18 @@ import java.util.Objects;
 @Slf4j
 @Builder
 public class ContentStoreIngestor {
-    private final ContentStore contentStore;
 
-    public IngestionResult ingest(EmbeddingModel embeddingModel, List<TextSegment> segments) {
-        List<Long> idList = segments.stream().map(item -> item.metadata().getLong(LangchainConstants.METADATA_FIELD_PARAGRAPH)).filter(Objects::nonNull).toList();
-        contentStore.removeAll(new IsIn(LangchainConstants.METADATA_FIELD_PARAGRAPH, idList));
-        Response<List<Embedding>> response = embeddingModel.embedAll(segments);
-        List<String> embedIdList = contentStore.addAll(response.content(), segments);
-        return IngestionResult.builder()
-                .tokenUsage(response.tokenUsage())
-                .embedIdList(embedIdList)
-                .build();
-    }
+	private final ContentStore contentStore;
+
+	public IngestionResult ingest(EmbeddingModel embeddingModel, List<TextSegment> segments) {
+		List<Long> idList = segments.stream()
+			.map(item -> item.metadata().getLong(LangchainConstants.METADATA_FIELD_PARAGRAPH))
+			.filter(Objects::nonNull)
+			.toList();
+		contentStore.removeAll(new IsIn(LangchainConstants.METADATA_FIELD_PARAGRAPH, idList));
+		Response<List<Embedding>> response = embeddingModel.embedAll(segments);
+		List<String> embedIdList = contentStore.addAll(response.content(), segments);
+		return IngestionResult.builder().tokenUsage(response.tokenUsage()).embedIdList(embedIdList).build();
+	}
+
 }

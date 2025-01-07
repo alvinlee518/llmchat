@@ -20,11 +20,13 @@ import java.util.List;
  * @since 2024-10-28
  */
 public interface AiDocumentService extends IService<AiDocument> {
-    PageData<DocumentItemVO> queryPage(DocumentPageParam param);
 
-    void saveOrUpdate(DocumentParam param, List<FileParam> fileParamList);
+	PageData<DocumentItemVO> queryPage(DocumentPageParam param);
 
-    void saveOrUpdate(DocumentParam param);
+	void saveOrUpdate(DocumentParam param, List<FileParam> fileParamList);
 
-    void changeState(Long docId, StateEnum state, String failure);
+	void saveOrUpdate(DocumentParam param);
+
+	void changeState(Long docId, StateEnum state, String failure);
+
 }

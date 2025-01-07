@@ -10,26 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageStreamPublisher {
-    private final StringRedisTemplate stringRedisTemplate;
 
-    public MessageStreamPublisher(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
+	private final StringRedisTemplate stringRedisTemplate;
 
-    public SendResult publish(Message message) {
-        ObjectRecord<String, String> objectRecord = StreamRecords.objectBacked(message.getBody()).withStreamKey(StreamConstants.streamKey(message.getTopic()));
-        RecordId recordId = stringRedisTemplate.opsForStream().add(objectRecord);
-        message.setSequence(recordId.getSequence());
-        message.setTimestamp(recordId.getTimestamp());
-        return new SendResult(recordId.getSequence(), recordId.getTimestamp(), recordId.getValue());
-    }
+	public MessageStreamPublisher(StringRedisTemplate stringRedisTemplate) {
+		this.stringRedisTemplate = stringRedisTemplate;
+	}
 
-    public List<SendResult> publish(@NonNull List<Message> list) {
-        List<SendResult> results = new ArrayList<>();
-        for (Message message : list) {
-            SendResult result = publish(message);
-            results.add(result);
-        }
-        return results;
-    }
+	public SendResult publish(Message message) {
+		ObjectRecord<String, String> objectRecord = StreamRecords.objectBacked(message.getBody())
+			.withStreamKey(StreamConstants.streamKey(message.getTopic()));
+		RecordId recordId = stringRedisTemplate.opsForStream().add(objectRecord);
+		message.setSequence(recordId.getSequence());
+		message.setTimestamp(recordId.getTimestamp());
+		return new SendResult(recordId.getSequence(), recordId.getTimestamp(), recordId.getValue());
+	}
+
+	public List<SendResult> publish(@NonNull List<Message> list) {
+		List<SendResult> results = new ArrayList<>();
+		for (Message message : list) {
+			SendResult result = publish(message);
+			results.add(result);
+		}
+		return results;
+	}
+
 }

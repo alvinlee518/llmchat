@@ -18,5 +18,8 @@ import java.util.List;
  */
 @Mapper
 public interface AiDocumentMapper extends BaseMapper<AiDocument> {
-    List<DocumentItemDO> queryPage(@Param("datasetId") Long datasetId, @Param("name") String name, @Param("state") Integer state);
+
+	List<DocumentItemDO> queryPage(@Param("datasetId") Long datasetId, @Param("name") String name,
+			@Param("state") Integer state);
+
 }

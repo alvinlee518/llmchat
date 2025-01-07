@@ -8,14 +8,16 @@ import lombok.Getter;
  */
 @Getter
 public enum SearchModeEnum implements BaseEnum<Integer> {
-    SIMILARITY(0, "向量检索"),
-    KEYWORD(1, "全文检索"),
-    HYBRID(2, "混合检索");
-    private final Integer code;
-    private final String message;
 
-    SearchModeEnum(Integer code, String message) {
-        this.code = code;
-        this.message = message;
-    }
+	SIMILARITY(0, "向量检索"), KEYWORD(1, "全文检索"), HYBRID(2, "混合检索");
+
+	private final Integer code;
+
+	private final String message;
+
+	SearchModeEnum(Integer code, String message) {
+		this.code = code;
+		this.message = message;
+	}
+
 }

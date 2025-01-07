@@ -19,11 +19,12 @@ import java.util.List;
  */
 public interface OauthMenuService extends IService<OauthMenu> {
 
-    PageData<OauthMenu> queryPage(CommonPageParam param);
+	PageData<OauthMenu> queryPage(CommonPageParam param);
 
-    List<TreeNode> treeData(Long parentId);
+	List<TreeNode> treeData(Long parentId);
 
-    List<RouteRecordVO> selectAuthorizedMenuList(Long userId);
+	List<RouteRecordVO> selectAuthorizedMenuList(Long userId);
 
-    List<String> selectPermissionList(Long userId);
+	List<String> selectPermissionList(Long userId);
+
 }

@@ -7,9 +7,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OauthUserPageParam extends PageParam {
-    private String name;
-    private String email;
-    private String phone;
-    private Integer status;
-    private Long deptId;
+
+	private String name;
+
+	private String email;
+
+	private String phone;
+
+	private Integer status;
+
+	private Long deptId;
+
 }

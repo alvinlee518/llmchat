@@ -8,14 +8,15 @@ import org.apache.ibatis.executor.ErrorContext;
  * @author lxw
  */
 public class ExceptionFactory {
-    /**
-     * 构建数据权限异常
-     *
-     * @param message
-     * @param e
-     * @return
-     */
-    public static RuntimeException dataScope(String message, Exception e) {
-        return new DataScopeException(ErrorContext.instance().message(message).cause(e).toString(), e);
-    }
+
+	/**
+	 * 构建数据权限异常
+	 * @param message
+	 * @param e
+	 * @return
+	 */
+	public static RuntimeException dataScope(String message, Exception e) {
+		return new DataScopeException(ErrorContext.instance().message(message).cause(e).toString(), e);
+	}
+
 }

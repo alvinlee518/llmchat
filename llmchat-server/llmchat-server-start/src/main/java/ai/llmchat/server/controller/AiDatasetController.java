@@ -29,56 +29,62 @@ import java.util.List;
 @RestController
 @RequestMapping("/dataset")
 public class AiDatasetController {
-    private final AiDatasetService aiDatasetService;
-    private final FileStorageService fileStorageService;
-    private final AiDocumentService aiDocumentService;
 
-    public AiDatasetController(AiDatasetService aiDatasetService, FileStorageService fileStorageService, AiDocumentService aiDocumentService) {
-        this.aiDatasetService = aiDatasetService;
-        this.fileStorageService = fileStorageService;
-        this.aiDocumentService = aiDocumentService;
-    }
+	private final AiDatasetService aiDatasetService;
 
-    @GetMapping("/list")
-    public PageResult<DatasetVO> queryPage(CommonPageParam param) {
-        PageData<DatasetVO> pageData = aiDatasetService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	private final FileStorageService fileStorageService;
 
-    @PostMapping("/create")
-    public Result<?> create(DatasetParam datasetParam, DocumentParam documentParam, @RequestParam("files") List<MultipartFile> fileList) {
-        List<FileParam> fileParamList = fileList.stream().map(item -> {
-            FileInfo fileInfo = fileStorageService.of(item).upload();
-            long aLong = NumberUtils.toLong(fileInfo.getId(), 0);
-            return new FileParam(aLong, fileInfo.getOriginalFilename());
-        }).toList();
-        Long datasetId = aiDatasetService.saveOrUpdate(datasetParam);
-        documentParam.setDatasetId(datasetId);
-        aiDocumentService.saveOrUpdate(documentParam, fileParamList);
-        return Result.data(datasetId);
-    }
+	private final AiDocumentService aiDocumentService;
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated DatasetParam param) {
-        aiDatasetService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	public AiDatasetController(AiDatasetService aiDatasetService, FileStorageService fileStorageService,
+			AiDocumentService aiDocumentService) {
+		this.aiDatasetService = aiDatasetService;
+		this.fileStorageService = fileStorageService;
+		this.aiDocumentService = aiDocumentService;
+	}
 
-    @GetMapping("/{id}")
-    public Result<AiDataset> detail(@PathVariable("id") Long id) {
-        AiDataset dto = aiDatasetService.getById(id);
-        return Result.data(dto);
-    }
+	@GetMapping("/list")
+	public PageResult<DatasetVO> queryPage(CommonPageParam param) {
+		PageData<DatasetVO> pageData = aiDatasetService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        aiDatasetService.removeByIds(ids);
-        return Result.success();
-    }
+	@PostMapping("/create")
+	public Result<?> create(DatasetParam datasetParam, DocumentParam documentParam,
+			@RequestParam("files") List<MultipartFile> fileList) {
+		List<FileParam> fileParamList = fileList.stream().map(item -> {
+			FileInfo fileInfo = fileStorageService.of(item).upload();
+			long aLong = NumberUtils.toLong(fileInfo.getId(), 0);
+			return new FileParam(aLong, fileInfo.getOriginalFilename());
+		}).toList();
+		Long datasetId = aiDatasetService.saveOrUpdate(datasetParam);
+		documentParam.setDatasetId(datasetId);
+		aiDocumentService.saveOrUpdate(documentParam, fileParamList);
+		return Result.data(datasetId);
+	}
 
-    @PostMapping("/hit-testing")
-    public Result<List<HitTestingVO>> hitTesting(@RequestBody HitTestingParam param) {
-        List<HitTestingVO> list = aiDatasetService.hitTesting(param);
-        return Result.data(list);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated DatasetParam param) {
+		aiDatasetService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
+
+	@GetMapping("/{id}")
+	public Result<AiDataset> detail(@PathVariable("id") Long id) {
+		AiDataset dto = aiDatasetService.getById(id);
+		return Result.data(dto);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		aiDatasetService.removeByIds(ids);
+		return Result.success();
+	}
+
+	@PostMapping("/hit-testing")
+	public Result<List<HitTestingVO>> hitTesting(@RequestBody HitTestingParam param) {
+		List<HitTestingVO> list = aiDatasetService.hitTesting(param);
+		return Result.data(list);
+	}
+
 }

@@ -9,24 +9,27 @@ import java.util.List;
 @Getter
 @Setter
 public class MenuScopeParam implements Serializable {
-    private static final long serialVersionUID = 1L;
-    /**
-     *
-     */
-    private Long id;
 
-    /**
-     * 名称
-     */
-    private String name;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 编码
-     */
-    private String code;
+	/**
+	 *
+	 */
+	private Long id;
 
-    /**
-     * 菜单Id
-     */
-    private List<Long> menuIds;
+	/**
+	 * 名称
+	 */
+	private String name;
+
+	/**
+	 * 编码
+	 */
+	private String code;
+
+	/**
+	 * 菜单Id
+	 */
+	private List<Long> menuIds;
+
 }

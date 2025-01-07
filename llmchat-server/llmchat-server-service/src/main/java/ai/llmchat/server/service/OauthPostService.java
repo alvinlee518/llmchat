@@ -18,7 +18,8 @@ import java.util.List;
  */
 public interface OauthPostService extends IService<OauthPost> {
 
-    PageData<OauthPost> queryPage(CommonPageParam param);
+	PageData<OauthPost> queryPage(CommonPageParam param);
 
-    List<SelectNode> selectOptions();
+	List<SelectNode> selectOptions();
+
 }

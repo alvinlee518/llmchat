@@ -22,39 +22,41 @@ import java.util.List;
 @RestController
 @RequestMapping("/dict")
 public class DictDataController {
-    private final DictDataService dictDataService;
 
-    public DictDataController(DictDataService dictDataService) {
-        this.dictDataService = dictDataService;
-    }
+	private final DictDataService dictDataService;
 
-    @GetMapping("/list")
-    public PageResult<DictData> queryPage(CommonPageParam param) {
-        PageData<DictData> pageData = dictDataService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	public DictDataController(DictDataService dictDataService) {
+		this.dictDataService = dictDataService;
+	}
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated DictData param) {
-        dictDataService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@GetMapping("/list")
+	public PageResult<DictData> queryPage(CommonPageParam param) {
+		PageData<DictData> pageData = dictDataService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated DictData param) {
-        dictDataService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated DictData param) {
+		dictDataService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @GetMapping("/{id}")
-    public Result<DictData> detail(@PathVariable("id") Long id) {
-        DictData dto = dictDataService.getById(id);
-        return Result.data(dto);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated DictData param) {
+		dictDataService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        dictDataService.removeByIds(ids);
-        return Result.success();
-    }
+	@GetMapping("/{id}")
+	public Result<DictData> detail(@PathVariable("id") Long id) {
+		DictData dto = dictDataService.getById(id);
+		return Result.data(dto);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		dictDataService.removeByIds(ids);
+		return Result.success();
+	}
+
 }

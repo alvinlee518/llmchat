@@ -2,9 +2,10 @@ package ai.llmchat.common.redis.core;
 
 public interface MessageStreamListener {
 
-    Action doConsume(Message message);
+	Action doConsume(Message message);
 
-    String getGroup();
+	String getGroup();
 
-    String getTopic();
+	String getTopic();
+
 }

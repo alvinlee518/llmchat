@@ -16,10 +16,11 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface AiModelMapper extends BaseMapper<AiModel> {
-    ModelOptionsDO getModelByDatasetId(@Param("datasetId") Long datasetId);
 
-    ModelOptionsDO getModelByAppId(@Param("appId") Long appId);
+	ModelOptionsDO getModelByDatasetId(@Param("datasetId") Long datasetId);
 
-    ModelOptionsDO getModelByChatId(@Param("chatId") Long chatId);
+	ModelOptionsDO getModelByAppId(@Param("appId") Long appId);
+
+	ModelOptionsDO getModelByChatId(@Param("chatId") Long chatId);
 
 }

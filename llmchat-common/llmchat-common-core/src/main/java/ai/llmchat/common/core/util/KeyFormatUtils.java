@@ -4,27 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KeyFormatUtils {
-    private List<String> list = new ArrayList<>(2);
 
-    private KeyFormatUtils(String prefix) {
-        this.list.add(prefix);
-    }
+	private List<String> list = new ArrayList<>(2);
 
-    public static KeyFormatUtils of(String prefix) {
-        return new KeyFormatUtils(prefix);
-    }
+	private KeyFormatUtils(String prefix) {
+		this.list.add(prefix);
+	}
 
-    public KeyFormatUtils add(String value) {
-        list.add(value);
-        return this;
-    }
+	public static KeyFormatUtils of(String prefix) {
+		return new KeyFormatUtils(prefix);
+	}
 
-    public String format() {
-        return this.toString();
-    }
+	public KeyFormatUtils add(String value) {
+		list.add(value);
+		return this;
+	}
 
-    @Override
-    public String toString() {
-        return String.join(":", list);
-    }
+	public String format() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString() {
+		return String.join(":", list);
+	}
+
 }

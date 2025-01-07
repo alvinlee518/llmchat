@@ -16,65 +16,67 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class QwenModelProvider implements ModelProvider {
-    @Override
-    public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        return QwenChatModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .apiKey(options.getApiKey())
-                .modelName(options.getModelName())
-                .maxTokens(options.getMaxTokens())
-                .temperature(options.getTemperature().floatValue())
-                .build();
-    }
 
-    @Override
-    public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        return QwenStreamingChatModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .apiKey(options.getApiKey())
-                .modelName(options.getModelName())
-                .maxTokens(options.getMaxTokens())
-                .temperature(options.getTemperature().floatValue())
-                .build();
-    }
+	@Override
+	public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
+		return QwenChatModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.apiKey(options.getApiKey())
+			.modelName(options.getModelName())
+			.maxTokens(options.getMaxTokens())
+			.temperature(options.getTemperature().floatValue())
+			.build();
+	}
 
-    @Override
-    public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return QwenEmbeddingModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .apiKey(options.getApiKey())
-                .modelName(options.getModelName())
-                .build();
-    }
+	@Override
+	public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
+		return QwenStreamingChatModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.apiKey(options.getApiKey())
+			.modelName(options.getModelName())
+			.maxTokens(options.getMaxTokens())
+			.temperature(options.getTemperature().floatValue())
+			.build();
+	}
 
-    @Override
-    public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
-    }
+	@Override
+	public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
+		return QwenEmbeddingModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.apiKey(options.getApiKey())
+			.modelName(options.getModelName())
+			.build();
+	}
 
-    @Override
-    public ImageModel imageModel(ImageModelOptions options) {
-        return WanxImageModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .apiKey(options.getApiKey())
-                .modelName(options.getModelName())
-                .style(WanxImageStyle.valueOf(options.getStyle()))
-                .size(WanxImageSize.valueOf(options.getSize()))
-                .build();
-    }
+	@Override
+	public ScoringModel scoringModel(ScoringModelOptions options) {
+		return new DisabledScoringModel();
+	}
 
-    @Override
-    public ModerationModel moderationModel(ModerationModelOptions options) {
-        return new DisabledModerationModel();
-    }
+	@Override
+	public ImageModel imageModel(ImageModelOptions options) {
+		return WanxImageModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.apiKey(options.getApiKey())
+			.modelName(options.getModelName())
+			.style(WanxImageStyle.valueOf(options.getStyle()))
+			.size(WanxImageSize.valueOf(options.getSize()))
+			.build();
+	}
 
-    @Override
-    public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.QWEN;
-    }
+	@Override
+	public ModerationModel moderationModel(ModerationModelOptions options) {
+		return new DisabledModerationModel();
+	}
 
-    @Override
-    public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING, ModelTypeEnum.IMAGE);
-    }
+	@Override
+	public ModelProviderEnum modelProvider() {
+		return ModelProviderEnum.QWEN;
+	}
+
+	@Override
+	public List<ModelTypeEnum> supportedModelTypes() {
+		return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING, ModelTypeEnum.IMAGE);
+	}
+
 }

@@ -11,9 +11,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AiDocumentConverter {
-    AiDocument param2dto(DocumentParam param);
 
-    List<DocumentItemVO> do2vo(List<DocumentItemDO> list);
+	AiDocument param2dto(DocumentParam param);
 
-    DocumentVO dto2vo(AiDocument dto);
+	List<DocumentItemVO> do2vo(List<DocumentItemDO> list);
+
+	DocumentVO dto2vo(AiDocument dto);
+
 }

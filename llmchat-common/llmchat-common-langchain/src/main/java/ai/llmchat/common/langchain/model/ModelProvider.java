@@ -13,19 +13,21 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public interface ModelProvider {
-    ChatLanguageModel chatLanguageModel(LanguageModelOptions options);
 
-    StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options);
+	ChatLanguageModel chatLanguageModel(LanguageModelOptions options);
 
-    EmbeddingModel embeddingModel(EmbeddingModelOptions options);
+	StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options);
 
-    ScoringModel scoringModel(ScoringModelOptions options);
+	EmbeddingModel embeddingModel(EmbeddingModelOptions options);
 
-    ImageModel imageModel(ImageModelOptions options);
+	ScoringModel scoringModel(ScoringModelOptions options);
 
-    ModerationModel moderationModel(ModerationModelOptions options);
+	ImageModel imageModel(ImageModelOptions options);
 
-    ModelProviderEnum modelProvider();
+	ModerationModel moderationModel(ModerationModelOptions options);
 
-    List<ModelTypeEnum> supportedModelTypes();
+	ModelProviderEnum modelProvider();
+
+	List<ModelTypeEnum> supportedModelTypes();
+
 }

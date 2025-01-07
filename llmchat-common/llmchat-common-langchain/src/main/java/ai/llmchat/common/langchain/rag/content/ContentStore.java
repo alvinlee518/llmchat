@@ -9,19 +9,21 @@ import dev.langchain4j.store.embedding.filter.Filter;
 import java.util.List;
 
 public interface ContentStore {
-    default List<String> addAll(List<Embedding> embeddings, List<TextSegment> embedded) {
-        List<String> ids = embeddings.stream().map(ignored -> Utils.randomUUID()).toList();
-        this.addAll(ids, embeddings, embedded);
-        return ids;
-    }
 
-    void addAll(List<String> ids, List<Embedding> embeddings, List<TextSegment> embedded);
+	default List<String> addAll(List<Embedding> embeddings, List<TextSegment> embedded) {
+		List<String> ids = embeddings.stream().map(ignored -> Utils.randomUUID()).toList();
+		this.addAll(ids, embeddings, embedded);
+		return ids;
+	}
 
-    void removeAll(Filter filter);
+	void addAll(List<String> ids, List<Embedding> embeddings, List<TextSegment> embedded);
 
-    List<EmbeddingMatch<TextSegment>> keywordSearch(ContentSearchOptions options);
+	void removeAll(Filter filter);
 
-    List<EmbeddingMatch<TextSegment>> similaritySearch(ContentSearchOptions options);
+	List<EmbeddingMatch<TextSegment>> keywordSearch(ContentSearchOptions options);
 
-    List<EmbeddingMatch<TextSegment>> hybridSearch(ContentSearchOptions options);
+	List<EmbeddingMatch<TextSegment>> similaritySearch(ContentSearchOptions options);
+
+	List<EmbeddingMatch<TextSegment>> hybridSearch(ContentSearchOptions options);
+
 }

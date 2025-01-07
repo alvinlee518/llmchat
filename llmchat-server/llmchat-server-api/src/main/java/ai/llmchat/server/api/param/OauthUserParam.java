@@ -11,65 +11,68 @@ import java.util.List;
 @Getter
 @Setter
 public class OauthUserParam implements Serializable {
-    private static final long serialVersionUID = 1L;
-    /**
-     *
-     */
-    private Long id;
 
-    /**
-     * 部门Id
-     */
-    private Long deptId;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 岗位Id列表
-     */
-    private List<Long> postIds;
+	/**
+	 *
+	 */
+	private Long id;
 
-    /**
-     * 角色Id列表
-     */
-    private List<Long> roleIds;
+	/**
+	 * 部门Id
+	 */
+	private Long deptId;
 
-    /**
-     * 姓名
-     */
-    @NotBlank
-    private String name;
+	/**
+	 * 岗位Id列表
+	 */
+	private List<Long> postIds;
 
-    /**
-     * 用户名
-     */
-    private String username;
+	/**
+	 * 角色Id列表
+	 */
+	private List<Long> roleIds;
 
-    /**
-     * 密码
-     */
-    private String password;
+	/**
+	 * 姓名
+	 */
+	@NotBlank
+	private String name;
 
-    /**
-     * 手机号
-     */
-    private String phone;
+	/**
+	 * 用户名
+	 */
+	private String username;
 
-    /**
-     * 邮箱
-     */
-    private String email;
+	/**
+	 * 密码
+	 */
+	private String password;
 
-    /**
-     * 性别:0-未知;1-男;2-女;
-     */
-    private Integer gender;
+	/**
+	 * 手机号
+	 */
+	private String phone;
 
-    /**
-     * 生日
-     */
-    private LocalDate birthday;
+	/**
+	 * 邮箱
+	 */
+	private String email;
 
-    /**
-     * 备注
-     */
-    private String remark;
+	/**
+	 * 性别:0-未知;1-男;2-女;
+	 */
+	private Integer gender;
+
+	/**
+	 * 生日
+	 */
+	private LocalDate birthday;
+
+	/**
+	 * 备注
+	 */
+	private String remark;
+
 }

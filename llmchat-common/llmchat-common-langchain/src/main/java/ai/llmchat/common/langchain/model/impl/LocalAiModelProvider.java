@@ -19,65 +19,67 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class LocalAiModelProvider implements ModelProvider {
-    @Override
-    public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        return LocalAiChatModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .modelName(options.getModelName())
-                .maxTokens(options.getMaxTokens())
-                .temperature(options.getTemperature())
-                .timeout(options.getTimeout())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
 
-    @Override
-    public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        return LocalAiStreamingChatModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .modelName(options.getModelName())
-                .maxTokens(options.getMaxTokens())
-                .temperature(options.getTemperature())
-                .timeout(options.getTimeout())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
+		return LocalAiChatModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.modelName(options.getModelName())
+			.maxTokens(options.getMaxTokens())
+			.temperature(options.getTemperature())
+			.timeout(options.getTimeout())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return LocalAiEmbeddingModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .modelName(options.getModelName())
-                .timeout(options.getTimeout())
-                .logRequests(options.getLogRequests())
-                .logResponses(options.getLogResponses())
-                .build();
-    }
+	@Override
+	public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
+		return LocalAiStreamingChatModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.modelName(options.getModelName())
+			.maxTokens(options.getMaxTokens())
+			.temperature(options.getTemperature())
+			.timeout(options.getTimeout())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
-    }
+	@Override
+	public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
+		return LocalAiEmbeddingModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.modelName(options.getModelName())
+			.timeout(options.getTimeout())
+			.logRequests(options.getLogRequests())
+			.logResponses(options.getLogResponses())
+			.build();
+	}
 
-    @Override
-    public ImageModel imageModel(ImageModelOptions options) {
-        return new DisabledImageModel();
-    }
+	@Override
+	public ScoringModel scoringModel(ScoringModelOptions options) {
+		return new DisabledScoringModel();
+	}
 
-    @Override
-    public ModerationModel moderationModel(ModerationModelOptions options) {
-        return new DisabledModerationModel();
-    }
+	@Override
+	public ImageModel imageModel(ImageModelOptions options) {
+		return new DisabledImageModel();
+	}
 
-    @Override
-    public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.LOCAL_AI;
-    }
+	@Override
+	public ModerationModel moderationModel(ModerationModelOptions options) {
+		return new DisabledModerationModel();
+	}
 
-    @Override
-    public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING);
-    }
+	@Override
+	public ModelProviderEnum modelProvider() {
+		return ModelProviderEnum.LOCAL_AI;
+	}
+
+	@Override
+	public List<ModelTypeEnum> supportedModelTypes() {
+		return List.of(ModelTypeEnum.LLM, ModelTypeEnum.EMBEDDING);
+	}
+
 }

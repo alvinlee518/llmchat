@@ -31,54 +31,48 @@ import java.util.List;
 @EnableConfigurationProperties(ContentStoreProperties.class)
 public class ContentStoreConfiguration {
 
-    @Bean
-    public ContentStore contentStore(ContentStoreProperties properties) throws AuthException {
-        Config config = new Config(properties.getScheme(), properties.getHost());
-        WeaviateClient client = WeaviateAuthClient.apiKey(config, properties.getApiKey());
-        return new WeaviateContentStore(
-                client,
-                ConsistencyLevel.QUORUM,
-                properties.getObjectClass(),
-                List.of(
-                        LangchainConstants.METADATA_FIELD_DATASET,
-                        LangchainConstants.METADATA_FIELD_DOCUMENT,
-                        LangchainConstants.METADATA_FIELD_PARAGRAPH
-                )
-        );
-    }
+	@Bean
+	public ContentStore contentStore(ContentStoreProperties properties) throws AuthException {
+		Config config = new Config(properties.getScheme(), properties.getHost());
+		WeaviateClient client = WeaviateAuthClient.apiKey(config, properties.getApiKey());
+		return new WeaviateContentStore(client, ConsistencyLevel.QUORUM, properties.getObjectClass(),
+				List.of(LangchainConstants.METADATA_FIELD_DATASET, LangchainConstants.METADATA_FIELD_DOCUMENT,
+						LangchainConstants.METADATA_FIELD_PARAGRAPH));
+	}
 
-    @Bean
-    @ConditionalOnClass(RedisTemplate.class)
-    @ConditionalOnSingleCandidate(RedisConnectionFactory.class)
-    public RedisTemplate<String, ChatMessage> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, ChatMessage> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        // 使用StringRedisSerializer 序列化和反序列化redis的key值
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        // 使用 fastjson 序列化和反序列化redis的value值
-        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
+	@Bean
+	@ConditionalOnClass(RedisTemplate.class)
+	@ConditionalOnSingleCandidate(RedisConnectionFactory.class)
+	public RedisTemplate<String, ChatMessage> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, ChatMessage> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		// 使用StringRedisSerializer 序列化和反序列化redis的key值
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		// 使用 fastjson 序列化和反序列化redis的value值
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.afterPropertiesSet();
+		return redisTemplate;
+	}
 
-    @Bean
-    @ConditionalOnBean(RedisTemplate.class)
-    public ChatMemoryStore chatMemoryStoreWithRedis(RedisTemplate<String, ChatMessage> redisTemplate) {
-        return new RedisChatMemoryStore(redisTemplate);
-    }
+	@Bean
+	@ConditionalOnBean(RedisTemplate.class)
+	public ChatMemoryStore chatMemoryStoreWithRedis(RedisTemplate<String, ChatMessage> redisTemplate) {
+		return new RedisChatMemoryStore(redisTemplate);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ChatMemoryStore chatMemoryStoreWithMemory() {
-        return new InMemoryChatMemoryStore();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public ChatMemoryStore chatMemoryStoreWithMemory() {
+		return new InMemoryChatMemoryStore();
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ContentStoreIngestor contentStoreIngestor(ContentStore contentStore) {
-        return ContentStoreIngestor.builder().contentStore(contentStore).build();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public ContentStoreIngestor contentStoreIngestor(ContentStore contentStore) {
+		return ContentStoreIngestor.builder().contentStore(contentStore).build();
+	}
+
 }

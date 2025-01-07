@@ -23,45 +23,47 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 public class OauthMenuController {
-    private final OauthMenuService oauthMenuService;
 
-    public OauthMenuController(OauthMenuService oauthMenuService) {
-        this.oauthMenuService = oauthMenuService;
-    }
+	private final OauthMenuService oauthMenuService;
 
-    @GetMapping("/tree/{pid}")
-    public Result<List<TreeNode>> treeData(@PathVariable("pid") Long pid) {
-        List<TreeNode> list = oauthMenuService.treeData(pid);
-        return Result.data(list);
-    }
+	public OauthMenuController(OauthMenuService oauthMenuService) {
+		this.oauthMenuService = oauthMenuService;
+	}
 
-    @GetMapping("/list")
-    public PageResult<OauthMenu> queryPage(CommonPageParam param) {
-        PageData<OauthMenu> pageData = oauthMenuService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	@GetMapping("/tree/{pid}")
+	public Result<List<TreeNode>> treeData(@PathVariable("pid") Long pid) {
+		List<TreeNode> list = oauthMenuService.treeData(pid);
+		return Result.data(list);
+	}
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated OauthMenu param) {
-        oauthMenuService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@GetMapping("/list")
+	public PageResult<OauthMenu> queryPage(CommonPageParam param) {
+		PageData<OauthMenu> pageData = oauthMenuService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated OauthMenu param) {
-        oauthMenuService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated OauthMenu param) {
+		oauthMenuService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @GetMapping("/{id}")
-    public Result<OauthMenu> detail(@PathVariable("id") Long id) {
-        OauthMenu dto = oauthMenuService.getById(id);
-        return Result.data(dto);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated OauthMenu param) {
+		oauthMenuService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        oauthMenuService.removeByIds(ids);
-        return Result.success();
-    }
+	@GetMapping("/{id}")
+	public Result<OauthMenu> detail(@PathVariable("id") Long id) {
+		OauthMenu dto = oauthMenuService.getById(id);
+		return Result.data(dto);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		oauthMenuService.removeByIds(ids);
+		return Result.success();
+	}
+
 }

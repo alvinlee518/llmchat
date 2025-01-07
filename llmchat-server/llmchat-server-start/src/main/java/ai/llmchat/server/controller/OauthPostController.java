@@ -23,45 +23,47 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 public class OauthPostController {
-    private final OauthPostService oauthPostService;
 
-    public OauthPostController(OauthPostService oauthPostService) {
-        this.oauthPostService = oauthPostService;
-    }
+	private final OauthPostService oauthPostService;
 
-    @GetMapping("/select_options")
-    public Result<List<SelectNode>> selectOptions() {
-        List<SelectNode> selectNodes = oauthPostService.selectOptions();
-        return Result.data(selectNodes);
-    }
+	public OauthPostController(OauthPostService oauthPostService) {
+		this.oauthPostService = oauthPostService;
+	}
 
-    @GetMapping("/list")
-    public PageResult<OauthPost> queryPage(CommonPageParam param) {
-        PageData<OauthPost> pageData = oauthPostService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	@GetMapping("/select_options")
+	public Result<List<SelectNode>> selectOptions() {
+		List<SelectNode> selectNodes = oauthPostService.selectOptions();
+		return Result.data(selectNodes);
+	}
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated OauthPost param) {
-        oauthPostService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@GetMapping("/list")
+	public PageResult<OauthPost> queryPage(CommonPageParam param) {
+		PageData<OauthPost> pageData = oauthPostService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated OauthPost param) {
-        oauthPostService.saveOrUpdate(param);
-        return Result.data(param.getId());
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated OauthPost param) {
+		oauthPostService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @GetMapping("/{id}")
-    public Result<OauthPost> detail(@PathVariable("id") Long id) {
-        OauthPost dto = oauthPostService.getById(id);
-        return Result.data(dto);
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated OauthPost param) {
+		oauthPostService.saveOrUpdate(param);
+		return Result.data(param.getId());
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        oauthPostService.removeByIds(ids);
-        return Result.success();
-    }
+	@GetMapping("/{id}")
+	public Result<OauthPost> detail(@PathVariable("id") Long id) {
+		OauthPost dto = oauthPostService.getById(id);
+		return Result.data(dto);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		oauthPostService.removeByIds(ids);
+		return Result.success();
+	}
+
 }

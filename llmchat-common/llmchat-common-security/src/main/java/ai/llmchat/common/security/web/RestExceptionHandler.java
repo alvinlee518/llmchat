@@ -16,63 +16,65 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @Slf4j
 @RestControllerAdvice
 public class RestExceptionHandler {
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public Result<?> handlerMaxUploadFile(MaxUploadSizeExceededException e) {
-        log.error(e.getMessage(), e);
-        return Result.badRequest(e.getMessage());
-    }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error(e.getMessage(), e);
-        return Result.badRequest(e.getMessage());
-    }
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public Result<?> handlerMaxUploadFile(MaxUploadSizeExceededException e) {
+		log.error(e.getMessage(), e);
+		return Result.badRequest(e.getMessage());
+	}
 
-    @ExceptionHandler(BindException.class)
-    public Result<?> bindException(BindException e) {
-        log.error(e.getMessage(), e);
-        return Result.badRequest(e.getMessage());
-    }
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public Result<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+		log.error(e.getMessage(), e);
+		return Result.badRequest(e.getMessage());
+	}
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Result<?> httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        log.error(e.getMessage(), e);
-        return Result.badRequest(e.getMessage());
-    }
+	@ExceptionHandler(BindException.class)
+	public Result<?> bindException(BindException e) {
+		log.error(e.getMessage(), e);
+		return Result.badRequest(e.getMessage());
+	}
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Result<?> handleAccessException(IllegalArgumentException e) {
-        log.error(e.getMessage(), e);
-        return Result.badRequest(e.getMessage());
-    }
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public Result<?> httpMessageNotReadableException(HttpMessageNotReadableException e) {
+		log.error(e.getMessage(), e);
+		return Result.badRequest(e.getMessage());
+	}
 
-    @ExceptionHandler(AuthenticationException.class)
-    public Result<?> securityExceptionHandler(AuthenticationException e) {
-        log.error(e.getMessage(), e);
-        return Result.unauthorized(e.getMessage());
-    }
+	@ExceptionHandler(IllegalArgumentException.class)
+	public Result<?> handleAccessException(IllegalArgumentException e) {
+		log.error(e.getMessage(), e);
+		return Result.badRequest(e.getMessage());
+	}
 
-    @ExceptionHandler(PermissionException.class)
-    public Result<?> permissionException(PermissionException e) {
-        log.error(e.getMessage(), e);
-        return Result.forbidden(e.getMessage());
-    }
+	@ExceptionHandler(AuthenticationException.class)
+	public Result<?> securityExceptionHandler(AuthenticationException e) {
+		log.error(e.getMessage(), e);
+		return Result.unauthorized(e.getMessage());
+	}
 
-    @ExceptionHandler(ServiceException.class)
-    public Result<?> serviceExceptionHandler(ServiceException e) {
-        log.error(e.getMessage(), e);
-        return Result.fail(e.getMessage());
-    }
+	@ExceptionHandler(PermissionException.class)
+	public Result<?> permissionException(PermissionException e) {
+		log.error(e.getMessage(), e);
+		return Result.forbidden(e.getMessage());
+	}
 
-    @ExceptionHandler(DataExistsException.class)
-    public Result<?> dataExistsExceptionHandler(DataExistsException e) {
-        log.error(e.getMessage(), e);
-        return Result.fail(e.getMessage());
-    }
+	@ExceptionHandler(ServiceException.class)
+	public Result<?> serviceExceptionHandler(ServiceException e) {
+		log.error(e.getMessage(), e);
+		return Result.fail(e.getMessage());
+	}
 
-    @ExceptionHandler(Exception.class)
-    public Result<?> defaultExceptionHandler(Exception e) {
-        log.error(e.getMessage(), e);
-        return Result.fail(e.getMessage());
-    }
+	@ExceptionHandler(DataExistsException.class)
+	public Result<?> dataExistsExceptionHandler(DataExistsException e) {
+		log.error(e.getMessage(), e);
+		return Result.fail(e.getMessage());
+	}
+
+	@ExceptionHandler(Exception.class)
+	public Result<?> defaultExceptionHandler(Exception e) {
+		log.error(e.getMessage(), e);
+		return Result.fail(e.getMessage());
+	}
+
 }

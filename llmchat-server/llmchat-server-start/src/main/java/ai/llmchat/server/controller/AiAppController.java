@@ -25,47 +25,50 @@ import java.util.List;
 @RestController
 @RequestMapping("/app")
 public class AiAppController {
-    private final AiAppService aiAppService;
-    private final AiAppDatasetService aiAppDatasetService;
 
-    public AiAppController(AiAppService aiAppService, AiAppDatasetService aiAppDatasetService) {
-        this.aiAppService = aiAppService;
-        this.aiAppDatasetService = aiAppDatasetService;
-    }
+	private final AiAppService aiAppService;
 
-    @GetMapping("/list")
-    public PageResult<AppVO> queryPage(CommonPageParam param) {
-        PageData<AppVO> pageData = aiAppService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	private final AiAppDatasetService aiAppDatasetService;
 
-    @PostMapping("/create")
-    public Result<?> create(@RequestBody @Validated AppParam param) {
-        Long rtn = aiAppService.saveOrUpdate(param);
-        return Result.data(rtn);
-    }
+	public AiAppController(AiAppService aiAppService, AiAppDatasetService aiAppDatasetService) {
+		this.aiAppService = aiAppService;
+		this.aiAppDatasetService = aiAppDatasetService;
+	}
 
-    @PutMapping("/modify")
-    public Result<?> modify(@RequestBody @Validated AppParam param) {
-        Long rtn = aiAppService.saveOrUpdate(param);
-        return Result.data(rtn);
-    }
+	@GetMapping("/list")
+	public PageResult<AppVO> queryPage(CommonPageParam param) {
+		PageData<AppVO> pageData = aiAppService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @GetMapping("/{id}")
-    public Result<AppVO> detail(@PathVariable("id") Long id) {
-        AppVO rtn = aiAppService.findById(id);
-        return Result.data(rtn);
-    }
+	@PostMapping("/create")
+	public Result<?> create(@RequestBody @Validated AppParam param) {
+		Long rtn = aiAppService.saveOrUpdate(param);
+		return Result.data(rtn);
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        aiAppService.removeByIds(ids);
-        return Result.success();
-    }
+	@PutMapping("/modify")
+	public Result<?> modify(@RequestBody @Validated AppParam param) {
+		Long rtn = aiAppService.saveOrUpdate(param);
+		return Result.data(rtn);
+	}
 
-    @GetMapping("/dataset_list")
-    public PageResult<AppDatasetVO> datasetList(AppDatasetParam param) {
-        PageData<AppDatasetVO> pageData = aiAppDatasetService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	@GetMapping("/{id}")
+	public Result<AppVO> detail(@PathVariable("id") Long id) {
+		AppVO rtn = aiAppService.findById(id);
+		return Result.data(rtn);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		aiAppService.removeByIds(ids);
+		return Result.success();
+	}
+
+	@GetMapping("/dataset_list")
+	public PageResult<AppDatasetVO> datasetList(AppDatasetParam param) {
+		PageData<AppDatasetVO> pageData = aiAppDatasetService.queryPage(param);
+		return PageResult.of(pageData);
+	}
+
 }

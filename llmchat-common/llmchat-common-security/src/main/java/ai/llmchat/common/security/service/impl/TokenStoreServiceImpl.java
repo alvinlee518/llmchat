@@ -11,51 +11,54 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class TokenStoreServiceImpl implements TokenStoreService {
-    private static final String TOKEN_KEY_PREFIX = "token:";
-    private final RedisTemplate<String, SecurityClaims> redisTemplate;
 
-    public TokenStoreServiceImpl(RedisTemplate<String, SecurityClaims> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+	private static final String TOKEN_KEY_PREFIX = "token:";
 
-    @Override
-    public String store(SecurityClaims claims) {
-        Assert.notNull(claims, "claims can not be null");
-        String token = IdUtil.fastUUID();
-        String key = formatKey(token);
-        redisTemplate.opsForValue().set(key, claims, 7, TimeUnit.DAYS);
-        return token;
-    }
+	private final RedisTemplate<String, SecurityClaims> redisTemplate;
 
-    @Override
-    public SecurityClaims read(String token) {
-        Assert.notNull(token, "token can not be empty");
-        String key = formatKey(token);
-        SecurityClaims claims = redisTemplate.opsForValue().get(key);
-        if (Optional.ofNullable(claims).map(SecurityClaims::getId).orElse(0L) <= 0) {
-            throw new AuthenticationException("Token已过期，请重新登录");
-        }
-        return claims;
-    }
+	public TokenStoreServiceImpl(RedisTemplate<String, SecurityClaims> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
 
-    @Override
-    public String readAndRefresh(String token) {
-        Assert.notNull(token, "token can not be empty");
-        String key = formatKey(token);
-        SecurityClaims claims = redisTemplate.opsForValue().getAndExpire(key, 7, TimeUnit.DAYS);
-        if (Optional.ofNullable(claims).map(SecurityClaims::getId).orElse(0L) <= 0) {
-            throw new AuthenticationException("Token已过期，请重新登录");
-        }
-        return claims.getUsername();
-    }
+	@Override
+	public String store(SecurityClaims claims) {
+		Assert.notNull(claims, "claims can not be null");
+		String token = IdUtil.fastUUID();
+		String key = formatKey(token);
+		redisTemplate.opsForValue().set(key, claims, 7, TimeUnit.DAYS);
+		return token;
+	}
 
-    @Override
-    public void remove(String token) {
-        String key = formatKey(token);
-        redisTemplate.delete(key);
-    }
+	@Override
+	public SecurityClaims read(String token) {
+		Assert.notNull(token, "token can not be empty");
+		String key = formatKey(token);
+		SecurityClaims claims = redisTemplate.opsForValue().get(key);
+		if (Optional.ofNullable(claims).map(SecurityClaims::getId).orElse(0L) <= 0) {
+			throw new AuthenticationException("Token已过期，请重新登录");
+		}
+		return claims;
+	}
 
-    private String formatKey(String token) {
-        return TOKEN_KEY_PREFIX + token;
-    }
+	@Override
+	public String readAndRefresh(String token) {
+		Assert.notNull(token, "token can not be empty");
+		String key = formatKey(token);
+		SecurityClaims claims = redisTemplate.opsForValue().getAndExpire(key, 7, TimeUnit.DAYS);
+		if (Optional.ofNullable(claims).map(SecurityClaims::getId).orElse(0L) <= 0) {
+			throw new AuthenticationException("Token已过期，请重新登录");
+		}
+		return claims.getUsername();
+	}
+
+	@Override
+	public void remove(String token) {
+		String key = formatKey(token);
+		redisTemplate.delete(key);
+	}
+
+	private String formatKey(String token) {
+		return TOKEN_KEY_PREFIX + token;
+	}
+
 }

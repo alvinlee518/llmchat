@@ -11,15 +11,21 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class TreeNode implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private String label;
-    private Long value;
-    private Long pid;
-    private List<TreeNode> children;
 
-    public TreeNode(String label, Long value, Long pid) {
-        this.label = label;
-        this.value = value;
-        this.pid = pid;
-    }
+	private static final long serialVersionUID = 1L;
+
+	private String label;
+
+	private Long value;
+
+	private Long pid;
+
+	private List<TreeNode> children;
+
+	public TreeNode(String label, Long value, Long pid) {
+		this.label = label;
+		this.value = value;
+		this.pid = pid;
+	}
+
 }

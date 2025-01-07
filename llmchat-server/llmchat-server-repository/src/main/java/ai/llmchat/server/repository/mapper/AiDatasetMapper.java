@@ -18,7 +18,9 @@ import java.util.List;
  */
 @Mapper
 public interface AiDatasetMapper extends BaseMapper<AiDataset> {
-    List<DatasetDO> queryPage(@Param("name") String name);
 
-    List<AiDataset> listByAppId(@Param("appId") Long appId);
+	List<DatasetDO> queryPage(@Param("name") String name);
+
+	List<AiDataset> listByAppId(@Param("appId") Long appId);
+
 }

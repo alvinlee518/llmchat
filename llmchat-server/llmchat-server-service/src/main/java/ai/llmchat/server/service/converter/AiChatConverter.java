@@ -18,19 +18,21 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AiChatConverter {
-    List<ChatVO> dto2vo(Collection<AiChat> list);
 
-    @Mappings({@Mapping(source = "id", target = "chatId"),})
-    ChatVO dto2vo(AiChat dto);
+	List<ChatVO> dto2vo(Collection<AiChat> list);
 
-    List<CitationDO> citationDto2do(Collection<Citation> list);
+	@Mappings({ @Mapping(source = "id", target = "chatId"), })
+	ChatVO dto2vo(AiChat dto);
 
-    List<CitationVO> citationDo2vo(Collection<CitationDO> list);
+	List<CitationDO> citationDto2do(Collection<Citation> list);
 
-    List<SegmentDO> segmentDto2Do(Collection<Segment> list);
+	List<CitationVO> citationDo2vo(Collection<CitationDO> list);
 
-    List<SegmentVO> segmentDo2vo(Collection<SegmentDO> list);
+	List<SegmentDO> segmentDto2Do(Collection<Segment> list);
 
-    @Mappings({@Mapping(source = "chatId", target = "id"),})
-    AiChat param2dto(ChatParam param);
+	List<SegmentVO> segmentDo2vo(Collection<SegmentDO> list);
+
+	@Mappings({ @Mapping(source = "chatId", target = "id"), })
+	AiChat param2dto(ChatParam param);
+
 }

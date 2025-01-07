@@ -25,62 +25,63 @@ import lombok.experimental.Accessors;
 @TableName("oauth_post")
 public class OauthPost implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+	@TableId(value = "id", type = IdType.ASSIGN_ID)
+	private Long id;
 
-    /**
-     * 名称
-     */
-    @TableField("name")
-    private String name;
+	/**
+	 * 名称
+	 */
+	@TableField("name")
+	private String name;
 
-    /**
-     * 编码
-     */
-    @TableField("code")
-    private String code;
+	/**
+	 * 编码
+	 */
+	@TableField("code")
+	private String code;
 
-    /**
-     * 排序
-     */
-    @TableField("sorting")
-    private Integer sorting;
+	/**
+	 * 排序
+	 */
+	@TableField("sorting")
+	private Integer sorting;
 
-    /**
-     * 备注
-     */
-    @TableField("remark")
-    private String remark;
+	/**
+	 * 备注
+	 */
+	@TableField("remark")
+	private String remark;
 
-    /**
-     * 状态:0-无效;1-有效
-     */
-    @TableField(value = "status", fill = FieldFill.INSERT)
-    private Integer status;
+	/**
+	 * 状态:0-无效;1-有效
+	 */
+	@TableField(value = "status", fill = FieldFill.INSERT)
+	private Integer status;
 
-    /**
-     * 创建人
-     */
-    @TableField(value = "create_by", fill = FieldFill.INSERT)
-    private String createBy;
+	/**
+	 * 创建人
+	 */
+	@TableField(value = "create_by", fill = FieldFill.INSERT)
+	private String createBy;
 
-    /**
-     * 创建时间
-     */
-    @TableField(value = "create_at", fill = FieldFill.INSERT)
-    private LocalDateTime createAt;
+	/**
+	 * 创建时间
+	 */
+	@TableField(value = "create_at", fill = FieldFill.INSERT)
+	private LocalDateTime createAt;
 
-    /**
-     * 更新人
-     */
-    @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    private String updateBy;
+	/**
+	 * 更新人
+	 */
+	@TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
+	private String updateBy;
 
-    /**
-     * 更新时间
-     */
-    @TableField(value = "update_at", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateAt;
+	/**
+	 * 更新时间
+	 */
+	@TableField(value = "update_at", fill = FieldFill.INSERT_UPDATE)
+	private LocalDateTime updateAt;
+
 }

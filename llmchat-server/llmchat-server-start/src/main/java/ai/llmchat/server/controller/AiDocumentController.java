@@ -1,6 +1,6 @@
 package ai.llmchat.server.controller;
 
-import ai.llmchat.common.core.util.ExcelUtil;
+import ai.llmchat.common.core.util.ExcelUtils;
 import ai.llmchat.common.core.wrapper.PageResult;
 import ai.llmchat.common.core.wrapper.Result;
 import ai.llmchat.common.core.wrapper.data.PageData;
@@ -33,66 +33,67 @@ import java.util.List;
 @RestController
 @RequestMapping("/document")
 public class AiDocumentController {
-    private final AiDocumentService aiDocumentService;
-    private final AiParagraphService aiParagraphService;
-    private final FileStorageService fileStorageService;
 
-    public AiDocumentController(AiDocumentService aiDocumentService, AiParagraphService aiParagraphService, FileStorageService fileStorageService) {
-        this.aiDocumentService = aiDocumentService;
-        this.aiParagraphService = aiParagraphService;
-        this.fileStorageService = fileStorageService;
-    }
+	private final AiDocumentService aiDocumentService;
 
-    @GetMapping("/list")
-    public PageResult<DocumentItemVO> queryPage(DocumentPageParam param) {
-        PageData<DocumentItemVO> pageData = aiDocumentService.queryPage(param);
-        return PageResult.of(pageData);
-    }
+	private final AiParagraphService aiParagraphService;
 
-    @PostMapping("/create")
-    public Result<?> create(DocumentParam param, @RequestParam("files") List<MultipartFile> fileList) {
-        List<FileParam> fileParamList = fileList.stream().map(item -> {
-            FileInfo fileInfo = fileStorageService.of(item).upload();
-            long aLong = NumberUtils.toLong(fileInfo.getId(), 0);
-            return new FileParam(aLong, fileInfo.getOriginalFilename());
-        }).toList();
-        aiDocumentService.saveOrUpdate(param, fileParamList);
-        return Result.success();
-    }
+	private final FileStorageService fileStorageService;
 
-    @PostMapping("/modify")
-    public Result<?> modify(@RequestBody DocumentParam param) {
-        aiDocumentService.saveOrUpdate(param);
-        return Result.success();
-    }
+	public AiDocumentController(AiDocumentService aiDocumentService, AiParagraphService aiParagraphService,
+			FileStorageService fileStorageService) {
+		this.aiDocumentService = aiDocumentService;
+		this.aiParagraphService = aiParagraphService;
+		this.fileStorageService = fileStorageService;
+	}
 
-    @PutMapping("/reindex/{id}")
-    public Result<?> reindex(@PathVariable("id") Long id) {
-        aiParagraphService.reindexByDocId(id);
-        return Result.success();
-    }
+	@GetMapping("/list")
+	public PageResult<DocumentItemVO> queryPage(DocumentPageParam param) {
+		PageData<DocumentItemVO> pageData = aiDocumentService.queryPage(param);
+		return PageResult.of(pageData);
+	}
 
-    @GetMapping("/{id}")
-    public Result<AiDocument> detail(@PathVariable("id") Long id) {
-        AiDocument dto = aiDocumentService.getById(id);
-        return Result.data(dto);
-    }
+	@PostMapping("/create")
+	public Result<?> create(DocumentParam param, @RequestParam("files") List<MultipartFile> fileList) {
+		List<FileParam> fileParamList = fileList.stream().map(item -> {
+			FileInfo fileInfo = fileStorageService.of(item).upload();
+			long aLong = NumberUtils.toLong(fileInfo.getId(), 0);
+			return new FileParam(aLong, fileInfo.getOriginalFilename());
+		}).toList();
+		aiDocumentService.saveOrUpdate(param, fileParamList);
+		return Result.success();
+	}
 
-    @DeleteMapping("/{ids}")
-    public Result<?> delete(@PathVariable("ids") List<Long> ids) {
-        aiDocumentService.removeByIds(ids);
-        return Result.success();
-    }
+	@PostMapping("/modify")
+	public Result<?> modify(@RequestBody DocumentParam param) {
+		aiDocumentService.saveOrUpdate(param);
+		return Result.success();
+	}
 
-    @SneakyThrows
-    @GetMapping("/export/{id}")
-    public void exportAll(HttpServletResponse response, @PathVariable("id") Long id) {
-        List<ParagraphExportVO> paragraphExportVOS = aiParagraphService.exportListByDocId(id);
-        ExcelUtil.export2Web(response,
-                String.valueOf(System.currentTimeMillis()),
-                "sheet1",
-                ParagraphExportVO.class,
-                paragraphExportVOS
-        );
-    }
+	@PutMapping("/reindex/{id}")
+	public Result<?> reindex(@PathVariable("id") Long id) {
+		aiParagraphService.reindexByDocId(id);
+		return Result.success();
+	}
+
+	@GetMapping("/{id}")
+	public Result<AiDocument> detail(@PathVariable("id") Long id) {
+		AiDocument dto = aiDocumentService.getById(id);
+		return Result.data(dto);
+	}
+
+	@DeleteMapping("/{ids}")
+	public Result<?> delete(@PathVariable("ids") List<Long> ids) {
+		aiDocumentService.removeByIds(ids);
+		return Result.success();
+	}
+
+	@SneakyThrows
+	@GetMapping("/export/{id}")
+	public void exportAll(HttpServletResponse response, @PathVariable("id") Long id) {
+		List<ParagraphExportVO> paragraphExportVOS = aiParagraphService.exportListByDocId(id);
+		ExcelUtils.export2Web(response, String.valueOf(System.currentTimeMillis()), "sheet1", ParagraphExportVO.class,
+				paragraphExportVOS);
+	}
+
 }

@@ -23,13 +23,15 @@ import java.util.List;
 public interface
 
 AiModelService extends IService<AiModel> {
-    PageData<ModelVO> queryPage(ModelPageParam param);
 
-    List<SelectGroupNode> selectGroupOptions(Integer modelType);
+	PageData<ModelVO> queryPage(ModelPageParam param);
 
-    List<ModelProviderVO> modelProviderList();
+	List<SelectGroupNode> selectGroupOptions(Integer modelType);
 
-    EmbeddingModel embeddingModelByDatasetId(Long datasetId);
+	List<ModelProviderVO> modelProviderList();
 
-    ModelOptionsDO findByChatId(Long chatId);
+	EmbeddingModel embeddingModelByDatasetId(Long datasetId);
+
+	ModelOptionsDO findByChatId(Long chatId);
+
 }

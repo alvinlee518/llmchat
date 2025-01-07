@@ -8,21 +8,14 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class DocumentSplitterFactory {
-    public static DocumentSplitter create(String[] separators,
-                                          Integer chunkSize,
-                                          Integer chunkOverlap
-    ) {
-        if (ArrayUtils.isNotEmpty(separators)) {
-            return new DocumentByRegexSplitter(
-                    String.join("|", separators),
-                    System.lineSeparator(),
-                    chunkSize,
-                    chunkOverlap,
-                    null,
-                    new DocumentBySentenceSplitter(chunkSize, chunkOverlap, null,
-                            new DocumentByWordSplitter(chunkSize, chunkOverlap, null, null)
-                    ));
-        }
-        return DocumentSplitters.recursive(256, 64);
-    }
+
+	public static DocumentSplitter create(String[] separators, Integer chunkSize, Integer chunkOverlap) {
+		if (ArrayUtils.isNotEmpty(separators)) {
+			return new DocumentByRegexSplitter(String.join("|", separators), System.lineSeparator(), chunkSize,
+					chunkOverlap, null, new DocumentBySentenceSplitter(chunkSize, chunkOverlap, null,
+							new DocumentByWordSplitter(chunkSize, chunkOverlap, null, null)));
+		}
+		return DocumentSplitters.recursive(256, 64);
+	}
+
 }

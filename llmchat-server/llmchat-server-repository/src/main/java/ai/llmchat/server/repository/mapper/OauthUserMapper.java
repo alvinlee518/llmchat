@@ -17,5 +17,8 @@ import java.util.List;
  */
 @Mapper
 public interface OauthUserMapper extends BaseMapper<OauthUser> {
-    List<OauthUser> selectUserListByRole(@Param("roleId") Long roleId, @Param("name") String name, @Param("phone") String phone, @Param("userScope") Integer userScope);
+
+	List<OauthUser> selectUserListByRole(@Param("roleId") Long roleId, @Param("name") String name,
+			@Param("phone") String phone, @Param("userScope") Integer userScope);
+
 }

@@ -19,49 +19,51 @@ import dev.langchain4j.model.scoring.ScoringModel;
 import java.util.List;
 
 public class ChatGlmModelProvider implements ModelProvider {
-    @Override
-    public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
-        return ChatGlmChatModel.builder()
-                .baseUrl(options.getBaseUrl())
-                .temperature(options.getTemperature())
-                .timeout(options.getTimeout())
-                .maxRetries(options.getMaxRetries())
-                .maxLength(options.getMaxTokens())
-                .build();
-    }
 
-    @Override
-    public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
-        return new DisabledStreamingChatLanguageModel();
-    }
+	@Override
+	public ChatLanguageModel chatLanguageModel(LanguageModelOptions options) {
+		return ChatGlmChatModel.builder()
+			.baseUrl(options.getBaseUrl())
+			.temperature(options.getTemperature())
+			.timeout(options.getTimeout())
+			.maxRetries(options.getMaxRetries())
+			.maxLength(options.getMaxTokens())
+			.build();
+	}
 
-    @Override
-    public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
-        return new DisabledEmbeddingModel();
-    }
+	@Override
+	public StreamingChatLanguageModel streamingChatLanguageModel(LanguageModelOptions options) {
+		return new DisabledStreamingChatLanguageModel();
+	}
 
-    @Override
-    public ScoringModel scoringModel(ScoringModelOptions options) {
-        return new DisabledScoringModel();
-    }
+	@Override
+	public EmbeddingModel embeddingModel(EmbeddingModelOptions options) {
+		return new DisabledEmbeddingModel();
+	}
 
-    @Override
-    public ImageModel imageModel(ImageModelOptions options) {
-        return new DisabledImageModel();
-    }
+	@Override
+	public ScoringModel scoringModel(ScoringModelOptions options) {
+		return new DisabledScoringModel();
+	}
 
-    @Override
-    public ModerationModel moderationModel(ModerationModelOptions options) {
-        return new DisabledModerationModel();
-    }
+	@Override
+	public ImageModel imageModel(ImageModelOptions options) {
+		return new DisabledImageModel();
+	}
 
-    @Override
-    public ModelProviderEnum modelProvider() {
-        return ModelProviderEnum.CHAT_GLM;
-    }
+	@Override
+	public ModerationModel moderationModel(ModerationModelOptions options) {
+		return new DisabledModerationModel();
+	}
 
-    @Override
-    public List<ModelTypeEnum> supportedModelTypes() {
-        return List.of(ModelTypeEnum.LLM);
-    }
+	@Override
+	public ModelProviderEnum modelProvider() {
+		return ModelProviderEnum.CHAT_GLM;
+	}
+
+	@Override
+	public List<ModelTypeEnum> supportedModelTypes() {
+		return List.of(ModelTypeEnum.LLM);
+	}
+
 }

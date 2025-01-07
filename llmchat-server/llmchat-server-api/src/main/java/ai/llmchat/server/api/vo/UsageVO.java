@@ -1,6 +1,5 @@
 package ai.llmchat.server.api.vo;
 
-
 import lombok.*;
 
 import java.io.Serializable;
@@ -11,9 +10,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsageVO implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Integer promptTokens;
-    private Integer completionTokens;
-    private Integer totalTokens;
-    private Long duration;
+
+	private static final long serialVersionUID = 1L;
+
+	private Integer promptTokens;
+
+	private Integer completionTokens;
+
+	private Integer totalTokens;
+
+	private Long duration;
+
 }

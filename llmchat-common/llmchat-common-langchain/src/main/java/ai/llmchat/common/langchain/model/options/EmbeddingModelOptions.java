@@ -6,5 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmbeddingModelOptions extends ModelOptions {
-    private Integer dimensions;
+
+	private Integer dimensions;
+
 }

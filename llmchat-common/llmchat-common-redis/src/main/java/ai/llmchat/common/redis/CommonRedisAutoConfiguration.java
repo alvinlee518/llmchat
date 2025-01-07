@@ -6,9 +6,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ImportAutoConfiguration({
-        RedisTemplateConfiguration.class,
-        RedisStreamConfiguration.class,
-})
+@ImportAutoConfiguration({ RedisTemplateConfiguration.class, RedisStreamConfiguration.class, })
 public class CommonRedisAutoConfiguration {
+
 }

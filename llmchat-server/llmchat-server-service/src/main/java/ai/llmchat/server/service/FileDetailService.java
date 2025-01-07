@@ -13,5 +13,7 @@ import org.dromara.x.file.storage.core.FileInfo;
  * @since 2024-10-28
  */
 public interface FileDetailService extends IService<FileDetail> {
-    FileInfo findById(Long id);
+
+	FileInfo findById(Long id);
+
 }

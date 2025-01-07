@@ -7,29 +7,32 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.List;
 
 public class RedisChatMemoryStore implements ChatMemoryStore {
-    private static final String MEMORY_KEY_PREFIX = "chat_memory:";
-    private final RedisTemplate<String, ChatMessage> redisTemplate;
 
-    public RedisChatMemoryStore(RedisTemplate<String, ChatMessage> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+	private static final String MEMORY_KEY_PREFIX = "chat_memory:";
 
-    @Override
-    public List<ChatMessage> getMessages(Object memoryId) {
-        return redisTemplate.opsForList().range(MEMORY_KEY_PREFIX + memoryId, 0, -1);
-    }
+	private final RedisTemplate<String, ChatMessage> redisTemplate;
 
-    @Override
-    public void updateMessages(Object memoryId, List<ChatMessage> messages) {
-        redisTemplate.opsForList().rightPushAll(formatKey(memoryId), messages);
-    }
+	public RedisChatMemoryStore(RedisTemplate<String, ChatMessage> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
 
-    @Override
-    public void deleteMessages(Object memoryId) {
-        redisTemplate.delete(formatKey(memoryId));
-    }
+	@Override
+	public List<ChatMessage> getMessages(Object memoryId) {
+		return redisTemplate.opsForList().range(MEMORY_KEY_PREFIX + memoryId, 0, -1);
+	}
 
-    private String formatKey(Object memoryId) {
-        return MEMORY_KEY_PREFIX + String.valueOf(memoryId);
-    }
+	@Override
+	public void updateMessages(Object memoryId, List<ChatMessage> messages) {
+		redisTemplate.opsForList().rightPushAll(formatKey(memoryId), messages);
+	}
+
+	@Override
+	public void deleteMessages(Object memoryId) {
+		redisTemplate.delete(formatKey(memoryId));
+	}
+
+	private String formatKey(Object memoryId) {
+		return MEMORY_KEY_PREFIX + String.valueOf(memoryId);
+	}
+
 }

@@ -12,25 +12,29 @@ import java.util.List;
 @Setter
 @ConfigurationProperties(prefix = SecurityConfigurationProperties.PREFIX)
 public class SecurityConfigurationProperties {
-    static final String PREFIX = "security";
-    private List<String> includePatterns;
-    private List<String> excludePatterns;
 
-    public List<String> getIncludePatterns() {
-        if (CollectionUtils.isEmpty(includePatterns)) {
-            includePatterns = new ArrayList<>();
-        }
-        this.includePatterns.add("/**");
-        return this.includePatterns;
-    }
+	static final String PREFIX = "security";
 
-    public List<String> getExcludePatterns() {
-        if (CollectionUtils.isEmpty(excludePatterns)) {
-            this.excludePatterns = new ArrayList<>();
-        }
-        this.excludePatterns.add("/favicon.ico");
-        this.excludePatterns.add("/icons/**");
-        this.excludePatterns.add("/security/**");
-        return this.excludePatterns.stream().distinct().toList();
-    }
+	private List<String> includePatterns;
+
+	private List<String> excludePatterns;
+
+	public List<String> getIncludePatterns() {
+		if (CollectionUtils.isEmpty(includePatterns)) {
+			includePatterns = new ArrayList<>();
+		}
+		this.includePatterns.add("/**");
+		return this.includePatterns;
+	}
+
+	public List<String> getExcludePatterns() {
+		if (CollectionUtils.isEmpty(excludePatterns)) {
+			this.excludePatterns = new ArrayList<>();
+		}
+		this.excludePatterns.add("/favicon.ico");
+		this.excludePatterns.add("/icons/**");
+		this.excludePatterns.add("/security/**");
+		return this.excludePatterns.stream().distinct().toList();
+	}
+
 }

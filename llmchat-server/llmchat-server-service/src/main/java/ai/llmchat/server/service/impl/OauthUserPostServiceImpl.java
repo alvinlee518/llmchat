@@ -19,21 +19,22 @@ import java.util.List;
  * @since 2024-10-23
  */
 @Service
-public class OauthUserPostServiceImpl extends ServiceImpl<OauthUserPostMapper, OauthUserPost> implements OauthUserPostService {
+public class OauthUserPostServiceImpl extends ServiceImpl<OauthUserPostMapper, OauthUserPost>
+		implements OauthUserPostService {
 
-    @Override
-    public void batchSave(Long userId, List<Long> ids) {
-        remove(Wrappers.<OauthUserPost>lambdaQuery().eq(OauthUserPost::getUserId, userId));
-        if (CollectionUtils.isEmpty(ids)) {
-            return;
-        }
-        List<OauthUserPost> list = ids.stream()
-                .map(item -> {
-                    OauthUserPost result = new OauthUserPost();
-                    result.setPostId(item);
-                    result.setUserId(userId);
-                    return result;
-                }).toList();
-        saveBatch(list);
-    }
+	@Override
+	public void batchSave(Long userId, List<Long> ids) {
+		remove(Wrappers.<OauthUserPost>lambdaQuery().eq(OauthUserPost::getUserId, userId));
+		if (CollectionUtils.isEmpty(ids)) {
+			return;
+		}
+		List<OauthUserPost> list = ids.stream().map(item -> {
+			OauthUserPost result = new OauthUserPost();
+			result.setPostId(item);
+			result.setUserId(userId);
+			return result;
+		}).toList();
+		saveBatch(list);
+	}
+
 }

@@ -10,7 +10,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AiAppDatasetConverter {
-    List<AppDatasetVO> do2vo(List<AppDatasetDO> list);
 
-    List<DatasetItemVO> itemDo2vo(List<DatasetItemDO> list);
+	List<AppDatasetVO> do2vo(List<AppDatasetDO> list);
+
+	List<DatasetItemVO> itemDo2vo(List<DatasetItemDO> list);
+
 }

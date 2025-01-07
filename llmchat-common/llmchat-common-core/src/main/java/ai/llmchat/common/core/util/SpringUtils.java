@@ -13,42 +13,46 @@ import java.util.Map;
 
 @Slf4j
 public class SpringUtils implements ApplicationContextAware {
-    private static ApplicationContext applicationContext = null;
 
-    public static <T> T getBean(Class<T> requiredType) {
-        return applicationContext.getBean(requiredType);
-    }
+	private static ApplicationContext applicationContext = null;
 
-    public static <T> Collection<T> getBeansOfType(Class<T> requiredType) {
-        Map<String, T> beansOfType = applicationContext.getBeansOfType(requiredType);
-        return beansOfType.values();
-    }
+	public static <T> T getBean(Class<T> requiredType) {
+		return applicationContext.getBean(requiredType);
+	}
 
-    public static <T> T getBean(String beanName, Class<T> requiredType) {
-        return applicationContext.getBean(beanName, requiredType);
-    }
+	public static <T> Collection<T> getBeansOfType(Class<T> requiredType) {
+		Map<String, T> beansOfType = applicationContext.getBeansOfType(requiredType);
+		return beansOfType.values();
+	}
 
-    public static boolean containsBean(String beanName) {
-        return applicationContext.containsBean(beanName);
-    }
+	public static <T> T getBean(String beanName, Class<T> requiredType) {
+		return applicationContext.getBean(beanName, requiredType);
+	}
 
-    public static <T> void registerBean(String beanName, T beanInstance) {
-        BeanDefinitionRegistry beanDefinitionRegistry =
-                (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition((Class<T>) beanInstance.getClass(), () -> beanInstance);
-        AbstractBeanDefinition rawBeanDefinition = builder.getRawBeanDefinition();
-        beanDefinitionRegistry.registerBeanDefinition(beanName, rawBeanDefinition);
-    }
+	public static boolean containsBean(String beanName) {
+		return applicationContext.containsBean(beanName);
+	}
 
-    public void unregisterBean(String beanName) {
-        BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
-        if (beanDefinitionRegistry.containsBeanDefinition(beanName)) {
-            beanDefinitionRegistry.removeBeanDefinition(beanName);
-        }
-    }
+	public static <T> void registerBean(String beanName, T beanInstance) {
+		BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) applicationContext
+			.getAutowireCapableBeanFactory();
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition((Class<T>) beanInstance.getClass(),
+				() -> beanInstance);
+		AbstractBeanDefinition rawBeanDefinition = builder.getRawBeanDefinition();
+		beanDefinitionRegistry.registerBeanDefinition(beanName, rawBeanDefinition);
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringUtils.applicationContext = applicationContext;
-    }
+	public void unregisterBean(String beanName) {
+		BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) applicationContext
+			.getAutowireCapableBeanFactory();
+		if (beanDefinitionRegistry.containsBeanDefinition(beanName)) {
+			beanDefinitionRegistry.removeBeanDefinition(beanName);
+		}
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		SpringUtils.applicationContext = applicationContext;
+	}
+
 }

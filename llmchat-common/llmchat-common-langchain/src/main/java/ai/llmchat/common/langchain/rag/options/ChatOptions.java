@@ -15,15 +15,27 @@ import java.util.function.Function;
 @Getter
 @Setter
 public class ChatOptions implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Long id;
-    private Long chatId;
-    private String systemPrompt;
-    private String instruction;
-    private Integer maxMemory;
-    private ToolProvider toolProvider;
-    private LanguageModelOptions modelOptions;
-    private RetrievalOptions retrieval;
-    private Function<List<Long>, List<Citation>> citationProvider;
-    private Consumer<Message> doOnComplete;
+
+	private static final long serialVersionUID = 1L;
+
+	private Long id;
+
+	private Long chatId;
+
+	private String systemPrompt;
+
+	private String instruction;
+
+	private Integer maxMemory;
+
+	private ToolProvider toolProvider;
+
+	private LanguageModelOptions modelOptions;
+
+	private RetrievalOptions retrieval;
+
+	private Function<List<Long>, List<Citation>> citationProvider;
+
+	private Consumer<Message> doOnComplete;
+
 }

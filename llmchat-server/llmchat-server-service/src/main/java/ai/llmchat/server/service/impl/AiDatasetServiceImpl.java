@@ -44,75 +44,84 @@ import java.util.Optional;
  */
 @Service
 public class AiDatasetServiceImpl extends ServiceImpl<AiDatasetMapper, AiDataset> implements AiDatasetService {
-    private final AiDatasetConverter aiDatasetConverter;
-    private final ContentStore contentStore;
-    private final AiModelService aiModelService;
-    private final AiParagraphService aiParagraphService;
 
-    public AiDatasetServiceImpl(AiDatasetConverter aiDatasetConverter,
-                                ContentStore contentStore,
-                                AiModelService aiModelService, AiParagraphService aiParagraphService) {
-        this.aiDatasetConverter = aiDatasetConverter;
-        this.contentStore = contentStore;
-        this.aiModelService = aiModelService;
-        this.aiParagraphService = aiParagraphService;
-    }
+	private final AiDatasetConverter aiDatasetConverter;
 
-    @Override
-    public PageData<DatasetVO> queryPage(CommonPageParam param) {
-        PageInfo<DatasetDO> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
-                .doSelectPageInfo(() -> baseMapper.queryPage(param.getName()));
-        return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(), aiDatasetConverter.do2vo(pageInfo.getList()));
-    }
+	private final ContentStore contentStore;
 
-    @Override
-    public Long saveOrUpdate(DatasetParam param) {
-        AiDataset dataset = aiDatasetConverter.param2dto(param);
-        if (Optional.ofNullable(param.getId()).orElse(0L) >= 1) {
-            AiDataset aiDataset = baseMapper.selectById(param.getId());
-            if (Optional.ofNullable(aiDataset).map(AiDataset::getId).orElse(0L) >= 1) {
-                baseMapper.updateById(dataset);
-                if (!Objects.equals(param.getEmbedId(), aiDataset.getEmbedId())) {
-                    aiParagraphService.reindexByDatasetId(dataset.getId());
-                }
-                return dataset.getId();
-            }
-        }
-        baseMapper.insert(dataset);
-        return dataset.getId();
-    }
+	private final AiModelService aiModelService;
 
-    @Override
-    public List<HitTestingVO> hitTesting(HitTestingParam param) {
-        ContentSearchOptions.ContentSearchOptionsBuilder optionsBuilder = ContentSearchOptions.builder().keyword(param.getKeyword())
-                .maxResults(param.getTopK())
-                .minScore(param.getScore())
-                .filter(MetadataFilterBuilder.metadataKey(LangchainConstants.METADATA_FIELD_DATASET).isEqualTo(param.getDatasetId()));
-        List<EmbeddingMatch<TextSegment>> searchResult;
-        if (Objects.equals(SearchModeEnum.SIMILARITY.getCode(), param.getSearchMode())) {
-            EmbeddingModel embeddingModel = aiModelService.embeddingModelByDatasetId(param.getDatasetId());
-            Embedding embedding = embeddingModel.embed(param.getKeyword()).content();
-            searchResult = contentStore.similaritySearch(optionsBuilder.embedding(embedding).build());
-        } else if (Objects.equals(SearchModeEnum.KEYWORD.getCode(), param.getSearchMode())) {
-            searchResult = contentStore.keywordSearch(optionsBuilder.build());
-        } else {
-            EmbeddingModel embeddingModel = aiModelService.embeddingModelByDatasetId(param.getDatasetId());
-            Embedding embeddedQuery = embeddingModel.embed(param.getKeyword()).content();
-            searchResult = contentStore.hybridSearch(optionsBuilder.embedding(embeddedQuery).build());
-        }
-        List<HitTestingVO> result = new ArrayList<>();
-        for (EmbeddingMatch<TextSegment> match : searchResult) {
-            TextSegment embedded = match.embedded();
-            Long paraId = embedded.metadata().getLong(LangchainConstants.METADATA_FIELD_PARAGRAPH);
-            Double score = match.score();
-            HitTestingVO build = HitTestingVO.builder().id(paraId).score(score).content(embedded.text()).build();
-            result.add(build);
-        }
-        return result;
-    }
+	private final AiParagraphService aiParagraphService;
 
-    @Override
-    public List<AiDataset> listByAppId(Long appId) {
-        return baseMapper.listByAppId(appId);
-    }
+	public AiDatasetServiceImpl(AiDatasetConverter aiDatasetConverter, ContentStore contentStore,
+			AiModelService aiModelService, AiParagraphService aiParagraphService) {
+		this.aiDatasetConverter = aiDatasetConverter;
+		this.contentStore = contentStore;
+		this.aiModelService = aiModelService;
+		this.aiParagraphService = aiParagraphService;
+	}
+
+	@Override
+	public PageData<DatasetVO> queryPage(CommonPageParam param) {
+		PageInfo<DatasetDO> pageInfo = PageHelper.startPage(param.getPage(), param.getSize())
+			.doSelectPageInfo(() -> baseMapper.queryPage(param.getName()));
+		return PageData.of(pageInfo.getTotal(), param.getPage(), param.getSize(),
+				aiDatasetConverter.do2vo(pageInfo.getList()));
+	}
+
+	@Override
+	public Long saveOrUpdate(DatasetParam param) {
+		AiDataset dataset = aiDatasetConverter.param2dto(param);
+		if (Optional.ofNullable(param.getId()).orElse(0L) >= 1) {
+			AiDataset aiDataset = baseMapper.selectById(param.getId());
+			if (Optional.ofNullable(aiDataset).map(AiDataset::getId).orElse(0L) >= 1) {
+				baseMapper.updateById(dataset);
+				if (!Objects.equals(param.getEmbedId(), aiDataset.getEmbedId())) {
+					aiParagraphService.reindexByDatasetId(dataset.getId());
+				}
+				return dataset.getId();
+			}
+		}
+		baseMapper.insert(dataset);
+		return dataset.getId();
+	}
+
+	@Override
+	public List<HitTestingVO> hitTesting(HitTestingParam param) {
+		ContentSearchOptions.ContentSearchOptionsBuilder optionsBuilder = ContentSearchOptions.builder()
+			.keyword(param.getKeyword())
+			.maxResults(param.getTopK())
+			.minScore(param.getScore())
+			.filter(MetadataFilterBuilder.metadataKey(LangchainConstants.METADATA_FIELD_DATASET)
+				.isEqualTo(param.getDatasetId()));
+		List<EmbeddingMatch<TextSegment>> searchResult;
+		if (Objects.equals(SearchModeEnum.SIMILARITY.getCode(), param.getSearchMode())) {
+			EmbeddingModel embeddingModel = aiModelService.embeddingModelByDatasetId(param.getDatasetId());
+			Embedding embedding = embeddingModel.embed(param.getKeyword()).content();
+			searchResult = contentStore.similaritySearch(optionsBuilder.embedding(embedding).build());
+		}
+		else if (Objects.equals(SearchModeEnum.KEYWORD.getCode(), param.getSearchMode())) {
+			searchResult = contentStore.keywordSearch(optionsBuilder.build());
+		}
+		else {
+			EmbeddingModel embeddingModel = aiModelService.embeddingModelByDatasetId(param.getDatasetId());
+			Embedding embeddedQuery = embeddingModel.embed(param.getKeyword()).content();
+			searchResult = contentStore.hybridSearch(optionsBuilder.embedding(embeddedQuery).build());
+		}
+		List<HitTestingVO> result = new ArrayList<>();
+		for (EmbeddingMatch<TextSegment> match : searchResult) {
+			TextSegment embedded = match.embedded();
+			Long paraId = embedded.metadata().getLong(LangchainConstants.METADATA_FIELD_PARAGRAPH);
+			Double score = match.score();
+			HitTestingVO build = HitTestingVO.builder().id(paraId).score(score).content(embedded.text()).build();
+			result.add(build);
+		}
+		return result;
+	}
+
+	@Override
+	public List<AiDataset> listByAppId(Long appId) {
+		return baseMapper.listByAppId(appId);
+	}
+
 }

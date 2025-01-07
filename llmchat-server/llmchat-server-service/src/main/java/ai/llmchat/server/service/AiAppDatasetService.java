@@ -18,9 +18,11 @@ import java.util.List;
  * @since 2024-11-04
  */
 public interface AiAppDatasetService extends IService<AiAppDataset> {
-    PageData<AppDatasetVO> queryPage(AppDatasetParam param);
 
-    void batchSave(Long appId, List<Long> datasetIds);
+	PageData<AppDatasetVO> queryPage(AppDatasetParam param);
 
-    List<DatasetItemVO> listByAppId(Long appId);
+	void batchSave(Long appId, List<Long> datasetIds);
+
+	List<DatasetItemVO> listByAppId(Long appId);
+
 }

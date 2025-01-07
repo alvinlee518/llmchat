@@ -9,13 +9,19 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class Prompt implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Description("Task Objective")
-    private String taskObjective;
-    @Description("Output Format")
-    private String outputFormat;
-    @Description("Key Points")
-    private String keyPoints;
-    @Description("prologue")
-    private String prologue;
+
+	private static final long serialVersionUID = 1L;
+
+	@Description("Task Objective")
+	private String taskObjective;
+
+	@Description("Output Format")
+	private String outputFormat;
+
+	@Description("Key Points")
+	private String keyPoints;
+
+	@Description("prologue")
+	private String prologue;
+
 }
